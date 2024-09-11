@@ -1,4 +1,10 @@
 <?php
+require_once "./db_connect.php";
+
+$sql = "SELECT name,date,genre,ingredient,time FROM recipes";
+$stmt = $pdo -> prepare($sql);
+$stmt->execute();
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -31,24 +37,40 @@
                 </span>
             </button>
         </div>
-
         <a href="detail.php">
-            <div class="recipe-card">
-                <div class="recipe-name-section">
-                    <h1 class="recipe-name">
-                        レシピ名
-                    </h1>
-                    <p class="recipe-genre">和</p>
-                </div>
-                <p class="recipe-time">
-                    <span class="material-symbols-outlined">
-                        timer
-                    </span>
-                    1分
-                </p>
-                <p class="recipe-ingredient">・材料<br>・材料<br>・材料</p>
-                <p class="recipe-date">2024/09/11 10:30</p>
-            </div>
+            <?php
+        foreach($results as $data){
+            echo "<div class='recipe-card'>";
+            echo "<div class='recipe-name-section'>";
+            echo "<h1 class='recipe-name'>" . $data['name'] . "</h1>";
+            echo "<p class='recipe-genre'>";
+            switch($data["genre"]) {
+                    case 0:
+                        echo "和";
+                        break;
+                    case 1:
+                        echo "洋";
+                        break;
+                    case 2:
+                        echo "中";
+                        break;
+                    case 3:
+                        echo "お菓子・デザート";
+                        break;
+                    default:
+                        echo $data['genre'];
+                        break;
+                }
+                echo "</p>";
+            echo "</div>";
+            echo "<p class='recipe-time'>";
+            echo "<span class='material-symbols-outlined'>timer</span>" . $data['time'] . "分";
+            echo "</p>";
+            echo "<p class='recipe-ingredient'>" . str_replace(' ', '<br>', $data['ingredient']) . "</p>";
+            echo "<p class='recipe-date'>" . $data['date'] . "</p>";
+            echo "</div>";
+        }
+        ?>
         </a>
     </main>
     
