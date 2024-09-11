@@ -40,12 +40,11 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <?php
         foreach($results as $result){
+            echo "<div class='recipe-card'>";
+            echo "<div class='recipe-name-section'>";
+            echo "<h1 class='recipe-name'>" . $result['name'] . "</h1>";
         }
         ?>
-        <div class="recipe-card">
-            <div class="recipe-name-section">
-                <h1 class="recipe-name">レシピ名</h1>
-                <p class="recipe-genre">和</p>
             </div>
             <p class="recipe-time">
                 <span class="material-symbols-outlined">
