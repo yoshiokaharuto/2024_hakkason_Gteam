@@ -65,9 +65,9 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo "<p class='recipe-time'>";
             echo "<span class='material-symbols-outlined'>timer</span>" . $result['time'] . "分";
             echo "</p>";
+            echo "<p>" . str_replace(' ', '<br>', $data['ingredient']) . "</p>";
         }
         ?>
-            <p class="recipe-ingredient">・材料<br>・材料<br>・材料</p>
             <p class="recipe-date">2024/09/11 10:30</p>
         </div>
     </main>
