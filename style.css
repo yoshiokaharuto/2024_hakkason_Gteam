@@ -1,0 +1,152 @@
+@charset "utf-8";
+
+*,  *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body, main, div, span, h1, h2, h3, p, ol, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --main-color: #FF852C;
+    --sub-color: #FFAB6F;
+    --gray: #B0B0B0;
+    --light-gray: #F3F3F3;
+}
+
+body {
+    font-family: "Noto Sans JP", system-ui;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+    background-color: var(--light-gray);
+}
+
+.material-symbols-outlined {
+    vertical-align: bottom;
+}
+
+.app-name {
+    font-size: 30px;
+    font-weight: normal;
+}
+
+header {
+    color: white;
+    background-color: var(--main-color);
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .material-symbols-outlined {
+    color: white;
+    font-size: 40px;
+}
+
+main {
+    width: 80%;
+    margin: 20px auto;
+}
+
+#searchbox-container {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--gray);
+}
+
+#searchbox-container input[type="text"],
+#searchboc-container button {
+    height: 40px;
+    border-radius: 5px;
+}
+
+#searchbox-container input[type="text"] {
+    width: 100%;
+    padding-left: 10px;
+    border: 1px solid var(--gray);
+}
+
+#searchbox-container button {
+    width: 40px;
+    color: white;
+    background-color: var(--main-color);
+    margin-left: 20px;
+    padding: 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#searchbox-container button:active {
+    background-color: var(--sub-color);
+}
+
+#searchbox-container button .material-symbols-outlined {
+    font-size: 40px;
+}
+
+.recipe-card {
+    background-color: white;
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid var(--gray);
+    border-radius: 10px;
+}
+
+.recipe-name-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.recipe-name {
+    color: black;
+    font-weight: normal;
+    font-size: 30px;
+}
+
+.recipe-genre {
+    color: white;
+    background-color: var(--sub-color);
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.recipe-time,
+.recipe-ingredient {
+    margin: 10px 0;
+    color: var(--gray);
+}
+
+.recipe-date {
+    color: var(--sub-color);
+    text-align: right;
+    margin-top: 10px;
+}
+
+footer {
+    color: white;
+    background-color: var(--sub-color);
+    text-align: center;
+    padding: 40px;
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 20px;
+    }
+
+    main {
+        width: 100%;
+        padding: 0 20px;
+    }
+}
