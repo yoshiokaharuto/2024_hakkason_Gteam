@@ -43,9 +43,10 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo "<div class='recipe-card'>";
             echo "<div class='recipe-name-section'>";
             echo "<h1 class='recipe-name'>" . $result['name'] . "</h1>";
+            echo "<p class='recipe-genre'>" . $result['genre'] . "</p>";
+            echo "</div>";
         }
         ?>
-            </div>
             <p class="recipe-time">
                 <span class="material-symbols-outlined">
                     timer
