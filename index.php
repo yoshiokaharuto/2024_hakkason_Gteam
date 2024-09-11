@@ -38,10 +38,10 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </button>
         </div>
         <?php
-        foreach($results as $result){
+        foreach($results as $data){
             echo "<div class='recipe-card'>";
             echo "<div class='recipe-name-section'>";
-            echo "<h1 class='recipe-name'>" . $result['name'] . "</h1>";
+            echo "<h1 class='recipe-name'>" . $data['name'] . "</h1>";
             echo "<p class='recipe-genre'>";
             switch($data["genre"]) {
                     case 0:
@@ -57,19 +57,19 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         echo "お菓子・デザート";
                         break;
                     default:
-                        echo $date['genre'];
+                        echo $data['genre'];
                         break;
                 }
                 echo "</p>";
             echo "</div>";
             echo "<p class='recipe-time'>";
-            echo "<span class='material-symbols-outlined'>timer</span>" . $result['time'] . "分";
+            echo "<span class='material-symbols-outlined'>timer</span>" . $data['time'] . "分";
             echo "</p>";
-            echo "<p>" . str_replace(' ', '<br>', $data['ingredient']) . "</p>";
+            echo "<p class='recipe-ingredient'" . str_replace(' ', '<br>', $data['ingredient']) . "</p>";
+            echo "<p class='recipe-date'>" . $data['date'] . "</p>";
+            echo "</div>";
         }
         ?>
-            <p class="recipe-date">2024/09/11 10:30</p>
-        </div>
     </main>
     
     <footer>
