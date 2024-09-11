@@ -1,7 +1,7 @@
 <?php
 require_once "./db_connect.php";
 
-$sql = "SELECT name,date,genre,ingredient,time FROM recipes";
+$sql = "SELECT recipe_id,name,date,genre,ingredient,time FROM recipes";
 $stmt = $pdo -> prepare($sql);
 $stmt->execute();
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -37,9 +37,9 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </span>
             </button>
         </div>
-        <a href="detail.php">
             <?php
         foreach($results as $data){
+            echo "<a href='detail.php?id=" .$data['recipe_id'] . "'>";
             echo "<div class='recipe-card'>";
             echo "<div class='recipe-name-section'>";
             echo "<h1 class='recipe-name'>" . $data['name'] . "</h1>";
@@ -69,9 +69,9 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo "<p class='recipe-ingredient'>" . str_replace(' ', '<br>', $data['ingredient']) . "</p>";
             echo "<p class='recipe-date'>" . $data['date'] . "</p>";
             echo "</div>";
+            echo "</a>";
         }
         ?>
-        </a>
     </main>
     
     <footer>
