@@ -1,4 +1,11 @@
 <?php
+require_once "./db_connect.php";
+
+$sql = "SELECT name,date,genre,ingredient,time FROM recipes";
+$stmt = $pdo -> prepare($sql);
+$stmt->execute();
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 ?>
 <!DOCTYPE html>
 <html lang="ja">
