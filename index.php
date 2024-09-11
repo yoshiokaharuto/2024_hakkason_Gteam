@@ -6,7 +6,6 @@ $stmt = $pdo -> prepare($sql);
 $stmt->execute();
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -47,9 +46,9 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo "</div>";
             echo "<p class='recipe-time'>";
             echo "<span class='material-symbols-outlined'>timer</span>" . $result['time'] . "分";
+            echo "</p>";
         }
         ?>
-            </p>
             <p class="recipe-ingredient">・材料<br>・材料<br>・材料</p>
             <p class="recipe-date">2024/09/11 10:30</p>
         </div>
