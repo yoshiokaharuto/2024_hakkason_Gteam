@@ -38,7 +38,10 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </span>
             </button>
         </div>
-
+        <?php
+        foreach($results as $result){
+        }
+        ?>
         <div class="recipe-card">
             <div class="recipe-name-section">
                 <h1 class="recipe-name">レシピ名</h1>
