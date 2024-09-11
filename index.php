@@ -37,8 +37,8 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </span>
             </button>
         </div>
-        
-        <?php
+        <a href="detail.php">
+            <?php
         foreach($results as $data){
             echo "<div class='recipe-card'>";
             echo "<div class='recipe-name-section'>";
@@ -71,6 +71,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo "</div>";
         }
         ?>
+        </a>
     </main>
     
     <footer>
