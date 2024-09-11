@@ -37,6 +37,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </span>
             </button>
         </div>
+        
         <?php
         foreach($results as $data){
             echo "<div class='recipe-card'>";

@@ -29,12 +29,17 @@ body {
 }
 
 .app-name {
+    color: white;
     font-size: 30px;
     font-weight: normal;
 }
 
+a {
+    color: black;
+    text-decoration: none;
+}
+
 header {
-    color: white;
     background-color: var(--main-color);
     padding: 20px 50px;
     display: flex;
@@ -48,10 +53,30 @@ header .material-symbols-outlined {
 }
 
 main {
-    width: 80%;
+    width: 70%;
     margin: 20px auto;
 }
 
+footer {
+    color: white;
+    background-color: var(--sub-color);
+    text-align: center;
+    padding: 40px;
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 20px;
+    }
+
+    main {
+        width: 100%;
+        padding: 0 20px;
+    }
+}
+
+/* ========== ↑ 主に全ページ ========== */
+/* ========== ↓ 主にindex ========== */
 #searchbox-container {
     display: flex;
     justify-content: space-between;
@@ -133,20 +158,80 @@ main {
     margin-top: 10px;
 }
 
-footer {
-    color: white;
-    background-color: var(--sub-color);
-    text-align: center;
-    padding: 40px;
+/* ========== ↑ 主にindex ========== */
+/* ========== ↓ 主にdetail ========== */ 
+.recipe-information {
+    margin: 20px 0;
 }
 
-@media (max-width: 600px) {
-    header {
-        padding: 20px;
-    }
+.recipe-information-title-section {
+    color: var(--main-color);
+    font-size: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    main {
-        width: 100%;
-        padding: 0 20px;
-    }
+.recipe-information-title-section button {
+    height: 28px;
+    width: 28px;
+    color: white;
+    background-color: var(--sub-color);
+    padding: 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.recipe-information-title-section button:active {
+    background-color: var(--main-color);
+}
+
+.recipe-information-title-section button .material-symbols-outlined {
+    font-size: 24px;
+}
+
+.recipe-information-content {
+    background-color: white;
+    padding: 10px 20px;
+    border: 1px solid var(--gray);
+    border-radius: 10px;
+}
+
+.button-container {
+    margin: 20px auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray);
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.button-container .white-button,
+.button-container .main-button {
+    padding: 5px 15px;
+}
+
+.button-container .white-button {
+    font-size: 16px;
+    color: var(--main-color);
+    background-color: white;
+    border: 1px solid var(--main-color);
+    border-radius: 5px;
+}
+
+.button-container .white-button:active {
+    background-color: var(--light-gray);
+}
+
+.button-container .main-button {
+    font-size: 16px;
+    color: white;
+    background-color: var(--main-color);
+    border: none;
+    border-radius: 5px;
+}
+
+.button-container .main-button:active {
+    background-color: var(--sub-color);
 }
