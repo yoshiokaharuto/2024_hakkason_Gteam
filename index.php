@@ -45,13 +45,10 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo "<h1 class='recipe-name'>" . $result['name'] . "</h1>";
             echo "<p class='recipe-genre'>" . $result['genre'] . "</p>";
             echo "</div>";
+            echo "<p class='recipe-time'>";
+            echo "<span class='material-symbols-outlined'>timer</span>" . $result['time'] . "分";
         }
         ?>
-            <p class="recipe-time">
-                <span class="material-symbols-outlined">
-                    timer
-                </span>
-                1分
             </p>
             <p class="recipe-ingredient">・材料<br>・材料<br>・材料</p>
             <p class="recipe-date">2024/09/11 10:30</p>
