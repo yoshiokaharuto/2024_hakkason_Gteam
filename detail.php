@@ -1,4 +1,7 @@
 <?php
+require_once "dbconnect.php";
+
+$result = ['recipe_id' => '', 'name' => '', 'date' => '', 'genre' => '', 'ingredient' => '', 'time' => '','process' => '', 'note' => ''];
 ?>
 <!DOCTYPE html>
 <html lang="ja">
