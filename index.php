@@ -42,7 +42,25 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo "<div class='recipe-card'>";
             echo "<div class='recipe-name-section'>";
             echo "<h1 class='recipe-name'>" . $result['name'] . "</h1>";
-            echo "<p class='recipe-genre'>" . $result['genre'] . "</p>";
+            echo "<p class='recipe-genre'>";
+            switch($data["genre"]) {
+                    case 0:
+                        echo "和";
+                        break;
+                    case 1:
+                        echo "洋";
+                        break;
+                    case 2:
+                        echo "中";
+                        break;
+                    case 3:
+                        echo "お菓子・デザート";
+                        break;
+                    default:
+                        echo $date['genre'];
+                        break;
+                }
+                echo "</p>";
             echo "</div>";
             echo "<p class='recipe-time'>";
             echo "<span class='material-symbols-outlined'>timer</span>" . $result['time'] . "分";
