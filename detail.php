@@ -3,8 +3,8 @@ require_once "db_connect.php";
 
 $result = ['recipe_id' => '', 'name' => '', 'date' => '', 'genre' => '', 'ingredient' => '', 'time' => '','process' => '', 'note' => ''];
 
-if(isset($_GET['resipe_id'])) {
-    $id = $_GET['resipe_id'];
+if(isset($_GET['recipe_id'])) {
+    $id = $_GET['recipe_id'];
 
     $sql = "SELECT * FROM recipe WHERE recipe_id = :id";
     $stmt = $pdo->prepare($sql);
