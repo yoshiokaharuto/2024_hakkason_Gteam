@@ -3,10 +3,10 @@ require_once "db_connect.php";
 
 $result = ['recipe_id' => '', 'name' => '', 'date' => '', 'genre' => '', 'ingredient' => '', 'time' => '','process' => '', 'note' => ''];
 
-if(isset($_GET['recipe_id'])) {
-    $id = $_GET['recipe_id'];
+if(isset($_GET['id'])) {
+    $id = $_GET['id'];
 
-    $sql = "SELECT * FROM recipe WHERE recipe_id = :id";
+    $sql = "SELECT * FROM recipes WHERE recipe_id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
