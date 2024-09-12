@@ -148,8 +148,6 @@
                 </div>
                 <p class="recipe-information-content" id="recipe-note">(なし)</p>
             <?php } ?>
-
-
         </div>
         <div id="recipe-dataToCopy">【レシピ名】<?= preoutput($data['name']) ?><br>
 【ジャンル】<?php
