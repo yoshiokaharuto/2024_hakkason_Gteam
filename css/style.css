@@ -85,7 +85,7 @@ footer {
 }
 
 #searchbox-container input[type="text"],
-#searchboc-container button {
+#searchbox-container button {
     height: 40px;
     border-radius: 5px;
 }
@@ -166,15 +166,15 @@ footer {
 
 .recipe-information-title-section {
     color: var(--main-color);
-    font-size: 24px;
+    font-size: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .recipe-information-title-section button {
-    height: 28px;
-    width: 28px;
+    height: 24px;
+    width: 24px;
     color: white;
     background-color: var(--sub-color);
     padding: 0;
@@ -188,7 +188,7 @@ footer {
 }
 
 .recipe-information-title-section button .material-symbols-outlined {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .recipe-information-content {
@@ -234,4 +234,88 @@ footer {
 
 .button-container .main-button:active {
     background-color: var(--sub-color);
+}
+
+/* ========== ↑ 主にdetail ========== */
+/* ========== ↓ 主にpost ========== */ 
+#page-name-section {
+    text-align: center;
+}
+
+#page-name-section h1 {
+    font-size: 30px;
+    font-weight: normal;
+}
+
+#page-name-section p {
+    color: var(--main-color);
+}
+
+.post-item-container {
+    margin: 20px 0;
+    color: var(--main-color);
+    font-size: 20px;
+}
+
+.post-item {
+    height: 40px;
+    width: 100%;
+    border: 1px solid var(--gray);
+    border-radius: 5px;
+    padding-left: 10px;
+    line-height: 20px;
+}
+
+.post-item-container textarea {
+    height: 150px;
+    resize: none;
+    padding-top: 10px;
+}
+
+.post-item::placeholder,
+.post-item-container textarea::placeholder {
+    color: var(--gray);
+}
+
+.genre-group {
+    display: flex;
+    width: 100%;
+}
+
+.genre-option {
+    width: 100%;
+}
+
+.genre-option input[type=radio] {
+    opacity: 0;
+    position: absolute;
+}
+
+.genre-option label {
+    height: 40px;
+    width: 100%;
+    display: inline-block;
+    cursor: pointer;
+    color: var(--gray);
+    background-color: white;
+    padding: 7px 0;
+    border: 1px solid var(--gray);
+    font-size: 16px;
+    text-align: center;
+}
+
+.genre-option:first-child label {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.genre-option:last-child label {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.genre-option input[type=radio]:checked+label {
+    color: white;
+    background-color: var(--main-color);
+    border: 1px solid var(--main-color);
 }
