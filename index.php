@@ -8,7 +8,9 @@ $ingredient_tag = isset($_GET['ingredient_tag']) && $_GET['ingredient_tag'] !== 
 
 // SQLクエリ作成（カテゴリや食材がNULLの場合の扱いを修正）
 $sql = "
-    SELECT r.*
+    SELECT r.*, 
+    GROUP_CONCAT(DISTINCT c.category_name ORDER BY c.category_name ASC SEPARATOR '</span><span>') AS category, 
+    GROUP_CONCAT(DISTINCT mi.ingredient_name ORDER BY mi.ingredient_name ASC SEPARATOR '</span><span>') AS main_ingredient
     FROM recipes r
     LEFT JOIN recipe_to_category rtc ON r.recipe_id = rtc.recipe_id
     LEFT JOIN categories c ON rtc.category_id = c.category_id
@@ -75,36 +77,52 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php
         if ($results) {
             foreach($results as $data){
-                echo "<a href='detail.php?id=" . $data['recipe_id'] . "'>";
-                echo "<div class='recipe-card'>";
-                echo "<div class='recipe-name-section'>";
-                echo "<h1 class='recipe-name'>" . htmlspecialchars($data['name'], ENT_QUOTES, 'UTF-8') . "</h1>";
-                echo "<p class='recipe-genre'>";
-                switch($data["genre"]) {
-                        case 0:
-                            echo "和";
-                            break;
-                        case 1:
-                            echo "洋";
-                            break;
-                        case 2:
-                            echo "中";
-                            break;
-                        case 3:
-                            echo "デ";
-                            break;
-                        default:
-                            echo $data['genre'];
-                            break;
-                    }
-                    echo "</p>";
-                echo "</div>";
-                echo "<p class='recipe-time'>";
-                echo "<span class='material-symbols-outlined'>timer</span>" . htmlspecialchars($data['time'], ENT_QUOTES, 'UTF-8') . "分";
-                echo "</p>";
-                echo "<p class='recipe-ingredient'>" . nl2br(htmlspecialchars($data['ingredient'], ENT_QUOTES, 'UTF-8')) . "</p>";
-                echo "<p class='recipe-date'>" . htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') . "</p>";
-                echo "</div></a>";
+        ?>
+            <a href='detail.php?id=<?= $data['recipe_id'] ?>'>
+                <div class='recipe-card'>
+                    <div class='recipe-name-section'>
+                        <h1 class='recipe-name'><?= htmlspecialchars($data['name'], ENT_QUOTES, 'UTF-8') ?></h1>
+                        <p class='recipe-genre'>
+                        <?php
+                            switch($data["genre"]) {
+                                case 0:
+                                    echo "和";
+                                    break;
+                                case 1:
+                                    echo "洋";
+                                    break;
+                                case 2:
+                                    echo "中";
+                                    break;
+                                case 3:
+                                    echo "デ";
+                                    break;
+                                default:
+                                    echo $data['genre'];
+                                    break;
+                            }
+                        ?>
+                        </p>
+                    </div>
+                    <p class='recipe-time'>
+                        <span class='material-symbols-outlined'>timer</span>
+                        <?= htmlspecialchars($data['time'], ENT_QUOTES, 'UTF-8') . "分"; ?>
+                    </p>
+                    <?php
+                        if(!empty($data['category'])) {
+                            echo "<p class='recipe-category'><span>".$data['category']."</span></p>";
+                        }
+                    ?>
+                    <?php
+                        if(!empty($data['main_ingredient'])) {
+                            echo "<p class='recipe-mainIngredient'><span>".$data['main_ingredient']."</span></p>";
+                        }
+                    ?>
+                    <p class='recipe-ingredient'><?= nl2br(htmlspecialchars($data['ingredient'], ENT_QUOTES, 'UTF-8')) ?></p>
+                    <p class='recipe-date'><?= htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') ?></p>
+                </div>
+            </a>
+        <?php 
             }
         } else {
             echo "<p id='not-found'>レシピが見つかりませんでした。</p>";

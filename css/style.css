@@ -163,6 +163,26 @@ footer {
     color: var(--gray);
 }
 
+.recipe-category {
+    margin-bottom: 5px;
+}
+
+.recipe-category span {
+    color: var(--main-color);
+    border: 1px solid var(--main-color);
+    margin-right: 5px;
+    padding: 0 5px;
+    border-radius: 5px;
+}
+
+.recipe-mainIngredient span {
+    color: white;
+    background-color: var(--sub-color);
+    margin-right: 5px;
+    padding: 0 5px;
+    border-radius: 5px;
+}
+
 .recipe-date {
     color: var(--sub-color);
     text-align: right;
@@ -211,6 +231,10 @@ footer {
     padding: 10px 20px;
     border: 1px solid var(--gray);
     border-radius: 10px;
+}
+
+#recipe-dataToCopy {
+    color: blue;
 }
 
 .button-container {
