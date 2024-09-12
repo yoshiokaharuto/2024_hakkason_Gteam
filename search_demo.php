@@ -7,8 +7,18 @@ $category_tag = isset($_GET['category_tag']) && $_GET['category_tag'] !== '' ? $
 $ingredient_tag = isset($_GET['ingredient_tag']) && $_GET['ingredient_tag'] !== '' ? $_GET['ingredient_tag'] : null;
 
 // SQLクエリ作成（カテゴリや食材がNULLの場合の扱いを修正）
+
+/*
+ SQLクエリ修正 GROUP_CONCAT関数を使って、複数のカテゴリや食材がある場合もまとめて取得
+
+ 追加
+    GROUP_CONCAT(DISTINCT c.category_name ORDER BY c.category_name ASC SEPARATOR ', ') AS categories, 
+    GROUP_CONCAT(DISTINCT mi.ingredient_name ORDER BY mi.ingredient_name ASC SEPARATOR ', ') AS ingredients
+*/ 
 $sql = "
-    SELECT r.*
+    SELECT r.*, 
+           GROUP_CONCAT(DISTINCT c.category_name ORDER BY c.category_name ASC SEPARATOR ', ') AS categories, 
+           GROUP_CONCAT(DISTINCT mi.ingredient_name ORDER BY mi.ingredient_name ASC SEPARATOR ', ') AS ingredients
     FROM recipes r
     LEFT JOIN recipe_to_category rtc ON r.recipe_id = rtc.recipe_id
     LEFT JOIN categories c ON rtc.category_id = c.category_id
@@ -57,11 +67,14 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <h2>検索結果</h2>
     <?php if ($results): ?>
-        <?php foreach ($results as $recipe): ?>
+        <?php foreach ($results as $recipe):?>
             <h3><?= htmlspecialchars($recipe['name'], ENT_QUOTES, 'UTF-8') ?></h3>
             <p>投稿日: <?= htmlspecialchars($recipe['date'], ENT_QUOTES, 'UTF-8') ?></p>
             <p>材料: <?= htmlspecialchars($recipe['ingredient'], ENT_QUOTES, 'UTF-8') ?></p>
             <p>手順: <?= htmlspecialchars($recipe['process'], ENT_QUOTES, 'UTF-8') ?></p>
+            <!-- カテゴリ・食材タグを追加 -->
+            <p>カテゴリタグ: <?= htmlspecialchars($recipe['categories'], ENT_QUOTES, 'UTF-8') ?></p>
+            <p>主要食材タグ: <?= htmlspecialchars($recipe['ingredients'], ENT_QUOTES, 'UTF-8') ?></p>
             <hr>
         <?php endforeach; ?>
     <?php else: ?>
