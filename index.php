@@ -42,7 +42,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($results as $data){
             echo "<div class='recipe-card'>";
             echo "<div class='recipe-name-section'>";
-            echo "<h1 class='recipe-name'>" . $data['name'] . "</h1>";
+            echo "<h1 class='recipe-name'>" . htmlspecialchars($data['name']) . "</h1>";
             echo "<p class='recipe-genre'>";
             switch($data["genre"]) {
                     case 0:
@@ -55,7 +55,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         echo "中";
                         break;
                     case 3:
-                        echo "お菓子・デザート";
+                        echo "デ";
                         break;
                     default:
                         echo $data['genre'];
@@ -64,10 +64,10 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 echo "</p>";
             echo "</div>";
             echo "<p class='recipe-time'>";
-            echo "<span class='material-symbols-outlined'>timer</span>" . $data['time'] . "分";
+            echo "<span class='material-symbols-outlined'>timer</span>" . htmlspecialchars($data['time']) . "分";
             echo "</p>";
-            echo "<p class='recipe-ingredient'>" . str_replace(' ', '<br>', $data['ingredient']) . "</p>";
-            echo "<p class='recipe-date'>" . $data['date'] . "</p>";
+            echo "<p class='recipe-ingredient'>" . nl2br(htmlspecialchars($data['ingredient'])) . "</p>";
+            echo "<p class='recipe-date'>" . htmlspecialchars($data['date']) . "</p>";
             echo "</div>";
         }
         ?>

@@ -83,19 +83,19 @@ if (isset($_POST['name']) && isset($_POST['genre']) && isset($_POST['ingredient'
                 ジャンル
                 <div class="genre-group">
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="japanese" value="1" checked>
+                        <input type="radio" name="genre" id="japanese" value="0" checked>
                         <label for="japanese">和風</label>
                     </div>
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="western" value="2">
+                        <input type="radio" name="genre" id="western" value="1">
                         <label for="western">洋風</label>
                     </div>
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="chinese" value="3">
+                        <input type="radio" name="genre" id="chinese" value="2">
                         <label for="chinese">中華風</label>
                     </div>
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="dessert" value="4">
+                        <input type="radio" name="genre" id="dessert" value="3">
                         <label for="dessert">デザート</label>
                     </div>
                 </div>
