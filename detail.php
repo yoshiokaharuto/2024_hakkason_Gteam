@@ -87,7 +87,7 @@ if(isset($_GET['id'])) {
                     </span>
                 </button>
             </div>
-            <p class="recipe-information-content" id="recipe-process"><?php echo htmlspecialchars($result['name'])?></p>
+            <p class="recipe-information-content" id="recipe-process"><?php echo str_replace(' ', '<br>', htmlspecialchars($result['process']))?></p>
         </div>
         <div class="recipe-information">
             <div class="recipe-information-title-section">
