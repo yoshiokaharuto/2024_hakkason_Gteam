@@ -41,13 +41,13 @@ if(isset($_GET['resipe_id'])) {
         <div class="recipe-card">
             <div class="recipe-name-section">
                 <h1 class="recipe-name"><?php echo htmlspecialchars($result['name'])?></h1>
-                <p class="recipe-genre">和</p>
+                <p class="recipe-genre"><?php echo htmlspecialchars($result['genre'])?></p>
             </div>
             <p class="recipe-time">
                 <span class="material-symbols-outlined">
                     timer
                 </span>
-                1分
+                <?php echo htmlspecialchars($result['time'])?>
             </p>
             <p class="recipe-date">2024/09/11 10:30</p>
         </div>
