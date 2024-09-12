@@ -40,7 +40,7 @@ if(isset($_GET['resipe_id'])) {
     <main>
         <div class="recipe-card">
             <div class="recipe-name-section">
-                <h1 class="recipe-name">レシピ名</h1>
+                <h1 class="recipe-name"><?php echo htmlspecialchars($result['name'])?></h1>
                 <p class="recipe-genre">和</p>
             </div>
             <p class="recipe-time">
