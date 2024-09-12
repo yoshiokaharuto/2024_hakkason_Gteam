@@ -234,7 +234,7 @@ footer {
 }
 
 #recipe-dataToCopy {
-    color: blue;
+    display: none;
 }
 
 .button-container {
