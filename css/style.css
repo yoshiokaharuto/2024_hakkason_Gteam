@@ -22,6 +22,10 @@ body {
     font-weight: normal;
     font-style: normal;
     background-color: var(--light-gray);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 100%;
+    min-height: 100vh;
 }
 
 .material-symbols-outlined {
@@ -77,42 +81,49 @@ footer {
 
 /* ========== ↑ 主に全ページ ========== */
 /* ========== ↓ 主にindex ========== */
-#searchbox-container {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 20px;
+#searchByName-container {
     border-bottom: 1px solid var(--gray);
+    padding-bottom: 20px;
+    text-align: center;
 }
 
-#searchbox-container input[type="text"],
-#searchbox-container button {
+#searchByName-container div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+#searchByName-container input[type="text"],
+#search-button {
     height: 40px;
     border-radius: 5px;
 }
 
-#searchbox-container input[type="text"] {
+#searchByName-container input[type="text"] {
     width: 100%;
     padding-left: 10px;
+    margin-bottom: 10px;
     border: 1px solid var(--gray);
 }
 
-#searchbox-container button {
-    width: 40px;
+#search-button {
     color: white;
     background-color: var(--main-color);
-    margin-left: 20px;
-    padding: 0;
+    font-size: 20px;
+    line-height: 30px;
+    padding: 0 10px 0 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
-#searchbox-container button:active {
+#search-button:active {
     background-color: var(--sub-color);
 }
 
-#searchbox-container button .material-symbols-outlined {
-    font-size: 40px;
+#search-button .material-symbols-outlined {
+    font-size: 30px;
 }
 
 .recipe-card {
@@ -152,10 +163,34 @@ footer {
     color: var(--gray);
 }
 
+.recipe-category {
+    margin-bottom: 5px;
+}
+
+.recipe-category span {
+    color: var(--main-color);
+    border: 1px solid var(--main-color);
+    margin-right: 5px;
+    padding: 0 5px;
+    border-radius: 5px;
+}
+
+.recipe-mainIngredient span {
+    color: white;
+    background-color: var(--sub-color);
+    margin-right: 5px;
+    padding: 0 5px;
+    border-radius: 5px;
+}
+
 .recipe-date {
     color: var(--sub-color);
     text-align: right;
     margin-top: 10px;
+}
+
+#not-found {
+    margin: 20px 0;
 }
 
 /* ========== ↑ 主にindex ========== */
@@ -196,6 +231,10 @@ footer {
     padding: 10px 20px;
     border: 1px solid var(--gray);
     border-radius: 10px;
+}
+
+#recipe-dataToCopy {
+    display: none;
 }
 
 .button-container {
