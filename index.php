@@ -1,9 +1,36 @@
 <?php
 require_once "./db_connect.php";
 
-$sql = "SELECT name,date,genre,ingredient,time FROM recipes";
-$stmt = $pdo -> prepare($sql);
+// 検索条件の初期化
+$recipe_name = isset($_GET['recipe_name']) && $_GET['recipe_name'] !== '' ? '%' . $_GET['recipe_name'] . '%' : '%';
+$category_tag = isset($_GET['category_tag']) && $_GET['category_tag'] !== '' ? $_GET['category_tag'] : null;
+$ingredient_tag = isset($_GET['ingredient_tag']) && $_GET['ingredient_tag'] !== '' ? $_GET['ingredient_tag'] : null;
+
+// SQLクエリ作成（カテゴリや食材がNULLの場合の扱いを修正）
+$sql = "
+    SELECT r.*
+    FROM recipes r
+    LEFT JOIN recipe_to_category rtc ON r.recipe_id = rtc.recipe_id
+    LEFT JOIN categories c ON rtc.category_id = c.category_id
+    LEFT JOIN recipe_to_ingredient rti ON r.recipe_id = rti.recipe_id
+    LEFT JOIN main_ingredients mi ON rti.ingredient_id = mi.ingredient_id
+    WHERE r.name LIKE :recipe_name
+    AND (:category_tag IS NULL OR c.category_name = :category_tag)
+    AND (:ingredient_tag IS NULL OR mi.ingredient_name = :ingredient_tag)
+    GROUP BY r.recipe_id
+    ORDER BY r.recipe_id DESC
+";
+
+// SQLを準備してパラメータをバインド
+$stmt = $pdo->prepare($sql);
+$stmt->bindValue(':recipe_name', $recipe_name, PDO::PARAM_STR);
+$stmt->bindValue(':category_tag', $category_tag, PDO::PARAM_STR);
+$stmt->bindValue(':ingredient_tag', $ingredient_tag, PDO::PARAM_STR);
+
+// クエリを実行
 $stmt->execute();
+
+// 結果を取得
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
@@ -29,49 +56,60 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </header>
 
     <main>
-        <div id="searchbox-container">
-            <input type="text" name="search-by-name" placeholder="検索したいレシピ名を入力…">
-            <button type="submit">
-                <span class="material-symbols-outlined">
-                    search
-                </span>
-            </button>
-        </div>
-        <a href="detail.php">
-            <?php
-        foreach($results as $data){
-            echo "<div class='recipe-card'>";
-            echo "<div class='recipe-name-section'>";
-            echo "<h1 class='recipe-name'>" . htmlspecialchars($data['name']) . "</h1>";
-            echo "<p class='recipe-genre'>";
-            switch($data["genre"]) {
-                    case 0:
-                        echo "和";
-                        break;
-                    case 1:
-                        echo "洋";
-                        break;
-                    case 2:
-                        echo "中";
-                        break;
-                    case 3:
-                        echo "デ";
-                        break;
-                    default:
-                        echo $data['genre'];
-                        break;
-                }
+        <form action="index.php" method="GET">
+            <div id="searchByName-container">
+                <input type="text" name="recipe_name" value="<?= htmlspecialchars($_GET['recipe_name'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="検索したいレシピ名を入力…">
+                <div>
+                    <input type="text" name="category_tag" value="<?= htmlspecialchars($_GET['category_tag'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="カテゴリタグ(後でselectにする)">
+                    <input type="text" name="ingredient_tag" value="<?= htmlspecialchars($_GET['ingredient_tag'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="主要食材タグ(後でselectにする)">
+                </div>
+
+                <button type="submit" id="search-button">
+                    検索
+                    <span class="material-symbols-outlined">
+                        search
+                    </span>
+                </button>
+            </div>
+        </form>
+        <?php
+        if ($results) {
+            foreach($results as $data){
+                echo "<a href='detail.php?id=" . $data['recipe_id'] . "'>";
+                echo "<div class='recipe-card'>";
+                echo "<div class='recipe-name-section'>";
+                echo "<h1 class='recipe-name'>" . htmlspecialchars($data['name'], ENT_QUOTES, 'UTF-8') . "</h1>";
+                echo "<p class='recipe-genre'>";
+                switch($data["genre"]) {
+                        case 0:
+                            echo "和";
+                            break;
+                        case 1:
+                            echo "洋";
+                            break;
+                        case 2:
+                            echo "中";
+                            break;
+                        case 3:
+                            echo "デ";
+                            break;
+                        default:
+                            echo $data['genre'];
+                            break;
+                    }
+                    echo "</p>";
+                echo "</div>";
+                echo "<p class='recipe-time'>";
+                echo "<span class='material-symbols-outlined'>timer</span>" . htmlspecialchars($data['time'], ENT_QUOTES, 'UTF-8') . "分";
                 echo "</p>";
-            echo "</div>";
-            echo "<p class='recipe-time'>";
-            echo "<span class='material-symbols-outlined'>timer</span>" . htmlspecialchars($data['time']) . "分";
-            echo "</p>";
-            echo "<p class='recipe-ingredient'>" . nl2br(htmlspecialchars($data['ingredient'])) . "</p>";
-            echo "<p class='recipe-date'>" . htmlspecialchars($data['date']) . "</p>";
-            echo "</div>";
+                echo "<p class='recipe-ingredient'>" . nl2br(htmlspecialchars($data['ingredient'], ENT_QUOTES, 'UTF-8')) . "</p>";
+                echo "<p class='recipe-date'>" . htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') . "</p>";
+                echo "</div></a>";
+            }
+        } else {
+            echo "<p id='not-found'>レシピが見つかりませんでした。</p>";
         }
         ?>
-        </a>
     </main>
     
     <footer>
