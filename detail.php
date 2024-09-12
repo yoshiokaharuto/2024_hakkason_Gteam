@@ -2,6 +2,19 @@
 require_once "dbconnect.php";
 
 $result = ['recipe_id' => '', 'name' => '', 'date' => '', 'genre' => '', 'ingredient' => '', 'time' => '','process' => '', 'note' => ''];
+
+if(isset($_GET['resipe_id'])) {
+    $id = $_GET['resipe_id'];
+
+    $sql = "SELECT * FROM recipe WHERE recipe_id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+} else {
+    echo "詳細を表示できません";
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
