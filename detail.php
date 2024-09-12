@@ -76,7 +76,7 @@ if(isset($_GET['id'])) {
                     </span>
                 </button>
             </div>
-            <p class="recipe-information-content" id="recipe-ingredient">・材料<br>・材料<br>・材料</p>
+            <p class="recipe-information-content" id="recipe-ingredient"><?php echo str_replace(' ', '<br>', htmlspecialchars($result['ingredient']))?></p>
         </div>
         <div class="recipe-information">
             <div class="recipe-information-title-section">
@@ -98,7 +98,7 @@ if(isset($_GET['id'])) {
                     </span>
                 </button>
             </div>
-            <p class="recipe-information-content" id="recipe-note">メモ</p>
+            <p class="recipe-information-content" id="recipe-note"><?php echo str_replace(' ', '<br>', htmlspecialchars($result['note']))?></p>
         </div>
         <div class="button-container">
             <a href="index.php" class="white-button">投稿一覧に戻る</a>
