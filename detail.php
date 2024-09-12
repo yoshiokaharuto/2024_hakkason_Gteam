@@ -1,20 +1,32 @@
 <?php
-require_once "db_connect.php";
+    require_once "./db_connect.php";
 
-$result = ['recipe_id' => '', 'name' => '', 'date' => '', 'genre' => '', 'ingredient' => '', 'time' => '','process' => '', 'note' => ''];
+    if(isset($_GET['id'])) {
+        $sql = "
+            SELECT r.*, 
+            GROUP_CONCAT(DISTINCT c.category_name ORDER BY c.category_name ASC SEPARATOR ', ') AS category, 
+            GROUP_CONCAT(DISTINCT mi.ingredient_name ORDER BY mi.ingredient_name ASC SEPARATOR ', ') AS main_ingredient
+            FROM recipes r
+            LEFT JOIN recipe_to_category rtc ON r.recipe_id = rtc.recipe_id
+            LEFT JOIN categories c ON rtc.category_id = c.category_id
+            LEFT JOIN recipe_to_ingredient rti ON r.recipe_id = rti.recipe_id
+            LEFT JOIN main_ingredients mi ON rti.ingredient_id = mi.ingredient_id
+            WHERE r.recipe_id = :id
+            GROUP BY r.recipe_id
+            ORDER BY r.recipe_id DESC
+        ";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
+        $stm->execute();
+        $data = $stm->fetch(PDO::FETCH_ASSOC);
+    } else {
+        header("Location: index.php");
+    }
 
-if(isset($_GET['id'])) {
-    $id = $_GET['id'];
-
-    $sql = "SELECT * FROM recipes WHERE recipe_id = :id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-} else {
-    echo "詳細を表示できません";
-    exit();
-}
+    function preoutput($str) {
+        $str = htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+        return nl2br($str);
+    }
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -40,43 +52,63 @@ if(isset($_GET['id'])) {
     <main>
         <div class="recipe-card">
             <div class="recipe-name-section">
-                <h1 class="recipe-name"><?php echo htmlspecialchars($result['name'])?></h1>
-                <p class="recipe-genre"><?php switch($result["genre"]) {
-                    case 0:
-                        echo htmlspecialchars("和");
-                        break;
-                    case 1:
-                        echo htmlspecialchars("洋");
-                        break;
-                    case 2:
-                        echo htmlspecialchars("中");
-                        break;
-                    case 3:
-                        echo htmlspecialchars("お菓子・デザート");
-                        break;
-                    default:
-                        echo htmlspecialchars($result['genre']);
-                        break;
-                }?></p>
+                <h1 class="recipe-name">
+                    <?= preoutput($data['name']) ?>
+                </h1>
+                <p class="recipe-genre">
+                    <?php
+                        switch($data["genre"]) {
+                            case 0:
+                                echo "和";
+                                break;
+                            case 1:
+                                echo "洋";
+                                break;
+                            case 2:
+                                echo "中";
+                                break;
+                            case 3:
+                                echo "デ";
+                                break;
+                            default:
+                                echo $data['genre'];
+                                break;
+                        }
+                    ?>
+                </p>
             </div>
             <p class="recipe-time">
                 <span class="material-symbols-outlined">
                     timer
                 </span>
-                <?php echo htmlspecialchars($result['time']) . "分"?>
+                <?= preoutput($data['time']) ?>分
             </p>
-            <p class="recipe-date"><?php echo htmlspecialchars($result['date'])?></p>
+            <?php
+                if(!empty($data['category'])) {
+                    echo "<p class='recipe-category'><span>".str_replace(', ', '</span><span>', $data['category'])."</span></p>";
+                }
+            ?>
+            <?php
+                if(!empty($data['main_ingredient'])) {
+                    echo "<p class='recipe-mainIngredient'><span>".str_replace(', ', '</span><span>', $data['main_ingredient'])."</span></p>";
+                }
+            ?>
+            <p class="recipe-date">
+                <?= preoutput($data['date']) ?>
+            </p>
         </div>
         <div class="recipe-information">
             <div class="recipe-information-title-section">
-                <p>材料</p>
+                <p>食材</p>
                 <button onclick="copyButton('recipe-ingredient')">
                     <span class="material-symbols-outlined">
                         content_copy
                     </span>
                 </button>
             </div>
-            <p class="recipe-information-content" id="recipe-ingredient"><?php echo str_replace(' ', '<br>', htmlspecialchars($result['ingredient']))?></p>
+            <p class="recipe-information-content" id="recipe-ingredient">
+                <?= preoutput($data['ingredient']) ?>
+            </p>
         </div>
         <div class="recipe-information">
             <div class="recipe-information-title-section">
@@ -87,19 +119,57 @@ if(isset($_GET['id'])) {
                     </span>
                 </button>
             </div>
-            <p class="recipe-information-content" id="recipe-process"><?php echo str_replace(' ', '<br>', htmlspecialchars($result['process']))?></p>
+            <p class="recipe-information-content" id="recipe-process">
+                <?= preoutput($data['process']) ?>
+            </p>
         </div>
         <div class="recipe-information">
             <div class="recipe-information-title-section">
                 <p>メモ</p>
-                <button onclick="copyButton('recipe-note')">
+            <?php if(!empty($data['note'])) { ?>
+                    <button onclick="copyButton('recipe-note')">
                     <span class="material-symbols-outlined">
                         content_copy
                     </span>
                 </button>
             </div>
-            <p class="recipe-information-content" id="recipe-note"><?php echo str_replace(' ', '<br>', htmlspecialchars($result['note']))?></p>
+            <p class="recipe-information-content" id="recipe-note">
+                <?= preoutput($data['note']) ?>
+            </p>
+            <?php } else { ?>
+                </div>
+                <p class="recipe-information-content" id="recipe-note">(なし)</p>
+            <?php } ?>
         </div>
+        <div id="recipe-dataToCopy">【レシピ名】<?= preoutput($data['name']) ?><br>
+【ジャンル】<?php
+                switch($data["genre"]) {
+                    case 0:
+                        echo "和風";
+                        break;
+                    case 1:
+                        echo "洋風";
+                        break;
+                    case 2:
+                        echo "中華風";
+                        break;
+                    case 3:
+                        echo "お菓子・デザート";
+                        break;
+                    default:
+                        echo $data['genre'];
+                        break;
+                }
+            ?><br>
+【所要時間】<?= preoutput($data['time']) ?>分<br>
+【食材】<br>
+<?= preoutput($data['ingredient']) ?><br>
+【主要食材】<?= !empty($data['main_ingredient']) ? preoutput($data['main_ingredient']) : "(なし)" ?><br>
+【手順】<br>
+<?= preoutput($data['process']) ?><br>
+【メモ】<br>
+<?= !empty($data['note']) ? preoutput($data['note']) : "(なし)" ?><br>
+【カテゴリタグ】<?= !empty($data['category']) ? preoutput($data['category']) : "(なし)" ?></div>
         <div class="button-container">
             <a href="index.php" class="white-button">投稿一覧に戻る</a>
             <button onclick="copyAllButton()" class="main-button">このレシピをコピー</button>
@@ -118,7 +188,7 @@ if(isset($_GET['id'])) {
         }
 
         function copyAllButton() {
-            // TODO : 現在開いているレシピの情報を項目名とともに一括でクリップボードにコピーする処理
+            navigator.clipboard.writeText(document.getElementById('recipe-dataToCopy').innerText);
         }
     </script>
 </body>
