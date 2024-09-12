@@ -1,5 +1,5 @@
 <?php
-require_once "dbconnect.php";
+require_once "db_connect.php";
 
 $result = ['recipe_id' => '', 'name' => '', 'date' => '', 'genre' => '', 'ingredient' => '', 'time' => '','process' => '', 'note' => ''];
 
@@ -49,7 +49,7 @@ if(isset($_GET['resipe_id'])) {
                 </span>
                 <?php echo htmlspecialchars($result['time'])?>
             </p>
-            <p class="recipe-date">2024/09/11 10:30</p>
+            <p class="recipe-date"><?php echo htmlspecialchars($result['date'])?></p>
         </div>
         <div class="recipe-information">
             <div class="recipe-information-title-section">
@@ -71,7 +71,7 @@ if(isset($_GET['resipe_id'])) {
                     </span>
                 </button>
             </div>
-            <p class="recipe-information-content" id="recipe-process">手順1<br>手順2<br>手順3</p>
+            <p class="recipe-information-content" id="recipe-process"><?php echo htmlspecialchars($result['name'])?></p>
         </div>
         <div class="recipe-information">
             <div class="recipe-information-title-section">
