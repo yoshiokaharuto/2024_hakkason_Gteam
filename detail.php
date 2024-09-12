@@ -41,13 +41,29 @@ if(isset($_GET['id'])) {
         <div class="recipe-card">
             <div class="recipe-name-section">
                 <h1 class="recipe-name"><?php echo htmlspecialchars($result['name'])?></h1>
-                <p class="recipe-genre"><?php echo htmlspecialchars($result['genre'])?></p>
+                <p class="recipe-genre"><?php switch($result["genre"]) {
+                    case 0:
+                        echo htmlspecialchars("和");
+                        break;
+                    case 1:
+                        echo htmlspecialchars("洋");
+                        break;
+                    case 2:
+                        echo htmlspecialchars("中");
+                        break;
+                    case 3:
+                        echo htmlspecialchars("お菓子・デザート");
+                        break;
+                    default:
+                        echo htmlspecialchars($result['genre']);
+                        break;
+                }?></p>
             </div>
             <p class="recipe-time">
                 <span class="material-symbols-outlined">
                     timer
                 </span>
-                <?php echo htmlspecialchars($result['time'])?>
+                <?php echo htmlspecialchars($result['time']) . "分"?>
             </p>
             <p class="recipe-date"><?php echo htmlspecialchars($result['date'])?></p>
         </div>
