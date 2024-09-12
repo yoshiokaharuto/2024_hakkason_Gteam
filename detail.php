@@ -2,23 +2,31 @@
     require_once "./db_connect.php";
 
     if(isset($_GET['id'])) {
-        $sql = "
-            SELECT r.*, 
-            GROUP_CONCAT(DISTINCT c.category_name ORDER BY c.category_name ASC SEPARATOR ', ') AS category, 
-            GROUP_CONCAT(DISTINCT mi.ingredient_name ORDER BY mi.ingredient_name ASC SEPARATOR ', ') AS main_ingredient
-            FROM recipes r
-            LEFT JOIN recipe_to_category rtc ON r.recipe_id = rtc.recipe_id
-            LEFT JOIN categories c ON rtc.category_id = c.category_id
-            LEFT JOIN recipe_to_ingredient rti ON r.recipe_id = rti.recipe_id
-            LEFT JOIN main_ingredients mi ON rti.ingredient_id = mi.ingredient_id
-            WHERE r.recipe_id = :id
-            GROUP BY r.recipe_id
-            ORDER BY r.recipe_id DESC
-        ";
+        $sql = "SELECT 1 FROM recipes where recipe_id = :id LIMIT 1";
         $stm = $pdo->prepare($sql);
         $stm->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
         $stm->execute();
-        $data = $stm->fetch(PDO::FETCH_ASSOC);
+        if($stm->fetchColumn() !== false) {
+            $sql = "
+                SELECT r.*, 
+                GROUP_CONCAT(DISTINCT c.category_name ORDER BY c.category_name ASC SEPARATOR ', ') AS category, 
+                GROUP_CONCAT(DISTINCT mi.ingredient_name ORDER BY mi.ingredient_name ASC SEPARATOR ', ') AS main_ingredient
+                FROM recipes r
+                LEFT JOIN recipe_to_category rtc ON r.recipe_id = rtc.recipe_id
+                LEFT JOIN categories c ON rtc.category_id = c.category_id
+                LEFT JOIN recipe_to_ingredient rti ON r.recipe_id = rti.recipe_id
+                LEFT JOIN main_ingredients mi ON rti.ingredient_id = mi.ingredient_id
+                WHERE r.recipe_id = :id
+                GROUP BY r.recipe_id
+                ORDER BY r.recipe_id DESC
+            ";
+            $stm = $pdo->prepare($sql);
+            $stm->bindValue(':id', $_GET['id'], PDO::PARAM_INT);
+            $stm->execute();
+            $data = $stm->fetch(PDO::FETCH_ASSOC);
+        } else {
+            header("Location: index.php");
+        }
     } else {
         header("Location: index.php");
     }
