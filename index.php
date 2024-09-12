@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>一覧・検索画面</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
 <body>
     <header>
         <h1 class="app-name">アプリ名</h1>
-        <a href="#">
+        <a href="post.php">
             <span class="material-symbols-outlined">
                 add_circle
             </span>
@@ -24,7 +24,7 @@
 
     <main>
         <div id="searchbox-container">
-            <input type="text" placeholder="検索したいレシピ名を入力…">
+            <input type="text" name="search-by-name" placeholder="検索したいレシピ名を入力…">
             <button type="submit">
                 <span class="material-symbols-outlined">
                     search
