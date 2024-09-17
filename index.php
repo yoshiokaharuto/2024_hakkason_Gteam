@@ -6,6 +6,22 @@ $recipe_name = isset($_GET['recipe_name']) && $_GET['recipe_name'] !== '' ? '%' 
 $category_tag = isset($_GET['category_tag']) && $_GET['category_tag'] !== '' ? $_GET['category_tag'] : null;
 $ingredient_tag = isset($_GET['ingredient_tag']) && $_GET['ingredient_tag'] !== '' ? $_GET['ingredient_tag'] : null;
 
+// カテゴリタグの取得
+$sql_categories = "SELECT category_name FROM categories";
+$stmt_categories = $pdo->prepare($sql_categories);
+$stmt_categories->execute();
+
+//データベースからカテゴリタグを取得して$categoriesに格納
+$categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
+
+// 主要食材タグの取得
+$sql_ingredients = "SELECT ingredient_name FROM main_ingredients";
+$stmt_ingredients = $pdo->prepare($sql_ingredients);
+$stmt_ingredients->execute();
+
+//データベースから主要食材タグを取得してに$ingredients格納
+$ingredients = $stmt_ingredients->fetchAll(PDO::FETCH_ASSOC);
+
 // SQLクエリ作成（カテゴリや食材がNULLの場合の扱いを修正）
 $sql = "
     SELECT r.*, 
@@ -77,8 +93,25 @@ if($maxId !== false) {
             <div id="searchByName-container">
                 <input type="text" name="recipe_name" value="<?= htmlspecialchars($_GET['recipe_name'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="検索したいレシピ名を入力…">
                 <div>
-                    <input type="text" name="category_tag" value="<?= htmlspecialchars($_GET['category_tag'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="カテゴリタグ(後でselectにする)">
-                    <input type="text" name="ingredient_tag" value="<?= htmlspecialchars($_GET['ingredient_tag'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="主要食材タグ(後でselectにする)">
+                    <!-- カテゴリタグの<select> -->
+                    <!-- 取得したカテゴリタグと主要食材タグをそれぞれ<option>として動的に生成 -->
+                    <select name="category_tag">
+                        <option value="">カテゴリを選択</option>
+                        <?php foreach($categories as $category): ?>
+                            <option value="<?= htmlspecialchars($category['category_name'], ENT_QUOTES, 'UTF-8') ?>" <?= isset($_GET['category_tag']) && $_GET['category_tag'] === $category['category_name'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($category['category_name'], ENT_QUOTES, 'UTF-8') ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <!-- 主要食材タグの<select> -->
+                    <select name="ingredient_tag">
+                        <option value="">主要食材を選択</option>
+                        <?php foreach($ingredients as $ingredient): ?>
+                            <option value="<?= htmlspecialchars($ingredient['ingredient_name'], ENT_QUOTES, 'UTF-8') ?>" <?= isset($_GET['ingredient_tag']) && $_GET['ingredient_tag'] === $ingredient['ingredient_name'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($ingredient['ingredient_name'], ENT_QUOTES, 'UTF-8') ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
 
                 <button type="submit" id="search-button">
