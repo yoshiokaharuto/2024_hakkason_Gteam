@@ -183,7 +183,7 @@
             <span class="material-symbols-outlined">
                 undo
             </span>
-            投稿一覧に戻る</a>
+            レシピ一覧に戻る</a>
             <button onclick="copyAllButton()" class="main-button">
                 <span class="material-symbols-outlined">
                     content_copy
