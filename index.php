@@ -74,23 +74,27 @@ if($maxId !== false) {
 
     <main>
         <form action="index.php" method="GET">
-            <div id="searchByName-container">
+            <div id="search-container">
                 <input type="text" name="recipe_name" value="<?= htmlspecialchars($_GET['recipe_name'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="検索したいレシピ名を入力…">
-                <div>
+                <div id="searchByTag-container">
                     <input type="text" name="category_tag" value="<?= htmlspecialchars($_GET['category_tag'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="カテゴリタグ(後でselectにする)">
                     <input type="text" name="ingredient_tag" value="<?= htmlspecialchars($_GET['ingredient_tag'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="主要食材タグ(後でselectにする)">
                 </div>
-
-                <button type="submit" id="search-button">
-                    検索
-                    <span class="material-symbols-outlined">
-                        search
-                    </span>
-                </button>
-                <a href='detail.php?id=<?= $randomPageId ?>'>
-                    ランダム
-                </a>
+                <div id="index-button-container">
+                    <button type="submit" id="search-button">
+                        <span class="material-symbols-outlined">
+                            search
+                        </span>
+                        検索
+                    </button>
+                    <a href='detail.php?id=<?= $randomPageId ?>'>
+                        <span class="material-symbols-outlined">
+                            shuffle
+                        </span>
+                        ランダム
+                    </a>
                 </div>
+            </div>
         </form>
         <?php
         if ($results) {
