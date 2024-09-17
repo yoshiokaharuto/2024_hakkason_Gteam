@@ -14,6 +14,8 @@ html, body, main, div, span, h1, h2, h3, p, ol, ul, li {
     --sub-color: #FFAB6F;
     --gray: #B0B0B0;
     --light-gray: #F3F3F3;
+    --text-color: black;
+    --invert-text-color: white;
 }
 
 body {
@@ -33,7 +35,7 @@ body {
 }
 
 .app-name {
-    color: white;
+    color: var(--invert-text-color);
     font-size: 30px;
     font-weight: normal;
 }
@@ -52,7 +54,7 @@ header {
 }
 
 header .material-symbols-outlined {
-    color: white;
+    color: var(--invert-text-color);
     font-size: 40px;
 }
 
@@ -62,7 +64,7 @@ main {
 }
 
 footer {
-    color: white;
+    color: var(--invert-text-color);
     background-color: var(--sub-color);
     text-align: center;
     padding: 40px;
@@ -117,8 +119,8 @@ footer {
 
 #search-button,
 #index-button-container a {
-    font-size: 20px;
-    line-height: 30px;
+    font-size: 16px;
+    line-height: 25px;
     padding: 0 15px 0 10px;
     border: none;
     border-radius: 5px;
@@ -126,7 +128,7 @@ footer {
 }
 
 #search-button {
-    color: white;
+    color: var(--invert-text-color);
     background-color: var(--main-color);
 }
 
@@ -136,9 +138,9 @@ footer {
 
 #search-container a {
     color: var(--main-color);
-    background-color: white;
+    background-color: var(--invert-text-color);
     border: 1px solid var(--main-color);
-    padding-top: 3px;
+    padding-top: 5px;
     padding-right: 10px;
 }
 
@@ -148,11 +150,11 @@ footer {
 
 #search-button .material-symbols-outlined,
 #search-container a .material-symbols-outlined {
-    font-size: 30px;
+    font-size: 25px;
 }
 
 .recipe-card {
-    background-color: white;
+    background-color: var(--invert-text-color);
     margin: 20px 0;
     padding: 20px;
     border: 1px solid var(--gray);
@@ -172,7 +174,7 @@ footer {
 }
 
 .recipe-genre {
-    color: white;
+    color: var(--invert-text-color);
     background-color: var(--sub-color);
     font-size: 24px;
     width: 40px;
@@ -202,7 +204,7 @@ footer {
 }
 
 .recipe-mainIngredient span {
-    color: white;
+    color: var(--invert-text-color);
     background-color: var(--sub-color);
     margin-right: 5px;
     padding: 0 5px;
@@ -236,7 +238,7 @@ footer {
 .recipe-information-title-section button {
     height: 24px;
     width: 24px;
-    color: white;
+    color: var(--invert-text-color);
     background-color: var(--sub-color);
     padding: 0;
     border: none;
@@ -253,7 +255,7 @@ footer {
 }
 
 .recipe-information-content {
-    background-color: white;
+    background-color: var(--invert-text-color);
     padding: 10px 20px;
     border: 1px solid var(--gray);
     border-radius: 10px;
@@ -280,7 +282,7 @@ footer {
 .button-container .white-button {
     font-size: 16px;
     color: var(--main-color);
-    background-color: white;
+    background-color: var(--invert-text-color);
     border: 1px solid var(--main-color);
     border-radius: 5px;
 }
@@ -291,7 +293,7 @@ footer {
 
 .button-container .main-button {
     font-size: 16px;
-    color: white;
+    color: var(--invert-text-color);
     background-color: var(--main-color);
     border: none;
     border-radius: 5px;
@@ -362,7 +364,7 @@ footer {
     display: inline-block;
     cursor: pointer;
     color: var(--gray);
-    background-color: white;
+    background-color: var(--invert-text-color);
     padding: 7px 0;
     border: 1px solid var(--gray);
     font-size: 16px;
@@ -380,7 +382,7 @@ footer {
 }
 
 .genre-option input[type=radio]:checked+label {
-    color: white;
+    color: var(--invert-text-color);
     background-color: var(--main-color);
     border: 1px solid var(--main-color);
 }
@@ -397,6 +399,13 @@ footer {
 #userRegister-container,
 #login-container {
     width: 50%;
+}
+
+@media (max-width: 900px) {
+    #userRegister-container,
+    #login-container {
+        width: 100%;
+    }
 }
 
 .button-container-withLink {
@@ -422,4 +431,21 @@ footer {
 
 .link-message a:active {
     color: var(--sub-color);
+}
+
+/* ========== ↑ 主にuser_register, login ========== */
+/* ========== ↓ 主にsettings ========== */ 
+.settings-section {
+    margin-top: 20px;
+    border-top: 1px solid var(--gray);
+}
+
+.settings-section h2 {
+    font-weight: normal;
+    margin-top: 20px;
+}
+
+.settings-section .button-container {
+    border-top: 0;
+    padding-top: 0;
 }

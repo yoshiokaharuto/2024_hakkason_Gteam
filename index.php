@@ -91,6 +91,7 @@ if($maxId !== false) {
             </span>
         </a>
         <a href="login.php">ログイン</a> <!-- 仮 -->
+        <a href="settings.php">設定</a> <!-- 仮 -->
     </header>
 
     <main>
@@ -100,7 +101,7 @@ if($maxId !== false) {
                 <div id="searchByTag-container">
                     <!-- カテゴリタグの<select> -->
                     <!-- 取得したカテゴリタグと主要食材タグをそれぞれ<option>として動的に生成 -->
-                    <select name="category_tag">
+                    <select name="category_tag" class="post-item">
                         <option value="">カテゴリを選択</option>
                         <?php foreach($categories as $category): ?>
                             <option value="<?= htmlspecialchars($category['category_name'], ENT_QUOTES, 'UTF-8') ?>" <?= isset($_GET['category_tag']) && $_GET['category_tag'] === $category['category_name'] ? 'selected' : '' ?>>
@@ -109,7 +110,7 @@ if($maxId !== false) {
                         <?php endforeach; ?>
                     </select>
                     <!-- 主要食材タグの<select> -->
-                    <select name="ingredient_tag">
+                    <select name="ingredient_tag" class="post-item">
                         <option value="">主要食材を選択</option>
                         <?php foreach($ingredients as $ingredient): ?>
                             <option value="<?= htmlspecialchars($ingredient['ingredient_name'], ENT_QUOTES, 'UTF-8') ?>" <?= isset($_GET['ingredient_tag']) && $_GET['ingredient_tag'] === $ingredient['ingredient_name'] ? 'selected' : '' ?>>
