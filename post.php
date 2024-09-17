@@ -9,6 +9,24 @@ $errorMessages = [
     'process' => ''
 ];
 
+// データベースからカテゴリと主要食材を取得
+$categories = [];
+$ingredients = [];
+
+try {
+    // カテゴリの取得
+    $sqlCategory = "SELECT category_id, category_name FROM categorys";
+    $stmCategory = $pdo->query($sqlCategory);
+    $categories = $stmCategory->fetchAll(PDO::FETCH_ASSOC);
+
+    // 主要食材の取得
+    $sqlIngredient = "SELECT ingredient_id, ingredient_name FROM main_ingredients";
+    $stmIngredient = $pdo->query($sqlIngredient);
+    $ingredients = $stmIngredient->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $resultMessage = "データベース取得エラー: " . $e->getMessage() . "<br>";
+}
+
 // POSTデータが存在するか確認して処理を行う
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 必須項目のバリデーション
@@ -25,20 +43,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // エラーがない場合に処理を行う
     if (empty(array_filter($errorMessages))) {
         // レシピの投稿処理
-        if (isset($_POST['name'], $_POST['genre'], $_POST['ingredient'], $_POST['time'], $_POST['process'])) {
+        if (isset($_POST['name'], $_POST['genre'], $_POST['ingredient'], $_POST['time'], $_POST['process'], $_POST['category_id'], $_POST['main_ingredient_id'])) {
             // POSTデータを変数に格納
             $name = $_POST['name'];
-            $genre = $_POST['genre'];
+            $genre = intval($_POST['genre']);
             $ingredient = $_POST['ingredient'];
-            $time = $_POST['time'];
+            $time = intval($_POST['time']);
             $process = $_POST['process'];
             $note = isset($_POST['note']) ? $_POST['note'] : '';
+            $category_ids = $_POST['category_id'];
+            $main_ingredient_ids = $_POST['main_ingredient_id'];
 
-            // レシピを `recipes` テーブルに挿入
-            $sql1 = "INSERT INTO recipes (name, genre, ingredient, time, process, note) 
-                     VALUES (:name, :genre, :ingredient, :time, :process, :note)";
-
+            // 各カテゴリと主要食材を処理するためにループ
             try {
+                $pdo->beginTransaction();
+                $sql1 = "INSERT INTO recipes (name, genre, ingredient, time, process, note) 
+                         VALUES (:name, :genre, :ingredient, :time, :process, :note)";
                 $stm1 = $pdo->prepare($sql1);
                 $stm1->bindValue(':name', $name, PDO::PARAM_STR);
                 $stm1->bindValue(':genre', $genre, PDO::PARAM_INT);
@@ -46,42 +66,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stm1->bindValue(':time', $time, PDO::PARAM_INT);
                 $stm1->bindValue(':process', $process, PDO::PARAM_STR);
                 $stm1->bindValue(':note', $note, PDO::PARAM_STR);
+                $stm1->execute();
 
-                if ($stm1->execute()) {
-                    $resultMessage = "レシピが正常に投稿されました！<br>";
-                } else {
-                    $resultMessage = "レシピの投稿に失敗しました。<br>";
+                $recipeId = $pdo->lastInsertId();
+
+                // カテゴリ
+                foreach ($category_ids as $category_id) {
+                    $sql2 = "INSERT INTO recipe_to_category (recipe_id, category_id) VALUES (:recipe_id, :category_id)";
+                    $stm2 = $pdo->prepare($sql2);
+                    $stm2->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
+                    $stm2->bindValue(':category_id', intval($category_id), PDO::PARAM_INT);
+                    $stm2->execute();
                 }
-            } catch (PDOException $e) {
-                $resultMessage = "SQLエラー: " . $e->getMessage() . "<br>";
-            }
-        }
 
-        // カテゴリの投稿処理
-        if (isset($_POST['category_name'])) {
-            $category_name = $_POST['category_name'];
-            $sql2 = "INSERT INTO categories (category_name) VALUES (:category_name)";
-            try {
-                $stm2 = $pdo->prepare($sql2);
-                $stm2->bindValue(':category_name', $category_name, PDO::PARAM_STR);
-                $stm2->execute();
-            } catch (PDOException $e) {
-            }
-        }
+                // 主要食材
+                foreach ($main_ingredient_ids as $ingredient_id) {
+                    $sql3 = "INSERT INTO recipe_to_ingredient (recipe_id, ingredient_id) VALUES (:recipe_id, :ingredient_id)";
+                    $stm3 = $pdo->prepare($sql3);
+                    $stm3->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
+                    $stm3->bindValue(':ingredient_id', intval($ingredient_id), PDO::PARAM_INT);
+                    $stm3->execute();
+                }
 
-        // 主要食材の投稿処理）
-        if (isset($_POST['ingredient_name'])) {
-            $ingredient_name = $_POST['ingredient_name'];
-            $sql3 = "INSERT INTO main_ingredients (ingredient_name) VALUES (:ingredient_name)";
-            try {
-                $stm3 = $pdo->prepare($sql3);
-                $stm3->bindValue(':ingredient_name', $ingredient_name, PDO::PARAM_STR);
-                $stm3->execute();
+                $pdo->commit();
+                $resultMessage = "レシピが正常に投稿されました。";
             } catch (PDOException $e) {
+                $pdo->rollBack();
+                $resultMessage = "投稿エラー: " . $e->getMessage() . "<br>";
             }
         }
-    } else {
-        $resultMessage = implode('<br>', array_filter($errorMessages)) . "<br>";
     }
 }
 ?>
@@ -111,13 +124,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p><?php echo $resultMessage; ?></p>
         </div>
 
-        <form action="post.php" method="POST">
+        <form action="index.php" method="POST">
             <div class="post-item-container">
                 <label>
                     レシピ名
                     <input type="text" name="name" placeholder="ちょい足し卵かけご飯" class="post-item">
+                    <p class="error-message"><?php echo $errorMessages['name']; ?></p>
                 </label>
-                <p class="error-message"><?php echo $errorMessages['name']; ?></p>
             </div>
             <div class="post-item-container">
                 ジャンル
@@ -152,34 +165,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <textarea name="ingredient" placeholder="・卵 - 1個
 ・ご飯 - 150g
 ・焼き肉のタレ - 大さじ1" class="post-item"></textarea>
+                    <p class="error-message"><?php echo $errorMessages['ingredient']; ?></p>
                 </label>
-                <p class="error-message"><?php echo $errorMessages['ingredient']; ?></p>
             </div>
-            <div>
+            <div class="post-item-container">
                 <label>主要食材</label>
-                <input type="text" name="ingredient_name">
+                <div id="main-ingredient-container">
+                    <select name="main_ingredient_id[]" class="post-item">
+                        <option value="">選択してください</option>
+                        <?php foreach ($ingredients as $ingredient): ?>
+                            <option value="<?php echo $ingredient['ingredient_id']; ?>">
+                                <?php echo $ingredient['ingredient_name']; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <button type="button" id="add-main-ingredient">主要食材を追加</button>
             </div>
             <div class="post-item-container">
                 <label>
                     手順
-                    <textarea name="process" placeholder="①茶碗にご飯を盛る
-②卵を割ってご飯にかける
-③焼き肉のタレをかける" class="post-item"></textarea>
+                    <textarea name="process" placeholder="①茶碗にご飯を盛り、卵を割り入れます。..." class="post-item"></textarea>
+                    <p class="error-message"><?php echo $errorMessages['process']; ?></p>
                 </label>
-                <p class="error-message"><?php echo $errorMessages['process']; ?></p>
             </div>
             <div class="post-item-container">
                 <label>
-                    メモ
-                    <textarea name="note" placeholder="〇〇社のタレがおすすめです。" class="post-item"></textarea>
+                    備考
+                    <textarea name="note" placeholder="このレシピはお弁当にも最適です。" class="post-item"></textarea>
                 </label>
             </div>
-            <div>
-                <label>カテゴリ名</label>
-                <input type="text" name="category_name">
+            <div class="post-item-container">
+                <label>カテゴリ</label>
+                <div id="category-container">
+                    <select name="category_id[]" class="post-item">
+                        <option value="">選択してください</option>
+                        <?php foreach ($categories as $category): ?>
+                            <option value="<?php echo $category['category_id']; ?>">
+                                <?php echo $category['category_name']; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <button type="button" id="add-category">カテゴリを追加</button>
             </div>
             <div class="button-container">
-                <a href="index.php" class="white-button">レシピ一覧に戻る</a>
+                <a href="index.php" class="white-button">投稿一覧に戻る</a>
                 <input type="submit" value="投稿する" class="main-button">
             </div>
         </form>
@@ -189,5 +220,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1 class="app-name">アプリ名</h1>
         <p>2024秋ハッカソン - グループG</p>
     </footer>
+
+    <script>
+    document.getElementById('add-main-ingredient').addEventListener('click', function() {
+        var container = document.getElementById('main-ingredient-container');
+        
+        // 新しいセレクトボックスを作成
+        var newSelect = document.createElement('select');
+        newSelect.name = 'main_ingredient_id[]';
+        newSelect.className = 'post-item';
+        newSelect.innerHTML = '<option value="">選択してください</option><?php foreach ($ingredients as $ingredient): ?><option value="<?php echo $ingredient['ingredient_id']; ?>"><?php echo $ingredient['ingredient_name']; ?></option><?php endforeach; ?>';
+
+        // 削除ボタンを作成
+        var removeButton = document.createElement('button');
+        removeButton.textContent = '削除';
+        removeButton.className = 'remove-button';
+        removeButton.type = 'button';
+
+        // 削除ボタンにクリックイベントを追加
+        removeButton.addEventListener('click', function() {
+            container.removeChild(newSelect);
+            container.removeChild(removeButton);
+        });
+
+        // コンテナにセレクトボックスと削除ボタンを追加
+        container.appendChild(newSelect);
+        container.appendChild(removeButton);
+    });
+
+    document.getElementById('add-category').addEventListener('click', function() {
+        var container = document.getElementById('category-container');
+        
+        // 新しいセレクトボックスを作成
+        var newSelect = document.createElement('select');
+        newSelect.name = 'category_id[]';
+        newSelect.className = 'post-item';
+        newSelect.innerHTML = '<option value="">選択してください</option><?php foreach ($categories as $category): ?><option value="<?php echo $category['category_id']; ?>"><?php echo $category['category_name']; ?></option><?php endforeach; ?>';
+
+        // 削除ボタンを作成
+        var removeButton = document.createElement('button');
+        removeButton.textContent = '削除';
+        removeButton.className = 'remove-button';
+        removeButton.type = 'button';
+
+        // 削除ボタンにクリックイベントを追加
+        removeButton.addEventListener('click', function() {
+            container.removeChild(newSelect);
+            container.removeChild(removeButton);
+        });
+
+        // コンテナにセレクトボックスと削除ボタンを追加
+        container.appendChild(newSelect);
+        container.appendChild(removeButton);
+    });
+</script>
+
 </body>
 </html>
