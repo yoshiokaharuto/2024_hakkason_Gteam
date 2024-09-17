@@ -5,18 +5,21 @@ require_once "./db_connect.php";
 $recipe_name = isset($_GET['recipe_name']) && $_GET['recipe_name'] !== '' ? '%' . $_GET['recipe_name'] . '%' : '%';
 $category_tag = isset($_GET['category_tag']) && $_GET['category_tag'] !== '' ? $_GET['category_tag'] : null;
 $ingredient_tag = isset($_GET['ingredient_tag']) && $_GET['ingredient_tag'] !== '' ? $_GET['ingredient_tag'] : null;
+
 // カテゴリタグの取得
 $sql_categories = "SELECT category_name FROM categories";
 $stmt_categories = $pdo->prepare($sql_categories);
 $stmt_categories->execute();
 //データベースからカテゴリタグを取得して$categoriesに格納
 $categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
+
 // 主要食材タグの取得
 $sql_ingredients = "SELECT ingredient_name FROM main_ingredients";
 $stmt_ingredients = $pdo->prepare($sql_ingredients);
 $stmt_ingredients->execute();
 //データベースから主要食材タグを取得してに$ingredients格納
 $ingredients = $stmt_ingredients->fetchAll(PDO::FETCH_ASSOC);
+
 // SQLクエリ作成（カテゴリや食材がNULLの場合の扱いを修正）
 $sql = "
     SELECT r.*, 
@@ -45,21 +48,6 @@ $stmt->execute();
 
 // 結果を取得
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// ==============================
-// ランダムなページに飛ぶボタンのための処理
-$sql = "SELECT MAX(recipe_id) FROM recipes";
-$stmt = $pdo->query($sql);
-$maxId = $stmt->fetchColumn();
-if($maxId !== false) {
-    do {
-        $randomPageId = rand(1, $maxId);
-        $sql = "SELECT 1 FROM recipes where recipe_id = :id LIMIT 1";
-        $stm = $pdo->prepare($sql);
-        $stm->bindValue(':id', $randomPageId, PDO::PARAM_INT);
-        $stm->execute();
-    } while ($stm->fetchColumn() === false);
-}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -115,11 +103,10 @@ if($maxId !== false) {
                         search
                     </span>
                 </button>
-                <a href='detail.php?id=<?= $randomPageId ?>'>
-                    ランダム
-                </a>
-                </div>
+            </div>
         </form>
+
+        <!-- 検索結果表示 -->
         <?php
         if ($results) {
             foreach($results as $data){
