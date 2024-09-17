@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" name="category_name">
             </div>
             <div class="button-container">
-                <a href="index.php" class="white-button">投稿一覧に戻る</a>
+                <a href="index.php" class="white-button">レシピ一覧に戻る</a>
                 <input type="submit" value="投稿する" class="main-button">
             </div>
         </form>

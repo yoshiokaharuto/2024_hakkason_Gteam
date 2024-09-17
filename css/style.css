@@ -384,3 +384,42 @@ footer {
     background-color: var(--main-color);
     border: 1px solid var(--main-color);
 }
+
+/* ========== ↑ 主にpost ========== */
+/* ========== ↓ 主にuser_register, login ========== */ 
+#userRegister-main,
+#login-main {
+    display: flex;
+    justify-content:center; /* 横方向 */
+	align-items:center; /* 縦方向 */
+}
+
+#userRegister-container,
+#login-container {
+    width: 50%;
+}
+
+.button-container-withLink {
+    margin: 20px auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray);
+}
+
+.button-container-withLink .button-container {
+    border-top: 0;
+    margin-top: 0;
+}
+
+.link-message {
+    flex: 1 0 100%;
+    text-align: center;
+}
+
+.link-message a {
+    color: var(--main-color);
+    text-decoration: underline;
+}
+
+.link-message a:active {
+    color: var(--sub-color);
+}

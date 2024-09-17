@@ -1,0 +1,55 @@
+<?php
+?>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ユーザー登録画面</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
+</head>
+<body>
+    <header>
+        <a href="index.php">
+            <h1 class="app-name">アプリ名</h1>
+        </a>
+    </header>
+    
+    <main id="userRegister-main">
+        <div id="userRegister-container">
+            <div id="page-name-section">
+                <h1>ユーザー登録</h1>
+            </div>
+
+            <form action="" method="POST">
+                <div class="post-item-container">
+                    <label>
+                        ID
+                        <input type="text" name="id" placeholder="利用したいIDを入力" class="post-item">
+                    </label>
+                </div>
+                <div class="post-item-container">
+                    <label>
+                        パスワード
+                        <input type="password" name="password" placeholder="パスワードをを入力" class="post-item">
+                    </label>
+                </div>
+                <div class="button-container">
+                    <a href="login.php" class="white-button">ログイン画面に戻る</a>
+                    <input type="submit" value="登録" class="main-button">
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <h1 class="app-name">アプリ名</h1>
+        <p>2024秋ハッカソン - グループG</p>
+    </footer>
+</body>
+</html>

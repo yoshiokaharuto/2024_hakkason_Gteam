@@ -80,12 +80,17 @@ if($maxId !== false) {
 </head>
 <body>
     <header>
-        <h1 class="app-name">アプリ名</h1>
+        <a href="index.php">
+            <h1 class="app-name">
+                アプリ名
+            </h1>
+        </a>
         <a href="post.php">
             <span class="material-symbols-outlined">
                 add_circle
             </span>
         </a>
+        <a href="login.php">ログイン</a> <!-- 仮 -->
     </header>
 
     <main>
