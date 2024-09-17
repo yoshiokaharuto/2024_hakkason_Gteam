@@ -90,9 +90,9 @@ if($maxId !== false) {
 
     <main>
         <form action="index.php" method="GET">
-            <div id="searchByName-container">
+            <div id="search-container">
                 <input type="text" name="recipe_name" value="<?= htmlspecialchars($_GET['recipe_name'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="検索したいレシピ名を入力…">
-                <div>
+                <div id="searchByTag-container">
                     <!-- カテゴリタグの<select> -->
                     <!-- 取得したカテゴリタグと主要食材タグをそれぞれ<option>として動的に生成 -->
                     <select name="category_tag">
@@ -113,17 +113,21 @@ if($maxId !== false) {
                         <?php endforeach; ?>
                     </select>
                 </div>
-
-                <button type="submit" id="search-button">
-                    検索
-                    <span class="material-symbols-outlined">
-                        search
-                    </span>
-                </button>
-                <a href='detail.php?id=<?= $randomPageId ?>'>
-                    ランダム
-                </a>
+                <div id="index-button-container">
+                    <button type="submit" id="search-button">
+                        <span class="material-symbols-outlined">
+                            search
+                        </span>
+                        検索
+                    </button>
+                    <a href='detail.php?id=<?= $randomPageId ?>'>
+                        <span class="material-symbols-outlined">
+                            shuffle
+                        </span>
+                        ランダム
+                    </a>
                 </div>
+            </div>
         </form>
         <?php
         if ($results) {

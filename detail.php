@@ -179,8 +179,16 @@
 <?= !empty($data['note']) ? preoutput($data['note']) : "(なし)" ?><br>
 【カテゴリタグ】<?= !empty($data['category']) ? preoutput($data['category']) : "(なし)" ?></div>
         <div class="button-container">
-            <a href="index.php" class="white-button">投稿一覧に戻る</a>
-            <button onclick="copyAllButton()" class="main-button">このレシピをコピー</button>
+            <a href="index.php" class="white-button">
+            <span class="material-symbols-outlined">
+                undo
+            </span>
+            投稿一覧に戻る</a>
+            <button onclick="copyAllButton()" class="main-button">
+                <span class="material-symbols-outlined">
+                    content_copy
+                </span>
+                このレシピをコピー</button>
         </div>
     </main>
     
