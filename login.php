@@ -15,7 +15,7 @@
 </head>
 <body>
     <header>
-        <a href="index.php">
+        <a href="index.php" title="レシピ一覧に戻る">
             <h1 class="app-name">アプリ名</h1>
         </a>
     </header>
@@ -36,7 +36,7 @@
                 <div class="post-item-container">
                     <label>
                         パスワード
-                        <input type="password" name="password" placeholder="パスワードをを入力" class="post-item">
+                        <input type="password" name="password" placeholder="パスワードを入力" class="post-item">
                     </label>
                 </div>
                 <div class="button-container-withLink">
@@ -45,15 +45,11 @@
                     </p>
                     <div class="button-container">
                         <a href="index.php" class="white-button">
-                            <span class="material-symbols-outlined">
-                                undo
-                            </span>
+                            <span class="material-symbols-outlined">undo</span>
                             レシピ一覧に戻る
                         </a>
                         <button type="submit" class="main-button">
-                            <span class="material-symbols-outlined">
-                                login
-                            </span>
+                            <span class="material-symbols-outlined">login</span>
                             ログイン
                         </button>
                     </div>

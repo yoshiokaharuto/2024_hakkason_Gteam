@@ -105,22 +105,29 @@ if(isset($_SESSION['resultMessage'])) {
         </div>
         <label id="sub-header-button-container">
             <input type="checkbox" id="sub-header-checkbox">
-            <span class="material-symbols-outlined" id="sub-header-button">
-                menu
-            </span>
+            <span class="material-symbols-outlined" id="sub-header-button">menu</span>
         </label>
     </header>
 
     <div id="sub-header">
         <ul>
-            <a href="post.php" title="新規投稿">
-                <li>新規投稿</li>
+            <a href="post.php">
+                <li>
+                    <span class="material-symbols-outlined">add_circle</span>
+                    新規投稿
+                </li>
             </a>
-            <a href="settings.php" title="設定">
-                <li>設定</li>
+            <a href="settings.php">
+                <li>
+                    <span class="material-symbols-outlined">settings</span>
+                    設定
+                </li>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
-                <li>ログアウト</li>
+            <a href="login.php"> <!-- 仮でログイン画面に飛びます -->
+                <li>
+                    <span class="material-symbols-outlined">logout</span>
+                    ログアウト
+                </li>
             </a>
         </ul>
     </div>
@@ -155,21 +162,15 @@ if(isset($_SESSION['resultMessage'])) {
                 </label>
                 <div id="index-button-container">
                     <button type="submit" id="search-button">
-                        <span class="material-symbols-outlined">
-                            search
-                        </span>
+                        <span class="material-symbols-outlined">search</span>
                         検索
                     </button>
                     <a href="index.php">
-                        <span class="material-symbols-outlined">
-                            restart_alt
-                        </span>
+                        <span class="material-symbols-outlined">restart_alt</span>
                         検索条件をリセット
                     </a>
                     <a href='detail.php?id=<?= $randomPageId ?>'>
-                        <span class="material-symbols-outlined">
-                            shuffle
-                        </span>
+                        <span class="material-symbols-outlined">shuffle</span>
                         ランダム
                     </a>
                 </div>
@@ -220,7 +221,9 @@ if(isset($_SESSION['resultMessage'])) {
                         }
                     ?>
                     <p class='recipe-ingredient'><?= nl2br(htmlspecialchars($data['ingredient'], ENT_QUOTES, 'UTF-8')) ?></p>
-                    <p class='recipe-date'><?= htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') ?></p>
+                        <p class='recipe-userAndDate'>
+                            <?= htmlspecialchars($data['user_id'], ENT_QUOTES, 'UTF-8') ?>(<?= htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') ?>)
+                        </p>
                 </div>
             </a>
         <?php 
