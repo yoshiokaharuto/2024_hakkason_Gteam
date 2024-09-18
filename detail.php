@@ -55,6 +55,10 @@
                 アプリ名
             </h1>
         </a>
+
+        <a href="edit.php?id=<?= $data['recipe_id'] ?>">
+            <p>レシピを編集</p>
+        </a>
     </header>
 
     <main>
