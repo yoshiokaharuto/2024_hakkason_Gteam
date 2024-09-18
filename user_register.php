@@ -38,6 +38,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $password_hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
                 $sql = "INSERT INTO users (user_id,password) VALUES(:user_id,:password)";
+                
+                try {
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+                    $stmt->bindValue(':password', $password_hash, PDO::PARAM_STR);
+
+                    if($stmt->execute()){
+                        $resultMessage = '登録が完了しました';
+                        $_SESSION['resultMessage'] = '登録が完了しました';
+                        header("Location:index.php");
+                        exit();
+                    }
+                }
             }
         }
 
