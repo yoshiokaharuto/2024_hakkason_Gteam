@@ -14,8 +14,8 @@ html, body, main, div, span, h1, h2, h3, p, ol, ul, li {
     --sub-color: #FFAB6F;
     --gray: #B0B0B0;
     --light-gray: #F3F3F3;
-    --text-color: black;
-    --invert-text-color: white;
+    --text-color: #000000;
+    --invert-text-color: #FFFFFF;
 }
 
 body {
@@ -53,9 +53,35 @@ header {
     align-items: center;
 }
 
+#sub-header-button-container {
+    display: none;
+}
+
+#header-icon-container {
+    display: flex;
+    gap: 20px;
+}
+
 header .material-symbols-outlined {
     color: var(--invert-text-color);
     font-size: 40px;
+}
+
+#sub-header{
+    background-color: var(--sub-color);
+    text-align: center;
+}
+
+#sub-header a:hover {
+    text-decoration: underline;
+}
+
+#sub-header li {
+    margin: 10px 0;
+}
+
+#sub-header-checkbox {
+    display: none;
 }
 
 main {
@@ -73,6 +99,14 @@ footer {
 @media (max-width: 600px) {
     header {
         padding: 20px;
+    }
+
+    #header-icon-container {
+        display: none;
+    }
+
+    #sub-header-button-container {
+        display: inline-block;
     }
 
     main {
@@ -117,8 +151,26 @@ footer {
     gap: 10px;
 }
 
+@media (max-width: 600px) {
+    #index-button-container{
+        flex-direction: column;
+    }
+}
+
+#user-recipe {
+    display: block;
+    margin: 10px 0;
+}
+
+#user-recipe input[type="checkbox"] {
+    transform: scale(1.5);
+    margin-right: 5px;
+    accent-color: var(--text-color);
+}
+
 #search-button,
 #index-button-container a {
+    display: block;
     font-size: 16px;
     line-height: 25px;
     padding: 0 15px 0 10px;
@@ -164,7 +216,7 @@ footer {
 .recipe-name-section {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: top;
 }
 
 .recipe-name {
@@ -228,11 +280,16 @@ footer {
 }
 
 .recipe-information-title-section {
-    color: var(--main-color);
+    color: var(--text-color);
     font-size: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.recipe-information-title-section p .material-symbols-outlined {
+    font-size: 25px;
+    color: var(--main-color);
 }
 
 .recipe-information-title-section button {
@@ -320,8 +377,13 @@ footer {
 
 .post-item-container {
     margin: 20px 0;
-    color: var(--main-color);
+    color: var(--text-color);
     font-size: 20px;
+}
+
+.post-item-container .material-symbols-outlined {
+    color: var(--main-color);
+    font-size: 25px;
 }
 
 .post-item {
@@ -441,8 +503,15 @@ footer {
 }
 
 .settings-section h2 {
+    font-size: 24px;
     font-weight: normal;
     margin-top: 20px;
+    color: var(--text-color);
+}
+
+.settings-section h2 .material-symbols-outlined {
+    font-size: 30px;
+    color: var(--main-color);
 }
 
 .settings-section .button-container {

@@ -44,8 +44,18 @@
                         <a href="user_register.php">新規登録はこちらから</a>
                     </p>
                     <div class="button-container">
-                        <a href="index.php" class="white-button">レシピ一覧に戻る</a>
-                        <input type="submit" value="ログイン" class="main-button">
+                        <a href="index.php" class="white-button">
+                            <span class="material-symbols-outlined">
+                                undo
+                            </span>
+                            レシピ一覧に戻る
+                        </a>
+                        <button type="submit" class="main-button">
+                            <span class="material-symbols-outlined">
+                                login
+                            </span>
+                            ログイン
+                        </button>
                     </div>
                 </div>
             </form>

@@ -14,18 +14,50 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
 </head>
 <body>
-    <header>
+<header>
         <a href="index.php">
-            <h1 class="app-name">アプリ名</h1>
+            <h1 class="app-name">
+                アプリ名
+            </h1>
         </a>
+        <div id="header-icon-container">
+            <a href="post.php" title="新規投稿">
+                <span class="material-symbols-outlined">add_circle</span>
+            </a>
+            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+                <span class="material-symbols-outlined">logout</span>
+            </a>
+        </div>
+        <label id="sub-header-button-container">
+            <input type="checkbox" id="sub-header-checkbox">
+            <span class="material-symbols-outlined" id="sub-header-button">
+                menu
+            </span>
+        </label>
     </header>
+
+    <div id="sub-header">
+        <ul>
+            <a href="post.php" title="新規投稿">
+                <li>新規投稿</li>
+            </a>
+            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+                <li>ログアウト</li>
+            </a>
+        </ul>
+    </div>
     
     <main>
         <div id="page-name-section">
             <h1>設定</h1>
         </div>
         <div class="settings-section">
-            <h2>パスワードを変更</h2>
+            <h2>
+                <span class="material-symbols-outlined">
+                    lock
+                </span>
+                パスワードを変更
+            </h2>
             <form action="" method="POST">
                 <div class="post-item-container">
                     <label>
@@ -46,13 +78,23 @@
                     </label>
                 </div>
                 <div class="button-container">
-                    <input type="submit" value="変更" class="main-button">
+                    <button type="submit" class="main-button">
+                        <span class="material-symbols-outlined">
+                            check
+                        </span>
+                        変更
+                    </button>
                 </div>
             </form>
         </div>
 
         <div class="settings-section">
-            <h2>テーマを変更</h2>
+            <h2>
+                <span class="material-symbols-outlined">
+                    palette
+                </span>
+                テーマを変更
+            </h2>
             <form action="" method="POST">
                 <div class="post-item-container">
                     <label>
@@ -64,14 +106,29 @@
                     </label>
                 </div>
                 <div class="button-container">
-                    <input type="submit" value="変更" class="main-button">
+                    <button type="submit" class="main-button">
+                        <span class="material-symbols-outlined">
+                            check
+                        </span>
+                        変更
+                    </button>
                 </div>
             </form>
         </div>
 
         <div class="button-container">
-            <a href="index.php" class="white-button">レシピ一覧に戻る</a>
-            <a href="" class="main-button">ログアウト</a>
+            <a href="index.php" class="white-button">
+                <span class="material-symbols-outlined">
+                    undo
+                </span>
+                レシピ一覧に戻る
+            </a>
+            <a href="" class="main-button">
+                <span class="material-symbols-outlined">
+                    logout
+                </span>
+                ログアウト
+            </a>
         </div>
     </main>
 
@@ -79,5 +136,7 @@
         <h1 class="app-name">アプリ名</h1>
         <p>2024秋ハッカソン - グループG</p>
     </footer>
+
+    <script src="js/script.js"></script>
 </body>
 </html>

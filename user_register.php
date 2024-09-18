@@ -15,7 +15,7 @@
 </head>
 <body>
     <header>
-        <a href="index.php">
+        <a href="index.php" title="レシピ一覧に戻る">
             <h1 class="app-name">アプリ名</h1>
         </a>
     </header>
@@ -40,8 +40,18 @@
                     </label>
                 </div>
                 <div class="button-container">
-                    <a href="login.php" class="white-button">ログイン画面に戻る</a>
-                    <input type="submit" value="登録" class="main-button">
+                    <a href="login.php" class="white-button">
+                        <span class="material-symbols-outlined">
+                            undo
+                        </span>
+                        ログイン画面に戻る
+                    </a>
+                    <button type="submit" class="main-button">
+                        <span class="material-symbols-outlined">
+                            person_add
+                        </span>
+                        登録
+                    </button>
                 </div>
             </form>
         </div>
@@ -51,5 +61,7 @@
         <h1 class="app-name">アプリ名</h1>
         <p>2024秋ハッカソン - グループG</p>
     </footer>
+
+    <script src="js/script.js"></script>
 </body>
 </html>

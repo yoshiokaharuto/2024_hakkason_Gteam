@@ -85,14 +85,38 @@ if($maxId !== false) {
                 アプリ名
             </h1>
         </a>
-        <a href="post.php">
-            <span class="material-symbols-outlined">
-                add_circle
+        <div id="header-icon-container">
+            <a href="post.php" title="新規投稿">
+                <span class="material-symbols-outlined">add_circle</span>
+            </a>
+            <a href="settings.php" title="設定">
+                <span class="material-symbols-outlined">settings</span>
+            </a>
+            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+                <span class="material-symbols-outlined">logout</span>
+            </a>
+        </div>
+        <label id="sub-header-button-container">
+            <input type="checkbox" id="sub-header-checkbox">
+            <span class="material-symbols-outlined" id="sub-header-button">
+                menu
             </span>
-        </a>
-        <a href="login.php">ログイン</a> <!-- 仮 -->
-        <a href="settings.php">設定</a> <!-- 仮 -->
+        </label>
     </header>
+
+    <div id="sub-header">
+        <ul>
+            <a href="post.php" title="新規投稿">
+                <li>新規投稿</li>
+            </a>
+            <a href="settings.php" title="設定">
+                <li>設定</li>
+            </a>
+            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+                <li>ログアウト</li>
+            </a>
+        </ul>
+    </div>
 
     <main>
         <form action="index.php" method="GET">
@@ -119,6 +143,9 @@ if($maxId !== false) {
                         <?php endforeach; ?>
                     </select>
                 </div>
+                <label id="user-recipe">
+                    <input type="checkbox" name="user-recipe">自分が投稿したレシピ</input>
+                </label>
                 <div id="index-button-container">
                     <button type="submit" id="search-button">
                         <span class="material-symbols-outlined">
@@ -126,6 +153,12 @@ if($maxId !== false) {
                         </span>
                         検索
                     </button>
+                    <a href="index.php">
+                        <span class="material-symbols-outlined">
+                            restart_alt
+                        </span>
+                        検索条件をリセット
+                    </a>
                     <a href='detail.php?id=<?= $randomPageId ?>'>
                         <span class="material-symbols-outlined">
                             shuffle
@@ -195,5 +228,7 @@ if($maxId !== false) {
         <h1 class="app-name">アプリ名</h1>
         <p>2024秋ハッカソン - グループG</p>
     </footer>
+
+    <script src="js/script.js"></script>
 </body>
 </html>
