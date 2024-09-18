@@ -52,7 +52,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     } else {
                         $resultMessage = '登録に失敗しました。';
                     }
-                } 
+                } catch(PDOException $e) {
+                    $resultMessage = 'sqlエラー:'.$e->getMessage();
+                }
             }
         }
 
