@@ -34,6 +34,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(isset($_POST['user_id'],$_POST['password'])) {
                 //postデータを変数に
                 $user_id = $_POST['user_id'];
+                //ハッシュ化して変数に
+                $password_hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
                 
             }
         }
