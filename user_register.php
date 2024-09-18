@@ -36,7 +36,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $user_id = $_POST['user_id'];
                 //ハッシュ化して変数に
                 $password_hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
-                
+
+                $sql = "INSERT INTO users (user_id,password) VALUES(:user_id,:password)";
             }
         }
 
