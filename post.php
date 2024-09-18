@@ -112,11 +112,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
 </head>
 <body>
-    <header>
+<header>
         <a href="index.php">
-            <h1 class="app-name">アプリ名</h1>
+            <h1 class="app-name">
+                アプリ名
+            </h1>
         </a>
+        <div id="header-icon-container">
+            <a href="settings.php" title="設定">
+                <span class="material-symbols-outlined">settings</span>
+            </a>
+            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+                <span class="material-symbols-outlined">logout</span>
+            </a>
+        </div>
+        <label id="sub-header-button-container">
+            <input type="checkbox" id="sub-header-checkbox">
+            <span class="material-symbols-outlined" id="sub-header-button">
+                menu
+            </span>
+        </label>
     </header>
+
+    <div id="sub-header">
+        <ul>
+            <a href="settings.php" title="設定">
+                <li>設定</li>
+            </a>
+            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+                <li>ログアウト</li>
+            </a>
+        </ul>
+    </div>
     
     <main>
         <div id="page-name-section">
@@ -127,12 +154,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="index.php" method="POST">
             <div class="post-item-container">
                 <label>
+                    <span class="material-symbols-outlined">
+                        edit
+                    </span>
                     レシピ名
                     <input type="text" name="name" placeholder="ちょい足し卵かけご飯" class="post-item">
                     <p class="error-message"><?php echo $errorMessages['name']; ?></p>
                 </label>
             </div>
             <div class="post-item-container">
+                <span class="material-symbols-outlined">
+                    widgets
+                </span>    
                 ジャンル
                 <div class="genre-group">
                     <div class="genre-option">
@@ -155,13 +188,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="post-item-container">
                 <label>
+                    <span class='material-symbols-outlined'>
+                        timer
+                    </span>
                     所要時間（分）
                     <input type="number" class="post-item" name="time" value="1" step="1" min="1">
                 </label>
             </div>
             <div class="post-item-container">
                 <label>
-                    材料
+                    <span class="material-symbols-outlined">
+                        grocery
+                    </span>
+                    食材
                     <textarea name="ingredient" placeholder="・卵 - 1個
 ・ご飯 - 150g
 ・焼き肉のタレ - 大さじ1" class="post-item"></textarea>
@@ -169,7 +208,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </label>
             </div>
             <div class="post-item-container">
-                <label>主要食材</label>
+                <label>
+                    <span class="material-symbols-outlined">
+                        star
+                    </span>
+                    主要食材
+                </label>
                 <div id="main-ingredient-container">
                     <select name="main_ingredient_id[]" class="post-item">
                         <option value="">選択してください</option>
@@ -184,6 +228,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="post-item-container">
                 <label>
+                    <span class="material-symbols-outlined">
+                        receipt_long
+                    </span>
                     手順
                     <textarea name="process" placeholder="①茶碗にご飯を盛り、卵を割り入れます。..." class="post-item"></textarea>
                     <p class="error-message"><?php echo $errorMessages['process']; ?></p>
@@ -191,12 +238,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="post-item-container">
                 <label>
-                    備考
-                    <textarea name="note" placeholder="このレシピはお弁当にも最適です。" class="post-item"></textarea>
+                    <span class="material-symbols-outlined">
+                        description
+                    </span>
+                    メモ
+                    <textarea name="note" placeholder="〇〇社のタレがおすすめです。" class="post-item"></textarea>
                 </label>
             </div>
             <div class="post-item-container">
-                <label>カテゴリ</label>
+                <label>
+                    <span class="material-symbols-outlined">
+                        sell
+                    </span>
+                    カテゴリ
+                </label>
                 <div id="category-container">
                     <select name="category_id[]" class="post-item">
                         <option value="">選択してください</option>
@@ -210,8 +265,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="button" id="add-category">カテゴリを追加</button>
             </div>
             <div class="button-container">
-                <a href="index.php" class="white-button">投稿一覧に戻る</a>
-                <input type="submit" value="投稿する" class="main-button">
+                <a href="index.php" class="white-button">
+                    <span class="material-symbols-outlined">
+                        undo
+                    </span>
+                    レシピ一覧に戻る
+                </a>
+                <button type="submit" class="main-button">
+                    <span class="material-symbols-outlined">
+                        send
+                    </span>
+                    投稿する
+                </button>
             </div>
         </form>
     </main>
@@ -221,6 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p>2024秋ハッカソン - グループG</p>
     </footer>
 
+    <script src="js/script.js"></script>
     <script>
     document.getElementById('add-main-ingredient').addEventListener('click', function() {
         var container = document.getElementById('main-ingredient-container');
@@ -274,6 +340,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         container.appendChild(removeButton);
     });
 </script>
-
 </body>
 </html>
