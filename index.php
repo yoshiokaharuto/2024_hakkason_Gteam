@@ -213,7 +213,9 @@ if($maxId !== false) {
                         }
                     ?>
                     <p class='recipe-ingredient'><?= nl2br(htmlspecialchars($data['ingredient'], ENT_QUOTES, 'UTF-8')) ?></p>
-                    <p class='recipe-date'><?= htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') ?></p>
+                        <p class='recipe-userAndDate'>
+                            <?= htmlspecialchars($data['user_id'], ENT_QUOTES, 'UTF-8') ?>(<?= htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') ?>)
+                        </p>
                 </div>
             </a>
         <?php 

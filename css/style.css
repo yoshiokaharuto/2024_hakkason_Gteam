@@ -41,7 +41,7 @@ body {
 }
 
 a {
-    color: black;
+    color: var(--text-color);
     text-decoration: none;
 }
 
@@ -160,6 +160,7 @@ footer {
 #user-recipe {
     display: block;
     margin: 10px 0;
+    color: var(--text-color);
 }
 
 #user-recipe input[type="checkbox"] {
@@ -220,7 +221,7 @@ footer {
 }
 
 .recipe-name {
-    color: black;
+    color: var(--text-color);
     font-weight: normal;
     font-size: 30px;
 }
@@ -263,7 +264,7 @@ footer {
     border-radius: 5px;
 }
 
-.recipe-date {
+.recipe-userAndDate {
     color: var(--sub-color);
     text-align: right;
     margin-top: 10px;
@@ -312,6 +313,7 @@ footer {
 }
 
 .recipe-information-content {
+    color: var(--text-color);
     background-color: var(--invert-text-color);
     padding: 10px 20px;
     border: 1px solid var(--gray);
@@ -367,6 +369,7 @@ footer {
 }
 
 #page-name-section h1 {
+    color: var(--text-color);
     font-size: 30px;
     font-weight: normal;
 }
@@ -393,6 +396,7 @@ footer {
     border-radius: 5px;
     padding-left: 10px;
     line-height: 20px;
+    color: var(--text-color);
 }
 
 .post-item-container textarea {

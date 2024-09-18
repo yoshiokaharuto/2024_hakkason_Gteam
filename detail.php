@@ -132,8 +132,8 @@
                     echo "<p class='recipe-mainIngredient'><span>".str_replace(', ', '</span><span>', $data['main_ingredient'])."</span></p>";
                 }
             ?>
-            <p class="recipe-date">
-                <?= preoutput($data['date']) ?>
+            <p class="recipe-userAndDate">
+                <?= preoutput($data['user_id']) ?>(<?= preoutput($data['date']) ?>)
             </p>
         </div>
         <div class="recipe-information">
@@ -223,7 +223,9 @@
 <?= preoutput($data['process']) ?><br>
 【メモ】<br>
 <?= !empty($data['note']) ? preoutput($data['note']) : "(なし)" ?><br>
-【カテゴリタグ】<?= !empty($data['category']) ? preoutput($data['category']) : "(なし)" ?></div>
+【カテゴリタグ】<?= !empty($data['category']) ? preoutput($data['category']) : "(なし)" ?><br>
+【投稿者】<?= preoutput($data['user_id']) ?><br>
+【投稿日時】<?= preoutput($data['date']) ?></div>
 
         <div class="button-container">
             <a href='edit.php?id=<?= $data['recipe_id'] ?>' class="main-button">

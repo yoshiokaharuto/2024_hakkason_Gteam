@@ -36,7 +36,7 @@
                 <div class="post-item-container">
                     <label>
                         パスワード
-                        <input type="password" name="password" placeholder="パスワードをを入力" class="post-item">
+                        <input type="password" name="password" placeholder="パスワードを入力" class="post-item">
                     </label>
                 </div>
                 <div class="button-container-withLink">
