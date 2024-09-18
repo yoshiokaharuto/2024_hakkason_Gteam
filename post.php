@@ -70,23 +70,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $recipeId = $pdo->lastInsertId();
 
-                // カテゴリ
+                // カテゴリを処理
                 foreach ($category_ids as $category_id) {
-                    $sql2 = "INSERT INTO recipe_to_category (recipe_id, category_id) VALUES (:recipe_id, :category_id)";
-                    $stm2 = $pdo->prepare($sql2);
-                    $stm2->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
-                    $stm2->bindValue(':category_id', intval($category_id), PDO::PARAM_INT);
-                    $stm2->execute();
-                }
+                $sql2 = "INSERT INTO recipe_to_category (recipe_id, category_id) VALUES (:recipe_id, :category_id)";
+                $stm2 = $pdo->prepare($sql2);
+                $stm2->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
+                $stm2->bindValue(':category_id', intval($category_id), PDO::PARAM_INT);
+                $stm2->execute();
+            }
 
-                // 主要食材
+                // 主要食材を処理
                 foreach ($main_ingredient_ids as $ingredient_id) {
-                    $sql3 = "INSERT INTO recipe_to_ingredient (recipe_id, ingredient_id) VALUES (:recipe_id, :ingredient_id)";
-                    $stm3 = $pdo->prepare($sql3);
-                    $stm3->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
-                    $stm3->bindValue(':ingredient_id', intval($ingredient_id), PDO::PARAM_INT);
-                    $stm3->execute();
-                }
+                $sql3 = "INSERT INTO recipe_to_ingredient (recipe_id, ingredient_id) VALUES (:recipe_id, :ingredient_id)";
+                $stm3 = $pdo->prepare($sql3);
+                $stm3->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
+                $stm3->bindValue(':ingredient_id', intval($ingredient_id), PDO::PARAM_INT);
+                $stm3->execute();
+            }
 
                 $pdo->commit();
                 $resultMessage = "レシピが正常に投稿されました。";
@@ -112,11 +112,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
 </head>
 <body>
-<header>
+    <header>
         <a href="index.php" title="レシピ一覧に戻る">
-            <h1 class="app-name">
-                アプリ名
-            </h1>
+            <h1 class="app-name">サービス名</h1>
         </a>
         <div id="header-icon-container">
             <a href="settings.php" title="設定">
@@ -188,9 +186,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="post-item-container">
                 <label>
-                    <span class='material-symbols-outlined'>
-                        timer
-                    </span>
                     所要時間（分）
                     <input type="number" class="post-item" name="time" value="1" step="1" min="1">
                 </label>
@@ -234,7 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>
                     <span class="material-symbols-outlined">description</span>
                     メモ
-                    <textarea name="note" placeholder="〇〇社のタレがおすすめです。" class="post-item"></textarea>
+                    <textarea name="note" placeholder="このレシピはお弁当にも最適です。" class="post-item"></textarea>
                 </label>
             </div>
             <div class="post-item-container">
@@ -268,11 +263,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
 
     <footer>
-        <h1 class="app-name">アプリ名</h1>
+        <h1 class="app-name">サービス名</h1>
         <p>2024秋ハッカソン - グループG</p>
     </footer>
 
-    <script src="js/script.js"></script>
     <script>
     document.getElementById('add-main-ingredient').addEventListener('click', function() {
         var container = document.getElementById('main-ingredient-container');
@@ -326,5 +320,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         container.appendChild(removeButton);
     });
 </script>
+
 </body>
 </html>
