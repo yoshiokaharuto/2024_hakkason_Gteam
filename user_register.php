@@ -18,6 +18,20 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $errorMessages['password'] = 'passwordは必須です';
     }
 
+    if(empty(array_filter($errorMessages))) {
+        //IDの重複チェック
+        $user_id = $_POST['user_id'];
+        $checkSql = "SELECT COUNT(*) FROM users WHERE user_id = :user_id";
+        $checkStmt = $pdo->prepare($checkSql);
+        $checkStmt->bindValue('user_id', $user_id, PDO::PARAM_INT);
+        $checkStmt->execute();
+        $userExists = $checkStmt->fetchColumn();
+
+        if($userExists){
+            $errorMessages['user_id'] = 'このIDはすでに使用されています';
+        }
+
+    }
 }
 ?>
 
