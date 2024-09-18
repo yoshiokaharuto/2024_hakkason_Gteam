@@ -65,6 +65,13 @@ if($maxId !== false) {
         $stm->execute();
     } while ($stm->fetchColumn() === false);
 }
+
+session_start(); //セッション開始
+$resultMessage = '';
+if(isset($_SESSION['resultMessage'])) {
+    $resultMessage = $_SESSION['resultMessage'];
+    unset($_SESSION['resultMessage']);//メッセージ表示後に削除
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -80,22 +87,52 @@ if($maxId !== false) {
 </head>
 <body>
     <header>
-        <h1 class="app-name">アプリ名</h1>
-        <a href="post.php">
-            <span class="material-symbols-outlined">
-                add_circle
-            </span>
+        <a href="index.php">
+            <h1 class="app-name">
+                アプリ名
+            </h1>
         </a>
+        <div id="header-icon-container">
+            <a href="post.php" title="新規投稿">
+                <span class="material-symbols-outlined">add_circle</span>
+            </a>
+            <a href="settings.php" title="設定">
+                <span class="material-symbols-outlined">settings</span>
+            </a>
+            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+                <span class="material-symbols-outlined">logout</span>
+            </a>
+        </div>
+        <label id="sub-header-button-container">
+            <input type="checkbox" id="sub-header-checkbox">
+            <span class="material-symbols-outlined" id="sub-header-button">
+                menu
+            </span>
+        </label>
     </header>
+
+    <div id="sub-header">
+        <ul>
+            <a href="post.php" title="新規投稿">
+                <li>新規投稿</li>
+            </a>
+            <a href="settings.php" title="設定">
+                <li>設定</li>
+            </a>
+            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+                <li>ログアウト</li>
+            </a>
+        </ul>
+    </div>
 
     <main>
         <form action="index.php" method="GET">
-            <div id="searchByName-container">
+            <div id="search-container">
                 <input type="text" name="recipe_name" value="<?= htmlspecialchars($_GET['recipe_name'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="検索したいレシピ名を入力…">
-                <div>
+                <div id="searchByTag-container">
                     <!-- カテゴリタグの<select> -->
                     <!-- 取得したカテゴリタグと主要食材タグをそれぞれ<option>として動的に生成 -->
-                    <select name="category_tag">
+                    <select name="category_tag" class="post-item">
                         <option value="">カテゴリを選択</option>
                         <?php foreach($categories as $category): ?>
                             <option value="<?= htmlspecialchars($category['category_name'], ENT_QUOTES, 'UTF-8') ?>" <?= isset($_GET['category_tag']) && $_GET['category_tag'] === $category['category_name'] ? 'selected' : '' ?>>
@@ -104,7 +141,7 @@ if($maxId !== false) {
                         <?php endforeach; ?>
                     </select>
                     <!-- 主要食材タグの<select> -->
-                    <select name="ingredient_tag">
+                    <select name="ingredient_tag" class="post-item">
                         <option value="">主要食材を選択</option>
                         <?php foreach($ingredients as $ingredient): ?>
                             <option value="<?= htmlspecialchars($ingredient['ingredient_name'], ENT_QUOTES, 'UTF-8') ?>" <?= isset($_GET['ingredient_tag']) && $_GET['ingredient_tag'] === $ingredient['ingredient_name'] ? 'selected' : '' ?>>
@@ -113,17 +150,30 @@ if($maxId !== false) {
                         <?php endforeach; ?>
                     </select>
                 </div>
-
-                <button type="submit" id="search-button">
-                    検索
-                    <span class="material-symbols-outlined">
-                        search
-                    </span>
-                </button>
-                <a href='detail.php?id=<?= $randomPageId ?>'>
-                    ランダム
-                </a>
+                <label id="user-recipe">
+                    <input type="checkbox" name="user-recipe">自分が投稿したレシピ</input>
+                </label>
+                <div id="index-button-container">
+                    <button type="submit" id="search-button">
+                        <span class="material-symbols-outlined">
+                            search
+                        </span>
+                        検索
+                    </button>
+                    <a href="index.php">
+                        <span class="material-symbols-outlined">
+                            restart_alt
+                        </span>
+                        検索条件をリセット
+                    </a>
+                    <a href='detail.php?id=<?= $randomPageId ?>'>
+                        <span class="material-symbols-outlined">
+                            shuffle
+                        </span>
+                        ランダム
+                    </a>
                 </div>
+            </div>
         </form>
         <?php
         if ($results) {
@@ -179,11 +229,19 @@ if($maxId !== false) {
             echo "<p id='not-found'>レシピが見つかりませんでした。</p>";
         }
         ?>
+
+        <?php if (!empty($resultMessage)): ?>
+            <script>
+                alert('<?php echo $resultMessage; ?>');
+            </script>
+        <?php endif; ?>
     </main>
     
     <footer>
         <h1 class="app-name">アプリ名</h1>
         <p>2024秋ハッカソン - グループG</p>
     </footer>
+
+    <script src="js/script.js"></script>
 </body>
 </html>

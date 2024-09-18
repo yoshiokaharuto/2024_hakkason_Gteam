@@ -49,17 +49,45 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
 </head>
 <body>
-    <header>
+<header>
         <a href="index.php">
             <h1 class="app-name">
                 アプリ名
             </h1>
         </a>
 
-        <a href="edit.php?id=<?= $data['recipe_id'] ?>">
-            <p>レシピを編集</p>
-        </a>
+        <div id="header-icon-container">
+            <a href="post.php" title="新規投稿">
+                <span class="material-symbols-outlined">add_circle</span>
+            </a>
+            <a href="settings.php" title="設定">
+                <span class="material-symbols-outlined">settings</span>
+            </a>
+            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+                <span class="material-symbols-outlined">logout</span>
+            </a>
+        </div>
+        <label id="sub-header-button-container">
+            <input type="checkbox" id="sub-header-checkbox">
+            <span class="material-symbols-outlined" id="sub-header-button">
+                menu
+            </span>
+        </label>
     </header>
+
+    <div id="sub-header">
+        <ul>
+            <a href="post.php" title="新規投稿">
+                <li>新規投稿</li>
+            </a>
+            <a href="settings.php" title="設定">
+                <li>設定</li>
+            </a>
+            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+                <li>ログアウト</li>
+            </a>
+        </ul>
+    </div>
 
     <main>
         <div class="recipe-card">
@@ -111,7 +139,12 @@
         </div>
         <div class="recipe-information">
             <div class="recipe-information-title-section">
-                <p>食材</p>
+                <p>
+                    <span class="material-symbols-outlined">
+                        grocery
+                    </span>
+                    食材
+                </p>
                 <button onclick="copyButton('recipe-ingredient')">
                     <span class="material-symbols-outlined">
                         content_copy
@@ -124,7 +157,12 @@
         </div>
         <div class="recipe-information">
             <div class="recipe-information-title-section">
-                <p>手順</p>
+                <p>
+                    <span class="material-symbols-outlined">
+                        receipt_long
+                    </span>
+                    手順
+                </p>
                 <button onclick="copyButton('recipe-process')">
                     <span class="material-symbols-outlined">
                         content_copy
@@ -137,7 +175,12 @@
         </div>
         <div class="recipe-information">
             <div class="recipe-information-title-section">
-                <p>メモ</p>
+                <p>
+                    <span class="material-symbols-outlined">
+                        description
+                    </span>
+                    メモ
+                </p>
             <?php if(!empty($data['note'])) { ?>
                     <button onclick="copyButton('recipe-note')">
                     <span class="material-symbols-outlined">
@@ -182,9 +225,35 @@
 【メモ】<br>
 <?= !empty($data['note']) ? preoutput($data['note']) : "(なし)" ?><br>
 【カテゴリタグ】<?= !empty($data['category']) ? preoutput($data['category']) : "(なし)" ?></div>
+
         <div class="button-container">
-            <a href="index.php" class="white-button">投稿一覧に戻る</a>
-            <button onclick="copyAllButton()" class="main-button">このレシピをコピー</button>
+            <a href='edit.php?id=<?= $data['recipe_id'] ?>' class="main-button">
+                <span class="material-symbols-outlined">
+                    edit
+                </span>
+                編集する
+            </a>
+            <a href='delete.php?id=<?= $data['recipe_id'] ?>' class="main-button">
+                <span class="material-symbols-outlined">
+                    delete
+                </span>
+                削除する
+            </a>
+        </div>
+
+        <div class="button-container">
+            <a href="index.php" class="white-button">
+                <span class="material-symbols-outlined">
+                    undo
+                </span>
+                レシピ一覧に戻る
+            </a>
+            <button onclick="copyAllButton()" class="main-button">
+                <span class="material-symbols-outlined">
+                    content_copy
+                </span>
+                このレシピをコピー
+            </button>
         </div>
     </main>
     
@@ -193,15 +262,6 @@
         <p>2024秋ハッカソン - グループG</p>
     </footer>
 
-    <script>
-        function copyButton(elementId) {
-            var element = document.getElementById(elementId);
-            navigator.clipboard.writeText(element.innerText);
-        }
-
-        function copyAllButton() {
-            navigator.clipboard.writeText(document.getElementById('recipe-dataToCopy').innerText);
-        }
-    </script>
+    <script src="js/script.js"></script>
 </body>
 </html>
