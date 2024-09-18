@@ -49,8 +49,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         $_SESSION['resultMessage'] = '登録が完了しました';
                         header("Location:index.php");
                         exit();
+                    } else {
+                        $resultMessage = '登録に失敗しました。';
                     }
-                }
+                } 
             }
         }
 
