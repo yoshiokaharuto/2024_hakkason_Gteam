@@ -1,4 +1,25 @@
 <?php
+    require_once "./db_connect.php";
+    $sql = "SELECT * FROM theme";
+    $stm = $pdo->prepare($sql);
+    $stm->execute();
+    $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+    $themeValues = array_column($result, 'theme_id');
+
+    if(isset($_POST['theme_id']) && in_array((int)$_POST['theme_id'], $themeValues, true)) {
+        $themeId = $_POST['theme_id'];
+        $sql = "SELECT * FROM theme WHERE theme_id = :themeId";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(':themeId', $themeId, PDO::PARAM_INT);
+        $stm->execute();
+        $theme = $stm->fetch(PDO::FETCH_ASSOC);
+    } else {
+        $theme = [
+            'main' => 'FF852C',
+            'sub' => 'FFAB6F'
+        ];
+    }
 ?>
 
 <!DOCTYPE html>
@@ -12,6 +33,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
+    <style>
+        :root {
+            --main-color: #<?= $theme['main'] ?>;
+            --sub-color: #<?= $theme['sub'] ?>;
+        }
+    </style> 
 </head>
 <body>
 <header>
@@ -95,13 +122,15 @@
                 </span>
                 テーマを変更
             </h2>
-            <form action="" method="POST">
+            <form action="settings.php" method="POST">
                 <div class="post-item-container">
                     <label>
-                        <select name="theme" class="post-item">
-                            <option value="orange">オレンジ</option>
-                            <option value="blue">ブルー</option>
-                            <option value="gray">グレー</option>
+                        <select name="theme_id" class="post-item">
+                            <?php foreach($result as $data): ?>
+                                <option value="<?= $data['theme_id']?>">
+                                    <?= $data['name'] ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </label>
                 </div>

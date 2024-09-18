@@ -15,7 +15,7 @@ $ingredients = [];
 
 try {
     // カテゴリの取得
-    $sqlCategory = "SELECT category_id, category_name FROM categorys";
+    $sqlCategory = "SELECT category_id, category_name FROM categories";
     $stmCategory = $pdo->query($sqlCategory);
     $categories = $stmCategory->fetchAll(PDO::FETCH_ASSOC);
 

@@ -13,7 +13,7 @@ html, body, main, div, span, h1, h2, h3, p, ol, ul, li {
     --main-color: #FF852C;
     --sub-color: #FFAB6F;
     --gray: #B0B0B0;
-    --light-gray: #F3F3F3;
+    --background-color: #F3F3F3;
     --text-color: #000000;
     --invert-text-color: #FFFFFF;
 }
@@ -23,7 +23,7 @@ body {
     font-optical-sizing: auto;
     font-weight: normal;
     font-style: normal;
-    background-color: var(--light-gray);
+    background-color: var(--background-color);
     display: grid;
     grid-template-rows: auto 1fr auto;
     grid-template-columns: 100%;
@@ -198,7 +198,7 @@ footer {
 }
 
 #search-container a:active {
-    background-color: var(--light-gray);
+    background-color: var(--background-color);
 }
 
 #search-button .material-symbols-outlined,
@@ -347,7 +347,7 @@ footer {
 }
 
 .button-container .white-button:active {
-    background-color: var(--light-gray);
+    background-color: var(--background-color);
 }
 
 .button-container .main-button {
