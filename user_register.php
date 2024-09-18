@@ -99,6 +99,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     <label>
                         パスワード
                         <input type="password" name="password" placeholder="パスワードをを入力" class="post-item">
+                        <p class="error-message"><?php echo $errorMessages['password'];?></p>
                     </label>
                 </div>
                 <div class="button-container">
