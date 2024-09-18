@@ -65,6 +65,13 @@ if($maxId !== false) {
         $stm->execute();
     } while ($stm->fetchColumn() === false);
 }
+
+session_start(); //セッション開始
+$resultMessage = '';
+if(isset($_SESSION['resultMessage'])) {
+    $resultMessage = $_SESSION['resultMessage'];
+    unset($_SESSION['resultMessage']);//メッセージ表示後に削除
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -222,6 +229,12 @@ if($maxId !== false) {
             echo "<p id='not-found'>レシピが見つかりませんでした。</p>";
         }
         ?>
+
+        <?php if (!empty($resultMessage)): ?>
+            <script>
+                alert('<?php echo $resultMessage; ?>');
+            </script>
+        <?php endif; ?>
     </main>
     
     <footer>
