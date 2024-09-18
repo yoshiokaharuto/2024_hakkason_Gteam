@@ -29,6 +29,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
         if($userExists){
             $errorMessages['user_id'] = 'このIDはすでに使用されています';
+        } else {
+            //登録
+            if(isset($_POST['user_id'],$_POST['password'])) {
+                //postデータを変数に
+                $user_id = $_POST['user_id'];
+                
+            }
         }
 
     }
