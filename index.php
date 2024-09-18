@@ -229,6 +229,12 @@ if(isset($_SESSION['resultMessage'])) {
             echo "<p id='not-found'>レシピが見つかりませんでした。</p>";
         }
         ?>
+
+        <?php if (!empty($resultMessage)): ?>
+            <script>
+                alert('<?php echo $resultMessage; ?>');
+            </script>
+        <?php endif; ?>
     </main>
     
     <footer>
