@@ -55,6 +55,7 @@
                 アプリ名
             </h1>
         </a>
+
         <div id="header-icon-container">
             <a href="post.php" title="新規投稿">
                 <span class="material-symbols-outlined">add_circle</span>
