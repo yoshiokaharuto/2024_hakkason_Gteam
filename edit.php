@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <header>
-        <a href="index.php">
+        <a href="index.php" title="レシピ一覧に戻る">
             <h1 class="app-name">アプリ名</h1>
         </a>
     </header>

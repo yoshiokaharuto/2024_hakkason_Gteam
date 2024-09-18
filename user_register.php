@@ -104,15 +104,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 </div>
                 <div class="button-container">
                     <a href="login.php" class="white-button">
-                        <span class="material-symbols-outlined">
-                            undo
-                        </span>
+                        <span class="material-symbols-outlined">undo</span>
                         ログイン画面に戻る
                     </a>
                     <button type="submit" class="main-button">
-                        <span class="material-symbols-outlined">
-                            person_add
-                        </span>
+                        <span class="material-symbols-outlined">person_add</span>
                         登録
                     </button>
                 </div>

@@ -42,7 +42,7 @@
 </head>
 <body>
 <header>
-        <a href="index.php">
+        <a href="index.php" title="レシピ一覧に戻る">
             <h1 class="app-name">
                 アプリ名
             </h1>
@@ -57,19 +57,23 @@
         </div>
         <label id="sub-header-button-container">
             <input type="checkbox" id="sub-header-checkbox">
-            <span class="material-symbols-outlined" id="sub-header-button">
-                menu
-            </span>
+            <span class="material-symbols-outlined" id="sub-header-button">menu</span>
         </label>
     </header>
 
     <div id="sub-header">
         <ul>
-            <a href="post.php" title="新規投稿">
-                <li>新規投稿</li>
+            <a href="post.php">
+                <li>
+                    <span class="material-symbols-outlined">add_circle</span>
+                    新規投稿
+                </li>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
-                <li>ログアウト</li>
+            <a href="login.php"> <!-- 仮でログイン画面に飛びます -->
+                <li>
+                    <span class="material-symbols-outlined">logout</span>
+                    ログアウト
+                </li>
             </a>
         </ul>
     </div>
@@ -80,9 +84,7 @@
         </div>
         <div class="settings-section">
             <h2>
-                <span class="material-symbols-outlined">
-                    lock
-                </span>
+                <span class="material-symbols-outlined">lock</span>
                 パスワードを変更
             </h2>
             <form action="" method="POST">
@@ -106,9 +108,7 @@
                 </div>
                 <div class="button-container">
                     <button type="submit" class="main-button">
-                        <span class="material-symbols-outlined">
-                            check
-                        </span>
+                        <span class="material-symbols-outlined">check</span>
                         変更
                     </button>
                 </div>
@@ -117,9 +117,7 @@
 
         <div class="settings-section">
             <h2>
-                <span class="material-symbols-outlined">
-                    palette
-                </span>
+                <span class="material-symbols-outlined">palette</span>
                 テーマを変更
             </h2>
             <form action="settings.php" method="POST">
@@ -136,9 +134,7 @@
                 </div>
                 <div class="button-container">
                     <button type="submit" class="main-button">
-                        <span class="material-symbols-outlined">
-                            check
-                        </span>
+                        <span class="material-symbols-outlined">check</span>
                         変更
                     </button>
                 </div>
@@ -147,15 +143,11 @@
 
         <div class="button-container">
             <a href="index.php" class="white-button">
-                <span class="material-symbols-outlined">
-                    undo
-                </span>
+                <span class="material-symbols-outlined">undo</span>
                 レシピ一覧に戻る
             </a>
             <a href="" class="main-button">
-                <span class="material-symbols-outlined">
-                    logout
-                </span>
+                <span class="material-symbols-outlined">logout</span>
                 ログアウト
             </a>
         </div>
