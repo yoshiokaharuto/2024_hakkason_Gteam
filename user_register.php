@@ -8,6 +8,17 @@ $errorMessages = [
     'user_id' => '',
     'password' => ''
 ];
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    //バリデーション
+    if(empty($_POST['user_id'])){
+        $errorMessages['user_id'] = 'idは必須です';
+    }
+    if(empty($_POST['password'])){
+        $errorMessages['password'] = 'passwordは必須です';
+    }
+
+}
 ?>
 
 <!DOCTYPE html>
