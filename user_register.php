@@ -92,6 +92,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     <label>
                         ID
                         <input type="text" name="id" placeholder="利用したいIDを入力" class="post-item">
+                        <p class="error-message"><?php echo $errorMessages['user_id'];?></p>
                     </label>
                 </div>
                 <div class="post-item-container">
