@@ -67,7 +67,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <h1>ログイン</h1>
             </div>
 
-            <form action="" method="POST">
+            <form action="login.php" method="POST">
                 <div class="post-item-container">
                     <label>
                         ID
