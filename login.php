@@ -16,6 +16,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     if(empty($_POST['password'])) {
         $errorMessages['password'] = 'パスワードを入力してください';
     }
+
+    if(isset($_POST['user_id'],$_POST['password'])) {
+        $user_id = $_POST['user_id'];
+        $password = $_POST['password'];
+
+    }
 }
 ?>
 
