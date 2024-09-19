@@ -53,10 +53,6 @@ header {
     align-items: center;
 }
 
-#sub-header-button-container {
-    display: none;
-}
-
 #header-icon-container {
     display: flex;
     gap: 20px;
@@ -65,6 +61,24 @@ header {
 header .material-symbols-outlined {
     color: var(--invert-text-color);
     font-size: 40px;
+}
+
+#sub-header-button-container {
+    display: none;
+}
+
+#sub-header-button {
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.3s ease;
+}
+
+#sub-header-checkbox:checked + #sub-header-button {
+    transform: rotate(90deg);
+}
+
+#sub-header-checkbox {
+    display: none;
 }
 
 #sub-header{
@@ -81,13 +95,9 @@ header .material-symbols-outlined {
     margin: 10px 0;
 }
 
-#sub-header-checkbox {
-    display: none;
-}
-
 main {
     width: 70%;
-    margin: 20px auto;
+    margin: 0px auto;
 }
 
 footer {
@@ -120,6 +130,7 @@ footer {
 /* ========== ↓ 主にindex ========== */
 #search-container {
     border-bottom: 1px solid var(--gray);
+    margin-top: 20px;
     padding-bottom: 20px;
     text-align: center;
 }
@@ -337,6 +348,7 @@ footer {
 .button-container .white-button,
 .button-container .main-button {
     padding: 5px 15px;
+    text-align: center;
 }
 
 .button-container .white-button {
@@ -363,9 +375,17 @@ footer {
     background-color: var(--sub-color);
 }
 
+@media (max-width: 600px) {
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
 /* ========== ↑ 主にdetail ========== */
 /* ========== ↓ 主にpost ========== */ 
 #page-name-section {
+    margin: 20px 0;
     text-align: center;
 }
 

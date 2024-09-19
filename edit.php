@@ -174,6 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- レシピ名入力 -->
             <div class="post-item-container">
                 <label>
+                    <span class="material-symbols-outlined">edit</span>
                     レシピ名
                     <input type="text" name="name" value="<?= htmlspecialchars($_POST['name'] ?? $recipe['name'], ENT_QUOTES, 'UTF-8') ?>" class="post-item">
                 </label>
@@ -182,6 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             <!-- ジャンル選択 -->
             <div class="post-item-container">
+                <span class="material-symbols-outlined">widgets</span>    
                 ジャンル
                 <div class="genre-group">
                     <div class="genre-option">
@@ -206,6 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- 所要時間 -->
             <div class="post-item-container">
                 <label>
+                    <span class="material-symbols-outlined">timer</span>
                     所要時間（分）
                     <input type="number" class="post-item" name="time" value="<?= htmlspecialchars($_POST['time'] ?? $recipe['time'], ENT_QUOTES, 'UTF-8') ?>" step="1" min="1">
                 </label>
@@ -213,7 +216,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- 主要食材選択 -->
             <div class="post-item-container">
-                <label>主要食材</label>
+                <label>
+                    <span class="material-symbols-outlined">star</span>
+                    主要食材
+                </label>
                 <!-- categories[]により複数のカテゴリを選択できる-->
                 <!-- multiple属性により、Ctrlキー（Windows）またはCommandキー（Mac）を押しながらクリックすることで、複数の項目を選択できる-->
                 <select name="ingredients[]" multiple class="post-item">
@@ -232,29 +238,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </select>
             </div>
 
-            <!-- 材料 -->
+            <!-- 食材 -->
             <div class="post-item-container">
-                <label>材料</label>
+                <label>
+                    <span class="material-symbols-outlined">grocery</span>
+                    食材
+                </label>
                 <textarea name="ingredient" class="post-item"><?= htmlspecialchars($_POST['ingredient'] ?? $recipe['ingredient'], ENT_QUOTES, 'UTF-8') ?></textarea>
                 <p class="error-message"><?php echo $errorMessages['ingredient']; ?></p>
             </div>
 
             <!-- 手順 -->
             <div class="post-item-container">
-                <label>手順</label>
+                <label>
+                    <span class="material-symbols-outlined">format_list_numbered</span>
+                    手順
+                </label>
                 <textarea name="process" class="post-item"><?= htmlspecialchars($_POST['process'] ?? $recipe['process'], ENT_QUOTES, 'UTF-8') ?></textarea>
                 <p class="error-message"><?php echo $errorMessages['process']; ?></p>
             </div>
 
             <!-- メモ -->
             <div class="post-item-container">
-                <label>メモ</label>
+                <label>
+                    <span class="material-symbols-outlined">description</span>
+                    メモ
+                </label>
                 <textarea name="note" class="post-item"><?= htmlspecialchars($_POST['note'] ?? $recipe['note'], ENT_QUOTES, 'UTF-8') ?></textarea>
             </div>
 
             <!-- カテゴリ選択 -->
             <div class="post-item-container">
-                <label>カテゴリ</label>
+                <label>
+                    <span class="material-symbols-outlined">sell</span>
+                    カテゴリ
+                </label>
                 <select name="categories[]" multiple class="post-item">
                     <?php foreach ($allCategories as $category): ?>
                         <option value="<?= $category['category_id'] ?>"
@@ -267,8 +285,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- 更新ボタン -->
             <div class="button-container">
-                <a href="index.php" class="white-button">投稿一覧に戻る</a>
-                <input type="submit" value="更新する" class="main-button">
+                <a href="index.php" class="white-button">
+                    <span class="material-symbols-outlined">undo</span>
+                    レシピ一覧に戻る
+                </a>
+                <button type="submit" class="main-button">
+                    <span class="material-symbols-outlined">check</span>
+                    更新する
+                </button>
             </div>
         </form>
     </main>

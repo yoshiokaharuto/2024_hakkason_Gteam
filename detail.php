@@ -159,7 +159,7 @@
         <div class="recipe-information">
             <div class="recipe-information-title-section">
                 <p>
-                    <span class="material-symbols-outlined">receipt_long</span>
+                    <span class="material-symbols-outlined">format_list_numbered</span>
                     手順
                 </p>
                 <button onclick="copyButton('recipe-process')">

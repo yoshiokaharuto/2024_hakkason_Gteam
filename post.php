@@ -186,6 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="post-item-container">
                 <label>
+                <span class="material-symbols-outlined">timer</span>
                     所要時間（分）
                     <input type="number" class="post-item" name="time" value="1" step="1" min="1">
                 </label>
@@ -219,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="post-item-container">
                 <label>
-                    <span class="material-symbols-outlined">receipt_long</span>
+                    <span class="material-symbols-outlined">format_list_numbered</span>
                     手順
                     <textarea name="process" placeholder="①茶碗にご飯を盛り、卵を割り入れます。..." class="post-item"></textarea>
                     <p class="error-message"><?php echo $errorMessages['process']; ?></p>
@@ -267,6 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p>2024秋ハッカソン - グループG</p>
     </footer>
 
+    <script type="text/javascript" src="js/script.js"></script>
     <script>
     document.getElementById('add-main-ingredient').addEventListener('click', function() {
         var container = document.getElementById('main-ingredient-container');
