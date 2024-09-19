@@ -1,4 +1,5 @@
 <?php
+require_once "./db_connect.php";
 
 //セッション開始
 session_start();
@@ -87,11 +88,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <h1>ユーザー登録</h1>
             </div>
 
-            <form action="" method="POST">
+            <form action="user_register.php" method="POST">
                 <div class="post-item-container">
                     <label>
                         ID
-                        <input type="text" name="id" placeholder="利用したいIDを入力" class="post-item">
+                        <input type="text" name="user_id" placeholder="利用したいIDを入力" class="post-item">
                         <p class="error-message"><?php echo $errorMessages['user_id'];?></p>
                     </label>
                 </div>
