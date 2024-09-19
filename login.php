@@ -1,5 +1,6 @@
 <?php
 
+require_once "./db_connect.php";
 session_start();
 
 $resultMessage = '';
@@ -71,7 +72,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <div class="post-item-container">
                     <label>
                         ID
-                        <input type="text" name="id" placeholder="IDを入力" class="post-item">
+                        <input type="text" name="user_id" placeholder="IDを入力" class="post-item">
                         <p><?php echo $errorMessages['user_id'];?></p>
                     </label>
                 </div>
