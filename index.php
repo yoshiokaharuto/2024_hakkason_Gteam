@@ -92,36 +92,66 @@ if(isset($_SESSION['resultMessage'])) {
                 アプリ名
             </h1>
         </a>
-        <div id="header-icon-container">
-            <a href="post.php" title="新規投稿">
-                <span class="material-symbols-outlined">add_circle</span>
+
+        <div id='header-icon-container'>
+<?php if(!isset($_SESSION['user_id'])) { // 未ログイン状態 ?>
+            <p title='レシピを投稿するにはログインが必要です' class='cant-click'>
+                <span class='material-symbols-outlined'>add_circle</span>
+            </p>
+            <a href='login.php' title='ログイン'>
+                <span class='material-symbols-outlined'>login</span>
             </a>
-            <a href="settings.php" title="設定">
-                <span class="material-symbols-outlined">settings</span>
+<?php } else { // ログイン状態 ?>
+            <a href='post.php' title='新規投稿'>
+                <span class='material-symbols-outlined'>add_circle</span>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
-                <span class="material-symbols-outlined">logout</span>
+            <a href='settings.php' title='設定'>
+                <span class='material-symbols-outlined'>settings</span>
             </a>
+            <a href='logout.php' title='ログアウト'>
+                <span class='material-symbols-outlined'>logout</span>
+            </a>
+<?php } ?>
         </div>
-        <label id="sub-header-button-container">
-            <input type="checkbox" id="sub-header-checkbox">
-            <span class="material-symbols-outlined" id="sub-header-button">
-                menu
-            </span>
+        <label id='sub-header-button-container'>
+            <input type='checkbox' id='sub-header-checkbox'>
+            <span class='material-symbols-outlined' id='sub-header-button'>menu</span>
         </label>
     </header>
 
     <div id="sub-header">
         <ul>
-            <a href="post.php" title="新規投稿">
-                <li>新規投稿</li>
+<?php if(!isset($_SESSION['user_id'])) { // 未ログイン状態 ?>
+            <li  title='レシピを投稿するにはログインが必要です' class='cant-click'>
+                <span class='material-symbols-outlined'>add_circle</span>
+                新規投稿
+            </li>
+            <a href='login.php'>
+                <li>
+                    <span class='material-symbols-outlined'>login</span>
+                    ログイン
+                </li>
             </a>
-            <a href="settings.php" title="設定">
-                <li>設定</li>
+<?php } else { // ログイン状態 ?>
+            <a href='post.php'>
+                <li>
+                    <span class='material-symbols-outlined'>add_circle</span>
+                    新規投稿
+                </li>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
-                <li>ログアウト</li>
+            <a href='settings.php'>
+                <li>
+                    <span class='material-symbols-outlined'>settings</span>
+                    設定
+                </li>
             </a>
+            <a href='logout.php'>
+                <li>
+                    <span class='material-symbols-outlined'>logout</span>
+                    ログアウト
+                </li>
+            </a>
+<?php } ?>
         </ul>
     </div>
 
@@ -150,31 +180,28 @@ if(isset($_SESSION['resultMessage'])) {
                         <?php endforeach; ?>
                     </select>
                 </div>
+<?php if(isset($_SESSION['user_id'])) { // ログイン状態 ?>
                 <label id="user-recipe">
                     <input type="checkbox" name="user-recipe">自分が投稿したレシピ</input>
                 </label>
+<?php } ?>
                 <div id="index-button-container">
                     <button type="submit" id="search-button">
-                        <span class="material-symbols-outlined">
-                            search
-                        </span>
+                        <span class="material-symbols-outlined">search</span>
                         検索
                     </button>
                     <a href="index.php">
-                        <span class="material-symbols-outlined">
-                            restart_alt
-                        </span>
+                        <span class="material-symbols-outlined">restart_alt</span>
                         検索条件をリセット
                     </a>
                     <a href='detail.php?id=<?= $randomPageId ?>'>
-                        <span class="material-symbols-outlined">
-                            shuffle
-                        </span>
+                        <span class="material-symbols-outlined">shuffle</span>
                         ランダム
                     </a>
                 </div>
             </div>
         </form>
+
         <?php
         if ($results) {
             foreach($results as $data){
@@ -220,13 +247,18 @@ if(isset($_SESSION['resultMessage'])) {
                         }
                     ?>
                     <p class='recipe-ingredient'><?= nl2br(htmlspecialchars($data['ingredient'], ENT_QUOTES, 'UTF-8')) ?></p>
-                    <p class='recipe-date'><?= htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') ?></p>
+                    <p class='recipe-userAndDate'>
+                    <span class="material-symbols-outlined">person</span>
+                    <?= htmlspecialchars($data['user_id'], ENT_QUOTES, 'UTF-8') ?><br>
+                    <span class="material-symbols-outlined">calendar_today</span>
+                    <?= htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') ?>
+                    </p>
                 </div>
             </a>
         <?php 
             }
         } else {
-            echo "<p id='not-found'>レシピが見つかりませんでした。</p>";
+            echo "<p id='not-found'><span class='material-symbols-outlined'>sentiment_dissatisfied</span>レシピが見つかりませんでした。</p>";
         }
         ?>
 

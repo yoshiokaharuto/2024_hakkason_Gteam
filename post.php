@@ -2,6 +2,12 @@
 // データベース接続ファイルを読み込む
 require_once 'db_connect.php';
 
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $resultMessage = '';
 $errorMessages = [
     'name' => '',
@@ -15,7 +21,7 @@ $ingredients = [];
 
 try {
     // カテゴリの取得
-    $sqlCategory = "SELECT category_id, category_name FROM categorys";
+    $sqlCategory = "SELECT category_id, category_name FROM categories";
     $stmCategory = $pdo->query($sqlCategory);
     $categories = $stmCategory->fetchAll(PDO::FETCH_ASSOC);
 
@@ -70,23 +76,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $recipeId = $pdo->lastInsertId();
 
-                // カテゴリ
+                // カテゴリを処理
                 foreach ($category_ids as $category_id) {
-                    $sql2 = "INSERT INTO recipe_to_category (recipe_id, category_id) VALUES (:recipe_id, :category_id)";
-                    $stm2 = $pdo->prepare($sql2);
-                    $stm2->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
-                    $stm2->bindValue(':category_id', intval($category_id), PDO::PARAM_INT);
-                    $stm2->execute();
-                }
+                $sql2 = "INSERT INTO recipe_to_category (recipe_id, category_id) VALUES (:recipe_id, :category_id)";
+                $stm2 = $pdo->prepare($sql2);
+                $stm2->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
+                $stm2->bindValue(':category_id', intval($category_id), PDO::PARAM_INT);
+                $stm2->execute();
+            }
 
-                // 主要食材
+                // 主要食材を処理
                 foreach ($main_ingredient_ids as $ingredient_id) {
-                    $sql3 = "INSERT INTO recipe_to_ingredient (recipe_id, ingredient_id) VALUES (:recipe_id, :ingredient_id)";
-                    $stm3 = $pdo->prepare($sql3);
-                    $stm3->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
-                    $stm3->bindValue(':ingredient_id', intval($ingredient_id), PDO::PARAM_INT);
-                    $stm3->execute();
-                }
+                $sql3 = "INSERT INTO recipe_to_ingredient (recipe_id, ingredient_id) VALUES (:recipe_id, :ingredient_id)";
+                $stm3 = $pdo->prepare($sql3);
+                $stm3->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
+                $stm3->bindValue(':ingredient_id', intval($ingredient_id), PDO::PARAM_INT);
+                $stm3->execute();
+            }
 
                 $pdo->commit();
                 $resultMessage = "レシピが正常に投稿されました。";
@@ -112,35 +118,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
 </head>
 <body>
-<header>
-        <a href="index.php">
-            <h1 class="app-name">
-                アプリ名
-            </h1>
+    <header>
+        <a href="index.php" title="レシピ一覧に戻る">
+            <h1 class="app-name">サービス名</h1>
         </a>
         <div id="header-icon-container">
             <a href="settings.php" title="設定">
                 <span class="material-symbols-outlined">settings</span>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+            <a href="logout.php" title="ログアウト">
                 <span class="material-symbols-outlined">logout</span>
             </a>
         </div>
         <label id="sub-header-button-container">
             <input type="checkbox" id="sub-header-checkbox">
-            <span class="material-symbols-outlined" id="sub-header-button">
-                menu
-            </span>
+            <span class="material-symbols-outlined" id="sub-header-button">menu</span>
         </label>
     </header>
 
     <div id="sub-header">
         <ul>
-            <a href="settings.php" title="設定">
-                <li>設定</li>
+            <a href="settings.php">
+                <li>
+                    <span class="material-symbols-outlined">settings</span>
+                    設定
+                </li>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
-                <li>ログアウト</li>
+            <a href="logout.php">
+                <li>
+                    <span class="material-symbols-outlined">logout</span>
+                    ログアウト
+                </li>
             </a>
         </ul>
     </div>
@@ -154,18 +162,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="index.php" method="POST">
             <div class="post-item-container">
                 <label>
-                    <span class="material-symbols-outlined">
-                        edit
-                    </span>
+                    <span class="material-symbols-outlined">edit</span>
                     レシピ名
                     <input type="text" name="name" placeholder="ちょい足し卵かけご飯" class="post-item">
                     <p class="error-message"><?php echo $errorMessages['name']; ?></p>
                 </label>
             </div>
             <div class="post-item-container">
-                <span class="material-symbols-outlined">
-                    widgets
-                </span>    
+                <span class="material-symbols-outlined">widgets</span>    
                 ジャンル
                 <div class="genre-group">
                     <div class="genre-option">
@@ -188,18 +192,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="post-item-container">
                 <label>
-                    <span class='material-symbols-outlined'>
-                        timer
-                    </span>
+                <span class="material-symbols-outlined">timer</span>
                     所要時間（分）
                     <input type="number" class="post-item" name="time" value="1" step="1" min="1">
                 </label>
             </div>
             <div class="post-item-container">
                 <label>
-                    <span class="material-symbols-outlined">
-                        grocery
-                    </span>
+                    <span class="material-symbols-outlined">grocery</span>
                     食材
                     <textarea name="ingredient" placeholder="・卵 - 1個
 ・ご飯 - 150g
@@ -209,9 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="post-item-container">
                 <label>
-                    <span class="material-symbols-outlined">
-                        star
-                    </span>
+                    <span class="material-symbols-outlined">star</span>
                     主要食材
                 </label>
                 <div id="main-ingredient-container">
@@ -224,13 +222,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <button type="button" id="add-main-ingredient">主要食材を追加</button>
+                <button type="button" id="add-main-ingredient" class="add-button">
+                    <span class="material-symbols-outlined">add</span>
+                    主要食材を追加
+                </button>
             </div>
             <div class="post-item-container">
                 <label>
-                    <span class="material-symbols-outlined">
-                        receipt_long
-                    </span>
+                    <span class="material-symbols-outlined">format_list_numbered</span>
                     手順
                     <textarea name="process" placeholder="①茶碗にご飯を盛り、卵を割り入れます。..." class="post-item"></textarea>
                     <p class="error-message"><?php echo $errorMessages['process']; ?></p>
@@ -238,18 +237,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="post-item-container">
                 <label>
-                    <span class="material-symbols-outlined">
-                        description
-                    </span>
+                    <span class="material-symbols-outlined">description</span>
                     メモ
-                    <textarea name="note" placeholder="〇〇社のタレがおすすめです。" class="post-item"></textarea>
+                    <textarea name="note" placeholder="このレシピはお弁当にも最適です。" class="post-item"></textarea>
                 </label>
             </div>
             <div class="post-item-container">
                 <label>
-                    <span class="material-symbols-outlined">
-                        sell
-                    </span>
+                    <span class="material-symbols-outlined">sell</span>
                     カテゴリ
                 </label>
                 <div id="category-container">
@@ -262,19 +257,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <button type="button" id="add-category">カテゴリを追加</button>
+                <button type="button" id="add-category" class="add-button">
+                    <span class="material-symbols-outlined">add</span>
+                    カテゴリを追加
+                </button>
             </div>
             <div class="button-container">
                 <a href="index.php" class="white-button">
-                    <span class="material-symbols-outlined">
-                        undo
-                    </span>
+                    <span class="material-symbols-outlined">undo</span>
                     レシピ一覧に戻る
                 </a>
                 <button type="submit" class="main-button">
-                    <span class="material-symbols-outlined">
-                        send
-                    </span>
+                    <span class="material-symbols-outlined">send</span>
                     投稿する
                 </button>
             </div>
@@ -282,15 +276,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
 
     <footer>
-        <h1 class="app-name">アプリ名</h1>
+        <h1 class="app-name">サービス名</h1>
         <p>2024秋ハッカソン - グループG</p>
     </footer>
 
-    <script src="js/script.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
     <script>
     document.getElementById('add-main-ingredient').addEventListener('click', function() {
         var container = document.getElementById('main-ingredient-container');
         
+        // 新しいセレクトボックスと削除ボタンを格納するdivを作成
+        var wrapperDiv = document.createElement('div');
+        wrapperDiv.className = 'new-select-item';
+
         // 新しいセレクトボックスを作成
         var newSelect = document.createElement('select');
         newSelect.name = 'main_ingredient_id[]';
@@ -299,24 +297,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // 削除ボタンを作成
         var removeButton = document.createElement('button');
-        removeButton.textContent = '削除';
+        removeButton.innerHTML = '<span class="material-symbols-outlined">delete</span>';
         removeButton.className = 'remove-button';
         removeButton.type = 'button';
 
         // 削除ボタンにクリックイベントを追加
         removeButton.addEventListener('click', function() {
-            container.removeChild(newSelect);
-            container.removeChild(removeButton);
+            container.removeChild(wrapperDiv);
         });
 
-        // コンテナにセレクトボックスと削除ボタンを追加
-        container.appendChild(newSelect);
-        container.appendChild(removeButton);
+        // divにセレクトボックスと削除ボタンを追加
+        wrapperDiv.appendChild(newSelect);
+        wrapperDiv.appendChild(removeButton);
+
+        // コンテナにdivを追加
+        container.appendChild(wrapperDiv);
     });
 
     document.getElementById('add-category').addEventListener('click', function() {
         var container = document.getElementById('category-container');
         
+        // 新しいセレクトボックスと削除ボタンを格納するdivを作成
+        var wrapperDiv = document.createElement('div');
+        wrapperDiv.className = 'new-select-item';
+
+
         // 新しいセレクトボックスを作成
         var newSelect = document.createElement('select');
         newSelect.name = 'category_id[]';
@@ -325,20 +330,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // 削除ボタンを作成
         var removeButton = document.createElement('button');
-        removeButton.textContent = '削除';
+        removeButton.innerHTML = '<span class="material-symbols-outlined">delete</span>';
         removeButton.className = 'remove-button';
         removeButton.type = 'button';
 
         // 削除ボタンにクリックイベントを追加
         removeButton.addEventListener('click', function() {
-            container.removeChild(newSelect);
-            container.removeChild(removeButton);
+            container.removeChild(wrapperDiv);
         });
 
-        // コンテナにセレクトボックスと削除ボタンを追加
-        container.appendChild(newSelect);
-        container.appendChild(removeButton);
+        // divにセレクトボックスと削除ボタンを追加
+        wrapperDiv.appendChild(newSelect);
+        wrapperDiv.appendChild(removeButton);
+
+        // コンテナにdivを追加
+        container.appendChild(wrapperDiv);
     });
 </script>
+
 </body>
 </html>

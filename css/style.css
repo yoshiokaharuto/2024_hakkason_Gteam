@@ -12,10 +12,13 @@ html, body, main, div, span, h1, h2, h3, p, ol, ul, li {
 :root {
     --main-color: #FF852C;
     --sub-color: #FFAB6F;
-    --gray: #B0B0B0;
-    --light-gray: #F3F3F3;
+    --background-color: #F3F3F3;
     --text-color: #000000;
     --invert-text-color: #FFFFFF;
+
+    --gray: #B0B0B0;
+    --black: #000000;
+    --white: #FFFFFF;
 }
 
 body {
@@ -23,7 +26,7 @@ body {
     font-optical-sizing: auto;
     font-weight: normal;
     font-style: normal;
-    background-color: var(--light-gray);
+    background-color: var(--background-color);
     display: grid;
     grid-template-rows: auto 1fr auto;
     grid-template-columns: 100%;
@@ -35,26 +38,23 @@ body {
 }
 
 .app-name {
-    color: var(--invert-text-color);
+    color: var(--white);
     font-size: 30px;
     font-weight: normal;
 }
 
 a {
-    color: black;
+    color: var(--text-color);
     text-decoration: none;
 }
 
 header {
+    color: var(--white);
     background-color: var(--main-color);
     padding: 20px 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-#sub-header-button-container {
-    display: none;
 }
 
 #header-icon-container {
@@ -63,13 +63,44 @@ header {
 }
 
 header .material-symbols-outlined {
-    color: var(--invert-text-color);
+    color: var(--white);
     font-size: 40px;
+}
+
+header .material-symbols-outlined:hover {
+    transform: scale(1.1);
+}
+
+.cant-click {
+    cursor: not-allowed;
+}
+
+#sub-header-button-container {
+    display: none;
+}
+
+#sub-header-button {
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.3s ease;
+}
+
+#sub-header-checkbox:checked + #sub-header-button {
+    transform: rotate(90deg);
+}
+
+#sub-header-checkbox {
+    display: none;
 }
 
 #sub-header{
     background-color: var(--sub-color);
     text-align: center;
+    display: none;
+}
+
+#sub-header a {
+    color: var(--white);
 }
 
 #sub-header a:hover {
@@ -78,19 +109,16 @@ header .material-symbols-outlined {
 
 #sub-header li {
     margin: 10px 0;
-}
-
-#sub-header-checkbox {
-    display: none;
+    color: var(--white);
 }
 
 main {
     width: 70%;
-    margin: 20px auto;
+    margin: 0px auto;
 }
 
 footer {
-    color: var(--invert-text-color);
+    color: var(--white);
     background-color: var(--sub-color);
     text-align: center;
     padding: 40px;
@@ -119,6 +147,7 @@ footer {
 /* ========== ↓ 主にindex ========== */
 #search-container {
     border-bottom: 1px solid var(--gray);
+    margin-top: 20px;
     padding-bottom: 20px;
     text-align: center;
 }
@@ -160,6 +189,7 @@ footer {
 #user-recipe {
     display: block;
     margin: 10px 0;
+    color: var(--text-color);
 }
 
 #user-recipe input[type="checkbox"] {
@@ -197,7 +227,7 @@ footer {
 }
 
 #search-container a:active {
-    background-color: var(--light-gray);
+    background-color: var(--background-color);
 }
 
 #search-button .material-symbols-outlined,
@@ -220,7 +250,7 @@ footer {
 }
 
 .recipe-name {
-    color: black;
+    color: var(--text-color);
     font-weight: normal;
     font-size: 30px;
 }
@@ -263,14 +293,16 @@ footer {
     border-radius: 5px;
 }
 
-.recipe-date {
+.recipe-userAndDate {
     color: var(--sub-color);
     text-align: right;
     margin-top: 10px;
 }
 
 #not-found {
-    margin: 20px 0;
+    color: var(--text-color);
+    margin: 20px;
+    text-align: center;
 }
 
 /* ========== ↑ 主にindex ========== */
@@ -312,6 +344,7 @@ footer {
 }
 
 .recipe-information-content {
+    color: var(--text-color);
     background-color: var(--invert-text-color);
     padding: 10px 20px;
     border: 1px solid var(--gray);
@@ -334,23 +367,24 @@ footer {
 .button-container .white-button,
 .button-container .main-button {
     padding: 5px 15px;
+    text-align: center;
 }
 
 .button-container .white-button {
     font-size: 16px;
     color: var(--main-color);
-    background-color: var(--invert-text-color);
+    background-color: var(--white);
     border: 1px solid var(--main-color);
     border-radius: 5px;
 }
 
 .button-container .white-button:active {
-    background-color: var(--light-gray);
+    background-color: var(--background-color);
 }
 
 .button-container .main-button {
     font-size: 16px;
-    color: var(--invert-text-color);
+    color: var(--white);
     background-color: var(--main-color);
     border: none;
     border-radius: 5px;
@@ -360,13 +394,22 @@ footer {
     background-color: var(--sub-color);
 }
 
+@media (max-width: 600px) {
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
 /* ========== ↑ 主にdetail ========== */
 /* ========== ↓ 主にpost ========== */ 
 #page-name-section {
+    margin: 20px 0;
     text-align: center;
 }
 
 #page-name-section h1 {
+    color: var(--text-color);
     font-size: 30px;
     font-weight: normal;
 }
@@ -393,6 +436,12 @@ footer {
     border-radius: 5px;
     padding-left: 10px;
     line-height: 20px;
+    color: var(--black);
+}
+
+.post-item + .new-select-item,
+.new-select-item + .new-select-item {
+    margin-top: 10px;
 }
 
 .post-item-container textarea {
@@ -443,10 +492,61 @@ footer {
     border-bottom-right-radius: 5px;
 }
 
+.genre-option + .genre-option label {
+    border-left: 0;
+}
+
 .genre-option input[type=radio]:checked+label {
     color: var(--invert-text-color);
     background-color: var(--main-color);
     border: 1px solid var(--main-color);
+}
+
+.add-button {
+    display: block;
+    padding: 5px 15px;
+    margin: 10px auto;
+    text-align: center;
+    font-size: 14px;
+    line-height: 24px;
+    color: var(--white);
+    background-color: var(--sub-color);
+    border: none;
+    border-radius: 5px;
+}
+
+.add-button:active {
+    background-color: var(--main-color);
+}
+
+.add-button .material-symbols-outlined {
+    color: var(--white);
+}
+
+.remove-button {
+    display: block;
+    padding: 5px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 14px;
+    line-height: 24px;
+    color: var(--sub-color);
+    background-color: var(--white);
+    border: 1px solid var(--sub-color);
+    border-radius: 5px;
+}
+
+.add-button:active {
+    background-color: var(--main-color);
+}
+
+.add-button .material-symbols-outlined {
+    color: var(--white);
+}
+
+.new-select-item {
+    display: flex;
+    gap: 10px;
 }
 
 /* ========== ↑ 主にpost ========== */

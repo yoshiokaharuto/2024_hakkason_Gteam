@@ -1,6 +1,8 @@
 <?php
     require_once "./db_connect.php";
 
+    session_start();
+
     if(isset($_GET['id'])) {
         $sql = "SELECT 1 FROM recipes where recipe_id = :id LIMIT 1";
         $stm = $pdo->prepare($sql);
@@ -49,43 +51,72 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
 </head>
 <body>
-<header>
-        <a href="index.php">
+    <header>
+        <a href="index.php" title="レシピ一覧に戻る">
             <h1 class="app-name">
                 アプリ名
             </h1>
         </a>
 
         <div id="header-icon-container">
+<?php if(!isset($_SESSION['user_id'])) { // 未ログイン状態 ?>
+            <p title='レシピを投稿するにはログインが必要です' class='cant-click'>
+                <span class='material-symbols-outlined'>add_circle</span>
+            </p>
+            <a href='login.php' title='ログイン'>
+                <span class='material-symbols-outlined'>login</span>
+            </a>
+<?php } else { // ログイン状態 ?>
             <a href="post.php" title="新規投稿">
                 <span class="material-symbols-outlined">add_circle</span>
             </a>
             <a href="settings.php" title="設定">
                 <span class="material-symbols-outlined">settings</span>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+            <a href="logout.php" title="ログアウト">
                 <span class="material-symbols-outlined">logout</span>
             </a>
+<?php } ?>
         </div>
         <label id="sub-header-button-container">
             <input type="checkbox" id="sub-header-checkbox">
-            <span class="material-symbols-outlined" id="sub-header-button">
-                menu
-            </span>
+            <span class="material-symbols-outlined" id="sub-header-button">menu</span>
         </label>
     </header>
 
     <div id="sub-header">
         <ul>
-            <a href="post.php" title="新規投稿">
-                <li>新規投稿</li>
+<?php if(!isset($_SESSION['user_id'])) { // 未ログイン状態 ?>
+            <li  title='レシピを投稿するにはログインが必要です' class='cant-click'>
+                <span class='material-symbols-outlined'>add_circle</span>
+                新規投稿
+            </li>
+            <a href='login.php'>
+                <li>
+                    <span class='material-symbols-outlined'>login</span>
+                    ログイン
+                </li>
             </a>
-            <a href="settings.php" title="設定">
-                <li>設定</li>
+<?php } else { // ログイン状態 ?>
+            <a href="post.php">
+                <li>
+                    <span class="material-symbols-outlined">add_circle</span>
+                    新規投稿
+                </li>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
-                <li>ログアウト</li>
+            <a href="settings.php">
+                <li>
+                    <span class="material-symbols-outlined">settings</span>
+                    設定
+                </li>
             </a>
+            <a href="logout.php">
+                <li>
+                    <span class="material-symbols-outlined">logout</span>
+                    ログアウト
+                </li>
+            </a>
+<?php } ?>
         </ul>
     </div>
 
@@ -118,9 +149,7 @@
                 </p>
             </div>
             <p class="recipe-time">
-                <span class="material-symbols-outlined">
-                    timer
-                </span>
+                <span class="material-symbols-outlined">timer</span>
                 <?= preoutput($data['time']) ?>分
             </p>
             <?php
@@ -133,22 +162,21 @@
                     echo "<p class='recipe-mainIngredient'><span>".str_replace(', ', '</span><span>', $data['main_ingredient'])."</span></p>";
                 }
             ?>
-            <p class="recipe-date">
-                <?= preoutput($data['date']) ?>
+            <p class='recipe-userAndDate'>
+            <span class="material-symbols-outlined">person</span>
+            <?= htmlspecialchars($data['user_id'], ENT_QUOTES, 'UTF-8') ?><br>
+            <span class="material-symbols-outlined">calendar_today</span>
+            <?= htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') ?>
             </p>
         </div>
         <div class="recipe-information">
             <div class="recipe-information-title-section">
                 <p>
-                    <span class="material-symbols-outlined">
-                        grocery
-                    </span>
+                    <span class="material-symbols-outlined">grocery</span>
                     食材
                 </p>
                 <button onclick="copyButton('recipe-ingredient')">
-                    <span class="material-symbols-outlined">
-                        content_copy
-                    </span>
+                    <span class="material-symbols-outlined">content_copy</span>
                 </button>
             </div>
             <p class="recipe-information-content" id="recipe-ingredient">
@@ -158,15 +186,11 @@
         <div class="recipe-information">
             <div class="recipe-information-title-section">
                 <p>
-                    <span class="material-symbols-outlined">
-                        receipt_long
-                    </span>
+                    <span class="material-symbols-outlined">format_list_numbered</span>
                     手順
                 </p>
                 <button onclick="copyButton('recipe-process')">
-                    <span class="material-symbols-outlined">
-                        content_copy
-                    </span>
+                    <span class="material-symbols-outlined">content_copy</span>
                 </button>
             </div>
             <p class="recipe-information-content" id="recipe-process">
@@ -176,16 +200,12 @@
         <div class="recipe-information">
             <div class="recipe-information-title-section">
                 <p>
-                    <span class="material-symbols-outlined">
-                        description
-                    </span>
+                    <span class="material-symbols-outlined">description</span>
                     メモ
                 </p>
             <?php if(!empty($data['note'])) { ?>
                     <button onclick="copyButton('recipe-note')">
-                    <span class="material-symbols-outlined">
-                        content_copy
-                    </span>
+                    <span class="material-symbols-outlined">content_copy</span>
                 </button>
             </div>
             <p class="recipe-information-content" id="recipe-note">
@@ -224,34 +244,29 @@
 <?= preoutput($data['process']) ?><br>
 【メモ】<br>
 <?= !empty($data['note']) ? preoutput($data['note']) : "(なし)" ?><br>
-【カテゴリタグ】<?= !empty($data['category']) ? preoutput($data['category']) : "(なし)" ?></div>
+【カテゴリタグ】<?= !empty($data['category']) ? preoutput($data['category']) : "(なし)" ?><br>
+【投稿者】<?= preoutput($data['user_id']) ?><br>
+【投稿日時】<?= preoutput($data['date']) ?></div>
 
+<?php if(isset($_SESSION['user_id']) && $data['user_id'] === $_SESSION['user_id']) { // ログイン状態 ?>
         <div class="button-container">
             <a href='edit.php?id=<?= $data['recipe_id'] ?>' class="main-button">
-                <span class="material-symbols-outlined">
-                    edit
-                </span>
+                <span class="material-symbols-outlined">edit</span>
                 編集する
             </a>
             <a href='delete.php?id=<?= $data['recipe_id'] ?>' class="main-button">
-                <span class="material-symbols-outlined">
-                    delete
-                </span>
+                <span class="material-symbols-outlined">delete</span>
                 削除する
             </a>
         </div>
-
+<?php } ?>
         <div class="button-container">
             <a href="index.php" class="white-button">
-                <span class="material-symbols-outlined">
-                    undo
-                </span>
+                <span class="material-symbols-outlined">undo</span>
                 レシピ一覧に戻る
             </a>
             <button onclick="copyAllButton()" class="main-button">
-                <span class="material-symbols-outlined">
-                    content_copy
-                </span>
+                <span class="material-symbols-outlined">content_copy</span>
                 このレシピをコピー
             </button>
         </div>

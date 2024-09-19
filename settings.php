@@ -1,4 +1,35 @@
 <?php
+    require_once "./db_connect.php";
+
+    session_start();
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit();
+    }
+
+    $sql = "SELECT * FROM theme";
+    $stm = $pdo->prepare($sql);
+    $stm->execute();
+    $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+    $themeValues = array_column($result, 'theme_id');
+
+    if(isset($_POST['theme_id']) && in_array((int)$_POST['theme_id'], $themeValues, true)) {
+        $themeId = $_POST['theme_id'];
+        $sql = "SELECT * FROM theme WHERE theme_id = :themeId";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(':themeId', $themeId, PDO::PARAM_INT);
+        $stm->execute();
+        $theme = $stm->fetch(PDO::FETCH_ASSOC);
+    } else {
+        $theme = [
+            'main' => 'FF852C',
+            'sub' => 'FFAB6F',
+            'background' => 'F3F3F3',
+            'text' => '000000',
+            'invert-text' => 'FFFFFF'
+        ];
+    }
 ?>
 
 <!DOCTYPE html>
@@ -12,10 +43,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
+    <style>
+        :root {
+            --main-color: #<?= $theme['main'] ?>;
+            --sub-color: #<?= $theme['sub'] ?>;
+            --background-color: #<?= $theme['background'] ?>;
+            --text-color: #<?= $theme['text'] ?>;
+            --invert-text-color: #<?= $theme['invert-text'] ?>;
+        }
+    </style> 
 </head>
 <body>
 <header>
-        <a href="index.php">
+        <a href="index.php" title="レシピ一覧に戻る">
             <h1 class="app-name">
                 アプリ名
             </h1>
@@ -30,19 +70,23 @@
         </div>
         <label id="sub-header-button-container">
             <input type="checkbox" id="sub-header-checkbox">
-            <span class="material-symbols-outlined" id="sub-header-button">
-                menu
-            </span>
+            <span class="material-symbols-outlined" id="sub-header-button">menu</span>
         </label>
     </header>
 
     <div id="sub-header">
         <ul>
-            <a href="post.php" title="新規投稿">
-                <li>新規投稿</li>
+            <a href="post.php">
+                <li>
+                    <span class="material-symbols-outlined">add_circle</span>
+                    新規投稿
+                </li>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
-                <li>ログアウト</li>
+            <a href="logout.php">
+                <li>
+                    <span class="material-symbols-outlined">logout</span>
+                    ログアウト
+                </li>
             </a>
         </ul>
     </div>
@@ -53,9 +97,7 @@
         </div>
         <div class="settings-section">
             <h2>
-                <span class="material-symbols-outlined">
-                    lock
-                </span>
+                <span class="material-symbols-outlined">lock</span>
                 パスワードを変更
             </h2>
             <form action="" method="POST">
@@ -79,9 +121,7 @@
                 </div>
                 <div class="button-container">
                     <button type="submit" class="main-button">
-                        <span class="material-symbols-outlined">
-                            check
-                        </span>
+                        <span class="material-symbols-outlined">check</span>
                         変更
                     </button>
                 </div>
@@ -90,26 +130,24 @@
 
         <div class="settings-section">
             <h2>
-                <span class="material-symbols-outlined">
-                    palette
-                </span>
+                <span class="material-symbols-outlined">palette</span>
                 テーマを変更
             </h2>
-            <form action="" method="POST">
+            <form action="settings.php" method="POST">
                 <div class="post-item-container">
                     <label>
-                        <select name="theme" class="post-item">
-                            <option value="orange">オレンジ</option>
-                            <option value="blue">ブルー</option>
-                            <option value="gray">グレー</option>
+                        <select name="theme_id" class="post-item">
+                            <?php foreach($result as $data): ?>
+                                <option value="<?= $data['theme_id']?>">
+                                    <?= $data['name'] ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </label>
                 </div>
                 <div class="button-container">
                     <button type="submit" class="main-button">
-                        <span class="material-symbols-outlined">
-                            check
-                        </span>
+                        <span class="material-symbols-outlined">check</span>
                         変更
                     </button>
                 </div>
@@ -118,15 +156,11 @@
 
         <div class="button-container">
             <a href="index.php" class="white-button">
-                <span class="material-symbols-outlined">
-                    undo
-                </span>
+                <span class="material-symbols-outlined">undo</span>
                 レシピ一覧に戻る
             </a>
-            <a href="" class="main-button">
-                <span class="material-symbols-outlined">
-                    logout
-                </span>
+            <a href="logout.php" class="main-button">
+                <span class="material-symbols-outlined">logout</span>
                 ログアウト
             </a>
         </div>
