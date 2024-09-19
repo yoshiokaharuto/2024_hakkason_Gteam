@@ -24,6 +24,20 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $stmt = $pdo->prepare("SELECT user_id, password FROM users WHERE user_id = :user_id");
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
         $stmt->execute();
+
+        if($stmt->rowCount() > 0){
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            //パスワードの確認
+            if (password_verify($password, $row['password'])){
+                $_SESSION['user_id'] = $user_id;
+                //セッションidを再生成
+                session_regenerate_id(true);
+                header("Location:index.php");
+                exit();
+            } else {
+                $resultMessage = "無効なidまたはパスワードです。";
+            }
+        }
     }
 }
 ?>
