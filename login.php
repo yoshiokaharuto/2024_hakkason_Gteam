@@ -1,4 +1,45 @@
 <?php
+
+session_start();
+
+$resultMessage = '';
+$errorMessages = [
+    'user_id' => '',
+    'password' => ''
+];
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    //バリデーション
+    if(empty($_POST['user_id'])) {
+        $errorMessages['user_id'] = 'idを入力してください';
+    }
+    if(empty($_POST['password'])) {
+        $errorMessages['password'] = 'パスワードを入力してください';
+    }
+
+    if(isset($_POST['user_id'],$_POST['password'])) {
+        $user_id = $_POST['user_id'];
+        $password = $_POST['password'];
+
+        $stmt = $pdo->prepare("SELECT user_id, password FROM users WHERE user_id = :user_id");
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt->execute();
+
+        if($stmt->rowCount() > 0){
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            //パスワードの確認
+            if (password_verify($password, $row['password'])){
+                $_SESSION['user_id'] = $user_id;
+                //セッションidを再生成
+                session_regenerate_id(true);
+                header("Location:index.php");
+                exit();
+            } else {
+                $resultMessage = "無効なidまたはパスワードです。";
+            }
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -26,17 +67,19 @@
                 <h1>ログイン</h1>
             </div>
 
-            <form action="" method="POST">
+            <form action="login.php" method="POST">
                 <div class="post-item-container">
                     <label>
                         ID
                         <input type="text" name="id" placeholder="IDを入力" class="post-item">
+                        <p><?php echo $errorMessages['user_id'];?></p>
                     </label>
                 </div>
                 <div class="post-item-container">
                     <label>
                         パスワード
                         <input type="password" name="password" placeholder="パスワードを入力" class="post-item">
+                        <p><?php echo $errorMessages['password'];?></p>
                     </label>
                 </div>
                 <div class="button-container-withLink">
