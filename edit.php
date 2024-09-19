@@ -494,8 +494,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             var parent = button.parentElement;
             parent.parentElement.removeChild(parent);
         });
-            container.removeChild(wrapperDiv);
-        });
 
         wrapperDiv.appendChild(newSelect);
         wrapperDiv.appendChild(removeButton);
