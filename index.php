@@ -92,43 +92,66 @@ if(isset($_SESSION['resultMessage'])) {
                 アプリ名
             </h1>
         </a>
-        <div id="header-icon-container">
-            <a href="post.php" title="新規投稿">
-                <span class="material-symbols-outlined">add_circle</span>
+
+        <div id='header-icon-container'>
+<?php if(!isset($_SESSION['user_id'])) { // 未ログイン状態 ?>
+            <p title='レシピを投稿するにはログインが必要です' class='cant-click'>
+                <span class='material-symbols-outlined'>add_circle</span>
+            </p>
+            <a href='login.php' title='ログイン'>
+                <span class='material-symbols-outlined'>login</span>
             </a>
-            <a href="settings.php" title="設定">
-                <span class="material-symbols-outlined">settings</span>
+<?php } else { // ログイン状態 ?>
+            <a href='post.php' title='新規投稿'>
+                <span class='material-symbols-outlined'>add_circle</span>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
-                <span class="material-symbols-outlined">logout</span>
+            <a href='settings.php' title='設定'>
+                <span class='material-symbols-outlined'>settings</span>
             </a>
+            <a href='logout.php' title='ログアウト'>
+                <span class='material-symbols-outlined'>logout</span>
+            </a>
+<?php } ?>
         </div>
-        <label id="sub-header-button-container">
-            <input type="checkbox" id="sub-header-checkbox">
-            <span class="material-symbols-outlined" id="sub-header-button">menu</span>
+        <label id='sub-header-button-container'>
+            <input type='checkbox' id='sub-header-checkbox'>
+            <span class='material-symbols-outlined' id='sub-header-button'>menu</span>
         </label>
     </header>
 
     <div id="sub-header">
         <ul>
-            <a href="post.php">
+<?php if(!isset($_SESSION['user_id'])) { // 未ログイン状態 ?>
+            <li  title='レシピを投稿するにはログインが必要です' class='cant-click'>
+                <span class='material-symbols-outlined'>add_circle</span>
+                新規投稿
+            </li>
+            <a href='login.php'>
                 <li>
-                    <span class="material-symbols-outlined">add_circle</span>
+                    <span class='material-symbols-outlined'>login</span>
+                    ログイン
+                </li>
+            </a>
+<?php } else { // ログイン状態 ?>
+            <a href='post.php'>
+                <li>
+                    <span class='material-symbols-outlined'>add_circle</span>
                     新規投稿
                 </li>
             </a>
-            <a href="settings.php">
+            <a href='settings.php'>
                 <li>
-                    <span class="material-symbols-outlined">settings</span>
+                    <span class='material-symbols-outlined'>settings</span>
                     設定
                 </li>
             </a>
-            <a href="logout.php"> <!-- 仮でログイン画面に飛びます -->
+            <a href='logout.php'>
                 <li>
-                    <span class="material-symbols-outlined">logout</span>
+                    <span class='material-symbols-outlined'>logout</span>
                     ログアウト
                 </li>
             </a>
+<?php } ?>
         </ul>
     </div>
 
@@ -157,9 +180,11 @@ if(isset($_SESSION['resultMessage'])) {
                         <?php endforeach; ?>
                     </select>
                 </div>
+<?php if(isset($_SESSION['user_id'])) { // ログイン状態 ?>
                 <label id="user-recipe">
                     <input type="checkbox" name="user-recipe">自分が投稿したレシピ</input>
                 </label>
+<?php } ?>
                 <div id="index-button-container">
                     <button type="submit" id="search-button">
                         <span class="material-symbols-outlined">search</span>
@@ -176,6 +201,7 @@ if(isset($_SESSION['resultMessage'])) {
                 </div>
             </div>
         </form>
+
         <?php
         if ($results) {
             foreach($results as $data){

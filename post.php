@@ -2,6 +2,12 @@
 // データベース接続ファイルを読み込む
 require_once 'db_connect.php';
 
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $resultMessage = '';
 $errorMessages = [
     'name' => '',
@@ -120,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="settings.php" title="設定">
                 <span class="material-symbols-outlined">settings</span>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+            <a href="logout.php" title="ログアウト">
                 <span class="material-symbols-outlined">logout</span>
             </a>
         </div>
@@ -138,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     設定
                 </li>
             </a>
-            <a href="login.php"> <!-- 仮でログイン画面に飛びます -->
+            <a href="logout.php">
                 <li>
                     <span class="material-symbols-outlined">logout</span>
                     ログアウト

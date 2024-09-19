@@ -67,6 +67,14 @@ header .material-symbols-outlined {
     font-size: 40px;
 }
 
+header .material-symbols-outlined:hover {
+    transform: scale(1.1);
+}
+
+.cant-click {
+    cursor: not-allowed;
+}
+
 #sub-header-button-container {
     display: none;
 }
@@ -89,6 +97,10 @@ header .material-symbols-outlined {
     background-color: var(--sub-color);
     text-align: center;
     display: none;
+}
+
+#sub-header a {
+    color: var(--white);
 }
 
 #sub-header a:hover {

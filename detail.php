@@ -1,6 +1,8 @@
 <?php
     require_once "./db_connect.php";
 
+    session_start();
+
     if(isset($_GET['id'])) {
         $sql = "SELECT 1 FROM recipes where recipe_id = :id LIMIT 1";
         $stm = $pdo->prepare($sql);
@@ -57,15 +59,24 @@
         </a>
 
         <div id="header-icon-container">
+<?php if(!isset($_SESSION['user_id'])) { // 未ログイン状態 ?>
+            <p title='レシピを投稿するにはログインが必要です' class='cant-click'>
+                <span class='material-symbols-outlined'>add_circle</span>
+            </p>
+            <a href='login.php' title='ログイン'>
+                <span class='material-symbols-outlined'>login</span>
+            </a>
+<?php } else { // ログイン状態 ?>
             <a href="post.php" title="新規投稿">
                 <span class="material-symbols-outlined">add_circle</span>
             </a>
             <a href="settings.php" title="設定">
                 <span class="material-symbols-outlined">settings</span>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+            <a href="logout.php" title="ログアウト">
                 <span class="material-symbols-outlined">logout</span>
             </a>
+<?php } ?>
         </div>
         <label id="sub-header-button-container">
             <input type="checkbox" id="sub-header-checkbox">
@@ -75,6 +86,18 @@
 
     <div id="sub-header">
         <ul>
+<?php if(!isset($_SESSION['user_id'])) { // 未ログイン状態 ?>
+            <li  title='レシピを投稿するにはログインが必要です' class='cant-click'>
+                <span class='material-symbols-outlined'>add_circle</span>
+                新規投稿
+            </li>
+            <a href='login.php'>
+                <li>
+                    <span class='material-symbols-outlined'>login</span>
+                    ログイン
+                </li>
+            </a>
+<?php } else { // ログイン状態 ?>
             <a href="post.php">
                 <li>
                     <span class="material-symbols-outlined">add_circle</span>
@@ -87,12 +110,13 @@
                     設定
                 </li>
             </a>
-            <a href="login.php"> <!-- 仮でログイン画面に飛びます -->
+            <a href="logout.php">
                 <li>
                     <span class="material-symbols-outlined">logout</span>
                     ログアウト
                 </li>
             </a>
+<?php } ?>
         </ul>
     </div>
 
@@ -224,6 +248,7 @@
 【投稿者】<?= preoutput($data['user_id']) ?><br>
 【投稿日時】<?= preoutput($data['date']) ?></div>
 
+<?php if(isset($_SESSION['user_id']) && $data['user_id'] === $_SESSION['user_id']) { // ログイン状態 ?>
         <div class="button-container">
             <a href='edit.php?id=<?= $data['recipe_id'] ?>' class="main-button">
                 <span class="material-symbols-outlined">edit</span>
@@ -234,7 +259,7 @@
                 削除する
             </a>
         </div>
-
+<?php } ?>
         <div class="button-container">
             <a href="index.php" class="white-button">
                 <span class="material-symbols-outlined">undo</span>
