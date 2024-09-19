@@ -290,7 +290,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
                     <?php endif; ?>
-
                     <!-- 2つ目以降のselectboxには削除ボタンをつける -->
                     <?php for ($i = 1; $i < count($currentIngredients); $i++): ?>
                         <div class="ingredient-group">
@@ -362,7 +361,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
                     <?php endif; ?>
-
                     <!-- 2つ目以降のselectboxには削除ボタンをつける -->
                     <?php for ($i = 1; $i < count($currentCategories); $i++): ?>
                         <div class="category-group">
