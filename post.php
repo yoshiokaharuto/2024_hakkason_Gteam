@@ -2,6 +2,12 @@
 // データベース接続ファイルを読み込む
 require_once 'db_connect.php';
 
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $resultMessage = '';
 $errorMessages = [
     'name' => '',
@@ -120,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="settings.php" title="設定">
                 <span class="material-symbols-outlined">settings</span>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+            <a href="logout.php" title="ログアウト">
                 <span class="material-symbols-outlined">logout</span>
             </a>
         </div>
@@ -138,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     設定
                 </li>
             </a>
-            <a href="login.php"> <!-- 仮でログイン画面に飛びます -->
+            <a href="logout.php">
                 <li>
                     <span class="material-symbols-outlined">logout</span>
                     ログアウト
@@ -216,7 +222,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <button type="button" id="add-main-ingredient">主要食材を追加</button>
+                <button type="button" id="add-main-ingredient" class="add-button">
+                    <span class="material-symbols-outlined">add</span>
+                    主要食材を追加
+                </button>
             </div>
             <div class="post-item-container">
                 <label>
@@ -248,7 +257,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <button type="button" id="add-category">カテゴリを追加</button>
+                <button type="button" id="add-category" class="add-button">
+                    <span class="material-symbols-outlined">add</span>
+                    カテゴリを追加
+                </button>
             </div>
             <div class="button-container">
                 <a href="index.php" class="white-button">
@@ -273,6 +285,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     document.getElementById('add-main-ingredient').addEventListener('click', function() {
         var container = document.getElementById('main-ingredient-container');
         
+        // 新しいセレクトボックスと削除ボタンを格納するdivを作成
+        var wrapperDiv = document.createElement('div');
+        wrapperDiv.className = 'new-select-item';
+
         // 新しいセレクトボックスを作成
         var newSelect = document.createElement('select');
         newSelect.name = 'main_ingredient_id[]';
@@ -281,24 +297,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // 削除ボタンを作成
         var removeButton = document.createElement('button');
-        removeButton.textContent = '削除';
+        removeButton.innerHTML = '<span class="material-symbols-outlined">delete</span>';
         removeButton.className = 'remove-button';
         removeButton.type = 'button';
 
         // 削除ボタンにクリックイベントを追加
         removeButton.addEventListener('click', function() {
-            container.removeChild(newSelect);
-            container.removeChild(removeButton);
+            container.removeChild(wrapperDiv);
         });
 
-        // コンテナにセレクトボックスと削除ボタンを追加
-        container.appendChild(newSelect);
-        container.appendChild(removeButton);
+        // divにセレクトボックスと削除ボタンを追加
+        wrapperDiv.appendChild(newSelect);
+        wrapperDiv.appendChild(removeButton);
+
+        // コンテナにdivを追加
+        container.appendChild(wrapperDiv);
     });
 
     document.getElementById('add-category').addEventListener('click', function() {
         var container = document.getElementById('category-container');
         
+        // 新しいセレクトボックスと削除ボタンを格納するdivを作成
+        var wrapperDiv = document.createElement('div');
+        wrapperDiv.className = 'new-select-item';
+
+
         // 新しいセレクトボックスを作成
         var newSelect = document.createElement('select');
         newSelect.name = 'category_id[]';
@@ -307,19 +330,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // 削除ボタンを作成
         var removeButton = document.createElement('button');
-        removeButton.textContent = '削除';
+        removeButton.innerHTML = '<span class="material-symbols-outlined">delete</span>';
         removeButton.className = 'remove-button';
         removeButton.type = 'button';
 
         // 削除ボタンにクリックイベントを追加
         removeButton.addEventListener('click', function() {
-            container.removeChild(newSelect);
-            container.removeChild(removeButton);
+            container.removeChild(wrapperDiv);
         });
 
-        // コンテナにセレクトボックスと削除ボタンを追加
-        container.appendChild(newSelect);
-        container.appendChild(removeButton);
+        // divにセレクトボックスと削除ボタンを追加
+        wrapperDiv.appendChild(newSelect);
+        wrapperDiv.appendChild(removeButton);
+
+        // コンテナにdivを追加
+        container.appendChild(wrapperDiv);
     });
 </script>
 

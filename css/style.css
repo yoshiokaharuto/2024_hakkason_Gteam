@@ -67,6 +67,14 @@ header .material-symbols-outlined {
     font-size: 40px;
 }
 
+header .material-symbols-outlined:hover {
+    transform: scale(1.1);
+}
+
+.cant-click {
+    cursor: not-allowed;
+}
+
 #sub-header-button-container {
     display: none;
 }
@@ -89,6 +97,10 @@ header .material-symbols-outlined {
     background-color: var(--sub-color);
     text-align: center;
     display: none;
+}
+
+#sub-header a {
+    color: var(--white);
 }
 
 #sub-header a:hover {
@@ -288,7 +300,9 @@ footer {
 }
 
 #not-found {
-    margin: 20px 0;
+    color: var(--text-color);
+    margin: 20px;
+    text-align: center;
 }
 
 /* ========== ↑ 主にindex ========== */
@@ -425,6 +439,11 @@ footer {
     color: var(--black);
 }
 
+.post-item + .new-select-item,
+.new-select-item + .new-select-item {
+    margin-top: 10px;
+}
+
 .post-item-container textarea {
     height: 150px;
     resize: none;
@@ -473,10 +492,61 @@ footer {
     border-bottom-right-radius: 5px;
 }
 
+.genre-option + .genre-option label {
+    border-left: 0;
+}
+
 .genre-option input[type=radio]:checked+label {
     color: var(--invert-text-color);
     background-color: var(--main-color);
     border: 1px solid var(--main-color);
+}
+
+.add-button {
+    display: block;
+    padding: 5px 15px;
+    margin: 10px auto;
+    text-align: center;
+    font-size: 14px;
+    line-height: 24px;
+    color: var(--white);
+    background-color: var(--sub-color);
+    border: none;
+    border-radius: 5px;
+}
+
+.add-button:active {
+    background-color: var(--main-color);
+}
+
+.add-button .material-symbols-outlined {
+    color: var(--white);
+}
+
+.remove-button {
+    display: block;
+    padding: 5px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 14px;
+    line-height: 24px;
+    color: var(--sub-color);
+    background-color: var(--white);
+    border: 1px solid var(--sub-color);
+    border-radius: 5px;
+}
+
+.add-button:active {
+    background-color: var(--main-color);
+}
+
+.add-button .material-symbols-outlined {
+    color: var(--white);
+}
+
+.new-select-item {
+    display: flex;
+    gap: 10px;
 }
 
 /* ========== ↑ 主にpost ========== */

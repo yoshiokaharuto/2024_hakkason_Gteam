@@ -1,5 +1,12 @@
 <?php
     require_once "./db_connect.php";
+
+    session_start();
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit();
+    }
+
     $sql = "SELECT * FROM theme";
     $stm = $pdo->prepare($sql);
     $stm->execute();
@@ -75,7 +82,7 @@
                     新規投稿
                 </li>
             </a>
-            <a href="login.php"> <!-- 仮でログイン画面に飛びます -->
+            <a href="logout.php">
                 <li>
                     <span class="material-symbols-outlined">logout</span>
                     ログアウト
@@ -152,7 +159,7 @@
                 <span class="material-symbols-outlined">undo</span>
                 レシピ一覧に戻る
             </a>
-            <a href="" class="main-button">
+            <a href="logout.php" class="main-button">
                 <span class="material-symbols-outlined">logout</span>
                 ログアウト
             </a>
