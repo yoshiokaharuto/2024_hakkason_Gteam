@@ -18,6 +18,7 @@ html, body, main, div, span, h1, h2, h3, p, ol, ul, li {
 
     --gray: #B0B0B0;
     --black: #000000;
+    --white: #FFFFFF;
 }
 
 body {
@@ -37,7 +38,7 @@ body {
 }
 
 .app-name {
-    color: var(--invert-text-color);
+    color: var(--white);
     font-size: 30px;
     font-weight: normal;
 }
@@ -48,7 +49,7 @@ a {
 }
 
 header {
-    color: var(--invert-text-color);
+    color: var(--white);
     background-color: var(--main-color);
     padding: 20px 50px;
     display: flex;
@@ -62,7 +63,7 @@ header {
 }
 
 header .material-symbols-outlined {
-    color: var(--invert-text-color);
+    color: var(--white);
     font-size: 40px;
 }
 
@@ -96,7 +97,7 @@ header .material-symbols-outlined {
 
 #sub-header li {
     margin: 10px 0;
-    color: var(--invert-text-color);
+    color: var(--white);
 }
 
 main {
@@ -105,7 +106,7 @@ main {
 }
 
 footer {
-    color: var(--invert-text-color);
+    color: var(--white);
     background-color: var(--sub-color);
     text-align: center;
     padding: 40px;
@@ -358,7 +359,7 @@ footer {
 .button-container .white-button {
     font-size: 16px;
     color: var(--main-color);
-    background-color: var(--invert-text-color);
+    background-color: var(--white);
     border: 1px solid var(--main-color);
     border-radius: 5px;
 }
@@ -369,7 +370,7 @@ footer {
 
 .button-container .main-button {
     font-size: 16px;
-    color: var(--invert-text-color);
+    color: var(--white);
     background-color: var(--main-color);
     border: none;
     border-radius: 5px;
