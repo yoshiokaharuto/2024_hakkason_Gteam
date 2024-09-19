@@ -38,7 +38,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 //ハッシュ化して変数に
                 $password_hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-                $sql = "INSERT INTO users (user_id,password) VALUES(:user_id,:password)";
+                $sql = "INSERT INTO users (user_id,password,theme_id) VALUES(:user_id,:password,1)";
                 
                 try {
                     $stmt = $pdo->prepare($sql);
@@ -48,7 +48,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     if($stmt->execute()){
                         $resultMessage = '登録が完了しました';
                         $_SESSION['resultMessage'] = '登録が完了しました';
-                        header("Location:index.php");
+                        header("Location:login.php");
                         exit();
                     } else {
                         $resultMessage = '登録に失敗しました。';

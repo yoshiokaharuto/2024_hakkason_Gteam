@@ -49,6 +49,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
+    <style>
+        :root {
+            --main-color: #<?= $_SESSION['theme']['main'] ?>;
+            --sub-color: #<?= $_SESSION['theme']['sub'] ?>;
+            --background-color: #<?= $_SESSION['theme']['background'] ?>;
+            --text-color: #<?= $_SESSION['theme']['text'] ?>;
+            --invert-text-color: #<?= $_SESSION['theme']['invert-text'] ?>;
+        }
+    </style> 
 </head>
 <body>
     <header>
@@ -248,7 +257,7 @@
 【投稿者】<?= preoutput($data['user_id']) ?><br>
 【投稿日時】<?= preoutput($data['date']) ?></div>
 
-<?php if(isset($_SESSION['user_id']) && $data['user_id'] === $_SESSION['user_id']) { // ログイン状態 ?>
+<?php if(isset($_SESSION['user_id']) && $data['user_id'] === (int)$_SESSION['user_id']) { // ログイン状態 ?>
         <div class="button-container">
             <a href='edit.php?id=<?= $data['recipe_id'] ?>' class="main-button">
                 <span class="material-symbols-outlined">edit</span>

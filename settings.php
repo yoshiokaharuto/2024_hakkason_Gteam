@@ -15,20 +15,18 @@
     $themeValues = array_column($result, 'theme_id');
 
     if(isset($_POST['theme_id']) && in_array((int)$_POST['theme_id'], $themeValues, true)) {
-        $themeId = $_POST['theme_id'];
-        $sql = "SELECT * FROM theme WHERE theme_id = :themeId";
+        $theme_id = $_POST['theme_id'];
+        $sql = "SELECT * FROM theme WHERE theme_id = :theme_id";
         $stm = $pdo->prepare($sql);
-        $stm->bindValue(':themeId', $themeId, PDO::PARAM_INT);
+        $stm->bindValue(':theme_id', $theme_id, PDO::PARAM_INT);
         $stm->execute();
-        $theme = $stm->fetch(PDO::FETCH_ASSOC);
-    } else {
-        $theme = [
-            'main' => 'FF852C',
-            'sub' => 'FFAB6F',
-            'background' => 'F3F3F3',
-            'text' => '000000',
-            'invert-text' => 'FFFFFF'
-        ];
+        $_SESSION['theme'] = $stm->fetch(PDO::FETCH_ASSOC);
+
+        $sql = "UPDATE users SET theme_id = :theme_id WHERE user_id = :user_id";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(':theme_id', $theme_id, PDO::PARAM_INT);
+        $stm->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stm->execute();
     }
 ?>
 
@@ -45,11 +43,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
     <style>
         :root {
-            --main-color: #<?= $theme['main'] ?>;
-            --sub-color: #<?= $theme['sub'] ?>;
-            --background-color: #<?= $theme['background'] ?>;
-            --text-color: #<?= $theme['text'] ?>;
-            --invert-text-color: #<?= $theme['invert-text'] ?>;
+            --main-color: #<?= $_SESSION['theme']['main'] ?>;
+            --sub-color: #<?= $_SESSION['theme']['sub'] ?>;
+            --background-color: #<?= $_SESSION['theme']['background'] ?>;
+            --text-color: #<?= $_SESSION['theme']['text'] ?>;
+            --invert-text-color: #<?= $_SESSION['theme']['invert-text'] ?>;
         }
     </style> 
 </head>
@@ -138,7 +136,7 @@
                     <label>
                         <select name="theme_id" class="post-item">
                             <?php foreach($result as $data): ?>
-                                <option value="<?= $data['theme_id']?>">
+                                <option value="<?= $data['theme_id']?>" <?= $_SESSION['theme']['theme_id'] == $data['theme_id'] ? 'selected' : '' ?>>
                                     <?= $data['name'] ?>
                                 </option>
                             <?php endforeach; ?>

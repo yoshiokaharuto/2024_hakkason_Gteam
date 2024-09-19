@@ -3,10 +3,6 @@
 require_once 'db_connect.php';
 
 session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
 
 $resultMessage = '';
 $errorMessages = [
@@ -32,6 +28,11 @@ $recipe = $stm->fetch(PDO::FETCH_ASSOC);
 
 if (!$recipe) {
     echo "該当するレシピが見つかりません。";
+    exit();
+}
+
+if (!isset($_SESSION['user_id']) || $recipe['user_id'] !== (int)$_SESSION['user_id']) {
+    header("Location: index.php");
     exit();
 }
 
@@ -172,6 +173,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
+    <style>
+        :root {
+            --main-color: #<?= $_SESSION['theme']['main'] ?>;
+            --sub-color: #<?= $_SESSION['theme']['sub'] ?>;
+            --background-color: #<?= $_SESSION['theme']['background'] ?>;
+            --text-color: #<?= $_SESSION['theme']['text'] ?>;
+            --invert-text-color: #<?= $_SESSION['theme']['invert-text'] ?>;
+        }
+    </style> 
 </head>
 <body>
     <header>

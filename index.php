@@ -1,5 +1,15 @@
 <?php
 require_once "./db_connect.php";
+session_start(); //セッション開始
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['theme'] = [
+        'main' => 'FF852C',
+        'sub' => 'FFAB6F',
+        'background' => 'F3F3F3',
+        'text' => '000000',
+        'invert-text' => 'FFFFFF'
+    ];
+}
 
 // 検索条件の初期化
 $recipe_name = isset($_GET['recipe_name']) && $_GET['recipe_name'] !== '' ? '%' . $_GET['recipe_name'] . '%' : '%';
@@ -66,7 +76,6 @@ if($maxId !== false) {
     } while ($stm->fetchColumn() === false);
 }
 
-session_start(); //セッション開始
 $resultMessage = '';
 if(isset($_SESSION['resultMessage'])) {
     $resultMessage = $_SESSION['resultMessage'];
@@ -84,6 +93,15 @@ if(isset($_SESSION['resultMessage'])) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
+    <style>
+        :root {
+            --main-color: #<?= $_SESSION['theme']['main'] ?>;
+            --sub-color: #<?= $_SESSION['theme']['sub'] ?>;
+            --background-color: #<?= $_SESSION['theme']['background'] ?>;
+            --text-color: #<?= $_SESSION['theme']['text'] ?>;
+            --invert-text-color: #<?= $_SESSION['theme']['invert-text'] ?>;
+        }
+    </style> 
 </head>
 <body>
     <header>
