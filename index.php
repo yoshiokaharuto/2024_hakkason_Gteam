@@ -232,7 +232,7 @@ if(isset($_SESSION['resultMessage'])) {
         <?php 
             }
         } else {
-            echo "<p id='not-found'>レシピが見つかりませんでした。</p>";
+            echo "<p id='not-found'><span class='material-symbols-outlined'>sentiment_dissatisfied</span>レシピが見つかりませんでした。</p>";
         }
         ?>
 

@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // コミット
             $pdo->commit();
-            $resultMessage = "レシピと主要食材が正常に更新されました！<br>";
+            $resultMessage = "レシピの情報が正常に更新されました！<br>";
         } catch (PDOException $e) {
             $pdo->rollBack();
             $resultMessage = "SQLエラー: " . $e->getMessage() . "<br>";
@@ -265,7 +265,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endforeach; ?> <!-- ここで endforeach を正しく閉じる -->
                     </select>
                 </div>
-                <button type="button" id="add-main-ingredient">主要食材を追加</button>
+                <button type="button" id="add-main-ingredient" class="add-button">
+                    <span class="material-symbols-outlined">add</span>
+                    主要食材を追加
+                </button>
             </div>
 
             <!-- 食材 -->
@@ -300,13 +303,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- カテゴリ選択 -->
             <div class="post-item-container">
                 <label>
-                    <span class="material-symbols-outlined">
-                        sell
-                    </span>
-                    
                     <span class="material-symbols-outlined">sell</span>
                     カテゴリ
-                
                 </label>
                 <div id="category-container">
                     <select name="category_id[]" class="post-item">
@@ -318,7 +316,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endforeach; ?> <!-- ここで endforeach を正しく閉じる -->
                     </select>            
                 </div>
-                <button type="button" id="add-category">カテゴリを追加</button>
+                <button type="button" id="add-category" class="add-button">
+                    <span class="material-symbols-outlined">add</span>
+                    カテゴリを追加
+                </button>
             </div>
             <!-- 更新ボタン -->
             <div class="button-container">
@@ -342,47 +343,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="js/script.js"></script>
     <script>
     document.getElementById('add-main-ingredient').addEventListener('click', function() {
-    var container = document.getElementById('main-ingredient-container');
-    
-    var newSelect = document.createElement('select');
-    newSelect.name = 'main_ingredient_id[]';
-    newSelect.className = 'post-item';
-    newSelect.innerHTML = `<?php foreach ($allIngredients as $ingredient): ?><option value="<?php echo $ingredient['ingredient_id']; ?>"><?php echo $ingredient['ingredient_name']; ?></option><?php endforeach; ?>`;
+        var container = document.getElementById('main-ingredient-container');
+        
+        var wrapperDiv = document.createElement('div');
+        wrapperDiv.className = 'new-select-item';
 
-    var removeButton = document.createElement('button');
-    removeButton.textContent = '削除';
-    removeButton.className = 'remove-button';
-    removeButton.type = 'button';
+        var newSelect = document.createElement('select');
+        newSelect.name = 'main_ingredient_id[]';
+        newSelect.className = 'post-item';
+        newSelect.innerHTML = `<?php foreach ($allIngredients as $ingredient): ?><option value="<?php echo $ingredient['ingredient_id']; ?>"><?php echo $ingredient['ingredient_name']; ?></option><?php endforeach; ?>`;
 
-    removeButton.addEventListener('click', function() {
-        container.removeChild(newSelect);
-        container.removeChild(removeButton);
+        var removeButton = document.createElement('button');
+        removeButton.innerHTML = '<span class="material-symbols-outlined">delete</span>';
+        removeButton.className = 'remove-button';
+        removeButton.type = 'button';
+
+        removeButton.addEventListener('click', function() {
+            container.removeChild(wrapperDiv);
+        });
+
+        wrapperDiv.appendChild(newSelect);
+        wrapperDiv.appendChild(removeButton);
+
+        container.appendChild(wrapperDiv);
     });
-
-    container.appendChild(newSelect);
-    container.appendChild(removeButton);
-});
 
     document.getElementById('add-category').addEventListener('click', function() {
         var container = document.getElementById('category-container');
         
+        var wrapperDiv = document.createElement('div');
+        wrapperDiv.className = 'new-select-item';
+
         var newSelect = document.createElement('select');
         newSelect.name = 'category_id[]';
         newSelect.className = 'post-item';
         newSelect.innerHTML = `<?php foreach ($allCategories as $category): ?><option value="<?php echo $category['category_id']; ?>"><?php echo $category['category_name']; ?></option><?php endforeach; ?>`;
 
         var removeButton = document.createElement('button');
-        removeButton.textContent = '削除';
+        removeButton.innerHTML = '<span class="material-symbols-outlined">delete</span>';
         removeButton.className = 'remove-button';
         removeButton.type = 'button';
 
         removeButton.addEventListener('click', function() {
-            container.removeChild(newSelect);
-            container.removeChild(removeButton);
+            container.removeChild(wrapperDiv);
         });
 
-        container.appendChild(newSelect);
-        container.appendChild(removeButton);
+        wrapperDiv.appendChild(newSelect);
+        wrapperDiv.appendChild(removeButton);
+
+        container.appendChild(wrapperDiv);
     });
     </script>
 
