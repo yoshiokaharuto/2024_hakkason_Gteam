@@ -123,7 +123,7 @@ if(isset($_SESSION['resultMessage'])) {
                     設定
                 </li>
             </a>
-            <a href="login.php"> <!-- 仮でログイン画面に飛びます -->
+            <a href="logout.php"> <!-- 仮でログイン画面に飛びます -->
                 <li>
                     <span class="material-symbols-outlined">logout</span>
                     ログアウト
