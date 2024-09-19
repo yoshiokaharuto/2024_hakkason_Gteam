@@ -221,9 +221,12 @@ if(isset($_SESSION['resultMessage'])) {
                         }
                     ?>
                     <p class='recipe-ingredient'><?= nl2br(htmlspecialchars($data['ingredient'], ENT_QUOTES, 'UTF-8')) ?></p>
-                        <p class='recipe-userAndDate'>
-                            <?= htmlspecialchars($data['user_id'], ENT_QUOTES, 'UTF-8') ?>(<?= htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') ?>)
-                        </p>
+                    <p class='recipe-userAndDate'>
+                    <span class="material-symbols-outlined">person</span>
+                    <?= htmlspecialchars($data['user_id'], ENT_QUOTES, 'UTF-8') ?><br>
+                    <span class="material-symbols-outlined">calendar_today</span>
+                    <?= htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') ?>
+                    </p>
                 </div>
             </a>
         <?php 

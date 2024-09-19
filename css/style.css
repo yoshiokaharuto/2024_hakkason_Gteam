@@ -12,10 +12,13 @@ html, body, main, div, span, h1, h2, h3, p, ol, ul, li {
 :root {
     --main-color: #FF852C;
     --sub-color: #FFAB6F;
-    --gray: #B0B0B0;
     --background-color: #F3F3F3;
     --text-color: #000000;
     --invert-text-color: #FFFFFF;
+
+    --gray: #B0B0B0;
+    --black: #000000;
+    --white: #FFFFFF;
 }
 
 body {
@@ -35,7 +38,7 @@ body {
 }
 
 .app-name {
-    color: var(--invert-text-color);
+    color: var(--white);
     font-size: 30px;
     font-weight: normal;
 }
@@ -46,15 +49,12 @@ a {
 }
 
 header {
+    color: var(--white);
     background-color: var(--main-color);
     padding: 20px 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-#sub-header-button-container {
-    display: none;
 }
 
 #header-icon-container {
@@ -63,8 +63,26 @@ header {
 }
 
 header .material-symbols-outlined {
-    color: var(--invert-text-color);
+    color: var(--white);
     font-size: 40px;
+}
+
+#sub-header-button-container {
+    display: none;
+}
+
+#sub-header-button {
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.3s ease;
+}
+
+#sub-header-checkbox:checked + #sub-header-button {
+    transform: rotate(90deg);
+}
+
+#sub-header-checkbox {
+    display: none;
 }
 
 #sub-header{
@@ -79,19 +97,16 @@ header .material-symbols-outlined {
 
 #sub-header li {
     margin: 10px 0;
-}
-
-#sub-header-checkbox {
-    display: none;
+    color: var(--white);
 }
 
 main {
     width: 70%;
-    margin: 20px auto;
+    margin: 0px auto;
 }
 
 footer {
-    color: var(--invert-text-color);
+    color: var(--white);
     background-color: var(--sub-color);
     text-align: center;
     padding: 40px;
@@ -120,6 +135,7 @@ footer {
 /* ========== ↓ 主にindex ========== */
 #search-container {
     border-bottom: 1px solid var(--gray);
+    margin-top: 20px;
     padding-bottom: 20px;
     text-align: center;
 }
@@ -337,12 +353,13 @@ footer {
 .button-container .white-button,
 .button-container .main-button {
     padding: 5px 15px;
+    text-align: center;
 }
 
 .button-container .white-button {
     font-size: 16px;
     color: var(--main-color);
-    background-color: var(--invert-text-color);
+    background-color: var(--white);
     border: 1px solid var(--main-color);
     border-radius: 5px;
 }
@@ -353,7 +370,7 @@ footer {
 
 .button-container .main-button {
     font-size: 16px;
-    color: var(--invert-text-color);
+    color: var(--white);
     background-color: var(--main-color);
     border: none;
     border-radius: 5px;
@@ -363,9 +380,17 @@ footer {
     background-color: var(--sub-color);
 }
 
+@media (max-width: 600px) {
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
 /* ========== ↑ 主にdetail ========== */
 /* ========== ↓ 主にpost ========== */ 
 #page-name-section {
+    margin: 20px 0;
     text-align: center;
 }
 
@@ -397,7 +422,7 @@ footer {
     border-radius: 5px;
     padding-left: 10px;
     line-height: 20px;
-    color: var(--text-color);
+    color: var(--black);
 }
 
 .post-item-container textarea {

@@ -155,9 +155,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <header>
         <a href="index.php" title="レシピ一覧に戻る">
-            <h1 class="app-name">アプリ名</h1>
+            <h1 class="app-name">
+                アプリ名
+            </h1>
         </a>
+
+        <div id="header-icon-container">
+            <a href="post.php" title="新規投稿">
+                <span class="material-symbols-outlined">add_circle</span>
+            </a>
+            <a href="settings.php" title="設定">
+                <span class="material-symbols-outlined">settings</span>
+            </a>
+            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+                <span class="material-symbols-outlined">logout</span>
+            </a>
+        </div>
+        <label id="sub-header-button-container">
+            <input type="checkbox" id="sub-header-checkbox">
+            <span class="material-symbols-outlined" id="sub-header-button">menu</span>
+        </label>
     </header>
+
+    <div id="sub-header">
+        <ul>
+            <a href="post.php">
+                <li>
+                    <span class="material-symbols-outlined">add_circle</span>
+                    新規投稿
+                </li>
+            </a>
+            <a href="settings.php">
+                <li>
+                    <span class="material-symbols-outlined">settings</span>
+                    設定
+                </li>
+            </a>
+            <a href="login.php"> <!-- 仮でログイン画面に飛びます -->
+                <li>
+                    <span class="material-symbols-outlined">logout</span>
+                    ログアウト
+                </li>
+            </a>
+        </ul>
+    </div>
     
     <main>
         <div id="page-name-section">
@@ -168,6 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- レシピ名入力 -->
             <div class="post-item-container">
                 <label>
+                    <span class="material-symbols-outlined">edit</span>
                     レシピ名
                     <input type="text" name="name" value="<?= htmlspecialchars($_POST['name'] ?? $recipe['name'], ENT_QUOTES, 'UTF-8') ?>" class="post-item">
                 </label>
@@ -176,6 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             <!-- ジャンル選択 -->
             <div class="post-item-container">
+                <span class="material-symbols-outlined">widgets</span>    
                 ジャンル
                 <div class="genre-group">
                     <div class="genre-option">
@@ -200,6 +243,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- 所要時間 -->
             <div class="post-item-container">
                 <label>
+                    <span class="material-symbols-outlined">timer</span>
                     所要時間（分）
                     <input type="number" class="post-item" name="time" value="<?= htmlspecialchars($_POST['time'] ?? $recipe['time'], ENT_QUOTES, 'UTF-8') ?>" step="1" min="1">
                 </label>
@@ -224,23 +268,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="button" id="add-main-ingredient">主要食材を追加</button>
             </div>
 
-            <!-- 材料 -->
+            <!-- 食材 -->
             <div class="post-item-container">
-                <label>材料</label>
+                <label>
+                    <span class="material-symbols-outlined">grocery</span>
+                    食材
+                </label>
                 <textarea name="ingredient" class="post-item"><?= htmlspecialchars($_POST['ingredient'] ?? $recipe['ingredient'], ENT_QUOTES, 'UTF-8') ?></textarea>
                 <p class="error-message"><?php echo $errorMessages['ingredient']; ?></p>
             </div>
 
             <!-- 手順 -->
             <div class="post-item-container">
-                <label>手順</label>
+                <label>
+                    <span class="material-symbols-outlined">format_list_numbered</span>
+                    手順
+                </label>
                 <textarea name="process" class="post-item"><?= htmlspecialchars($_POST['process'] ?? $recipe['process'], ENT_QUOTES, 'UTF-8') ?></textarea>
                 <p class="error-message"><?php echo $errorMessages['process']; ?></p>
             </div>
 
             <!-- メモ -->
             <div class="post-item-container">
-                <label>メモ</label>
+                <label>
+                    <span class="material-symbols-outlined">description</span>
+                    メモ
+                </label>
                 <textarea name="note" class="post-item"><?= htmlspecialchars($_POST['note'] ?? $recipe['note'], ENT_QUOTES, 'UTF-8') ?></textarea>
             </div>
 
@@ -250,7 +303,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <span class="material-symbols-outlined">
                         sell
                     </span>
+                    
+                    <span class="material-symbols-outlined">sell</span>
                     カテゴリ
+                
                 </label>
                 <div id="category-container">
                     <select name="category_id[]" class="post-item">
@@ -266,8 +322,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <!-- 更新ボタン -->
             <div class="button-container">
-                <a href="index.php" class="white-button">投稿一覧に戻る</a>
-                <input type="submit" value="更新する" class="main-button">
+                <a href="index.php" class="white-button">
+                    <span class="material-symbols-outlined">undo</span>
+                    レシピ一覧に戻る
+                </a>
+                <button type="submit" class="main-button">
+                    <span class="material-symbols-outlined">check</span>
+                    更新する
+                </button>
             </div>
         </form>
     </main>
@@ -324,5 +386,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     });
     </script>
 
+
+    <script src="js/script.js"></script>
 </body>
 </html>
