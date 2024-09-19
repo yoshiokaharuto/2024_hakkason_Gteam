@@ -2,6 +2,10 @@
 
 require_once "./db_connect.php";
 session_start();
+if (isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
 
 $resultMessage = '';
 $errorMessages = [
@@ -22,7 +26,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $user_id = $_POST['user_id'];
         $password = $_POST['password'];
 
-        $stmt = $pdo->prepare("SELECT user_id, password FROM users WHERE user_id = :user_id");
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE user_id = :user_id");
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
         $stmt->execute();
 
@@ -31,6 +35,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             //パスワードの確認
             if (password_verify($password, $row['password'])){
                 $_SESSION['user_id'] = $user_id;
+                $theme_id = $row['theme_id'];
+
+                $sql = "SELECT * FROM theme WHERE theme_id = :theme_id";
+                $stm = $pdo->prepare($sql);
+                $stm->bindValue(':theme_id', $theme_id, PDO::PARAM_INT);
+                $stm->execute();
+                $theme = $stm->fetch(PDO::FETCH_ASSOC);
+                $_SESSION['theme'] = $theme;
+
                 //セッションidを再生成
                 session_regenerate_id(true);
                 header("Location:index.php");
