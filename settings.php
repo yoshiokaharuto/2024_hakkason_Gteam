@@ -17,7 +17,10 @@
     } else {
         $theme = [
             'main' => 'FF852C',
-            'sub' => 'FFAB6F'
+            'sub' => 'FFAB6F',
+            'background' => 'F3F3F3',
+            'text' => '000000',
+            'invert-text' => 'FFFFFF'
         ];
     }
 ?>
@@ -37,6 +40,9 @@
         :root {
             --main-color: #<?= $theme['main'] ?>;
             --sub-color: #<?= $theme['sub'] ?>;
+            --background-color: #<?= $theme['background'] ?>;
+            --text-color: #<?= $theme['text'] ?>;
+            --invert-text-color: #<?= $theme['invert-text'] ?>;
         }
     </style> 
 </head>
