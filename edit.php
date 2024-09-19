@@ -77,13 +77,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $time = $_POST['time'];
         $process = $_POST['process'];
         $note = isset($_POST['note']) ? $_POST['note'] : '';
-
-        // レシピの更新処理（投稿日を現在の日時に変更する）CURRENT_TIMESTAMP
-        $sql1 = "UPDATE recipes 
-                 SET name = :name, genre = :genre, ingredient = :ingredient, time = :time, process = :process, note = :note, date = CURRENT_TIMESTAMP
-                 WHERE recipe_id = :recipe_id";
-
         try {
+            // トランザクション開始
+            $pdo->beginTransaction();
+
+            // レシピの更新処理
+            $sql1 = "UPDATE recipes 
+                SET name = :name, genre = :genre, ingredient = :ingredient, time = :time, process = :process, note = :note, date = NOW()
+                WHERE recipe_id = :recipe_id";
             $stm1 = $pdo->prepare($sql1);
             $stm1->bindValue(':name', $name, PDO::PARAM_STR);
             $stm1->bindValue(':genre', $genre, PDO::PARAM_INT);
@@ -92,50 +93,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stm1->bindValue(':process', $process, PDO::PARAM_STR);
             $stm1->bindValue(':note', $note, PDO::PARAM_STR);
             $stm1->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
+            $stm1->execute();
 
-            if ($stm1->execute()) {
-                // レシピの更新が成功した後、カテゴリと主要食材の更新を行う
-                $pdo->beginTransaction();
+            // カテゴリの削除と追加
+            $sql_delete = "DELETE FROM recipe_to_category WHERE recipe_id = :recipe_id";
+            $stmt_delete = $pdo->prepare($sql_delete);
+            $stmt_delete->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
+            $stmt_delete->execute();
 
-                // 既存のカテゴリ紐付けを削除
-                $sql_delete = "DELETE FROM recipe_to_category WHERE recipe_id = :recipe_id";
-                $stmt_delete = $pdo->prepare($sql_delete);
-                $stmt_delete->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
-                $stmt_delete->execute();
-
-                // 新しく選択されたカテゴリを追加
-                if (isset($_POST['categories']) && is_array($_POST['categories'])) {
-                    foreach ($_POST['categories'] as $category_id) {
-                        $sql_insert = "INSERT INTO recipe_to_category (recipe_id, category_id) VALUES (:recipe_id, :category_id)";
-                        $stmt_insert = $pdo->prepare($sql_insert);
-                        $stmt_insert->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
-                        $stmt_insert->bindValue(':category_id', (int)$category_id, PDO::PARAM_INT);
-                        $stmt_insert->execute();
-                    }
+            if (isset($_POST['category_id']) && is_array($_POST['category_id'])) {
+                foreach ($_POST['category_id'] as $category_id) {
+                    $sql_insert = "INSERT INTO recipe_to_category (recipe_id, category_id) VALUES (:recipe_id, :category_id)";
+                    $stmt_insert = $pdo->prepare($sql_insert);
+                    $stmt_insert->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
+                    $stmt_insert->bindValue(':category_id', intval($category_id), PDO::PARAM_INT);
+                    $stmt_insert->execute();
                 }
-
-                // 主要食材の更新処理
-                $sql_delete_ingredients = "DELETE FROM recipe_to_ingredient WHERE recipe_id = :recipe_id";
-                $stmt_delete_ingredients = $pdo->prepare($sql_delete_ingredients);
-                $stmt_delete_ingredients->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
-                $stmt_delete_ingredients->execute();
-
-                // 新しく選択された主要食材を追加
-                if (isset($_POST['ingredients']) && is_array($_POST['ingredients'])) {
-                    foreach ($_POST['ingredients'] as $ingredient_id) {
-                        $sql_insert_ingredients = "INSERT INTO recipe_to_ingredient (recipe_id, ingredient_id) VALUES (:recipe_id, :ingredient_id)";
-                        $stmt_insert_ingredients = $pdo->prepare($sql_insert_ingredients);
-                        $stmt_insert_ingredients->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
-                        $stmt_insert_ingredients->bindValue(':ingredient_id', (int)$ingredient_id, PDO::PARAM_INT);
-                        $stmt_insert_ingredients->execute();
-                    }
-                }
-
-                $pdo->commit();
-                $resultMessage = "レシピと主要食材が正常に更新されました！<br>";
-            } else {
-                $resultMessage = "レシピの更新に失敗しました。<br>";
             }
+
+            // 主要食材の削除と追加
+            $sql_delete_ingredients = "DELETE FROM recipe_to_ingredient WHERE recipe_id = :recipe_id";
+            $stmt_delete_ingredients = $pdo->prepare($sql_delete_ingredients);
+            $stmt_delete_ingredients->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
+            $stmt_delete_ingredients->execute();
+
+            if (isset($_POST['main_ingredient_id']) && is_array($_POST['main_ingredient_id'])) {
+                foreach ($_POST['main_ingredient_id'] as $ingredient_id) {
+                    $sql_insert_ingredients = "INSERT INTO recipe_to_ingredient (recipe_id, ingredient_id) VALUES (:recipe_id, :ingredient_id)";
+                    $stmt_insert_ingredients = $pdo->prepare($sql_insert_ingredients);
+                    $stmt_insert_ingredients->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
+                    $stmt_insert_ingredients->bindValue(':ingredient_id', intval($ingredient_id), PDO::PARAM_INT);
+                    $stmt_insert_ingredients->execute();
+                }
+            }
+
+            // コミット
+            $pdo->commit();
+            $resultMessage = "レシピと主要食材が正常に更新されました！<br>";
         } catch (PDOException $e) {
             $pdo->rollBack();
             $resultMessage = "SQLエラー: " . $e->getMessage() . "<br>";
@@ -213,23 +207,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- 主要食材選択 -->
             <div class="post-item-container">
-                <label>主要食材</label>
-                <!-- categories[]により複数のカテゴリを選択できる-->
-                <!-- multiple属性により、Ctrlキー（Windows）またはCommandキー（Mac）を押しながらクリックすることで、複数の項目を選択できる-->
-                <select name="ingredients[]" multiple class="post-item">
-                    <!--
-                        各<option>要素のvalue属性に、そのカテゴリのIDを設定。
-                        in_array関数で、$currentIngredientsの中に、カテゴリID（$ingredient['ingredient_id']）が含まれているかを確認。
-                        含まれている場合、<option>要素にselected属性を追加
-                        含まれていない場合、何も設定されない。
-                    -->
-                    <?php foreach ($allIngredients as $ingredient): ?>
-                        <option value="<?= $ingredient['ingredient_id'] ?>"
-                            <?= in_array($ingredient['ingredient_id'], $currentIngredients) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($ingredient['ingredient_name'], ENT_QUOTES, 'UTF-8') ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                <label>
+                    <span class="material-symbols-outlined">star</span>
+                    主要食材
+                </label>
+                <div id="main-ingredient-container">
+                    <select name="main_ingredient_id[]" class="post-item">
+                        <?php foreach ($allIngredients as $ingredient): ?>  <!-- 変数名を $allIngredients に修正 -->
+                            <option value="<?= $ingredient['ingredient_id']; ?>" 
+                                <?= in_array($ingredient['ingredient_id'], $currentIngredients) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($ingredient['ingredient_name'], ENT_QUOTES, 'UTF-8'); ?>
+                            </option>
+                        <?php endforeach; ?> <!-- ここで endforeach を正しく閉じる -->
+                    </select>
+                </div>
+                <button type="button" id="add-main-ingredient">主要食材を追加</button>
             </div>
 
             <!-- 材料 -->
@@ -254,17 +246,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- カテゴリ選択 -->
             <div class="post-item-container">
-                <label>カテゴリ</label>
-                <select name="categories[]" multiple class="post-item">
-                    <?php foreach ($allCategories as $category): ?>
-                        <option value="<?= $category['category_id'] ?>"
-                            <?= in_array($category['category_id'], $currentCategories) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($category['category_name'], ENT_QUOTES, 'UTF-8') ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                <label>
+                    <span class="material-symbols-outlined">
+                        sell
+                    </span>
+                    カテゴリ
+                </label>
+                <div id="category-container">
+                    <select name="category_id[]" class="post-item">
+                        <?php foreach ($allCategories as $category): ?>  <!-- 変数名を $allCategories に修正 -->
+                            <option value="<?= $category['category_id']; ?>" 
+                                <?= in_array($category['category_id'], $currentCategories) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($category['category_name'], ENT_QUOTES, 'UTF-8'); ?>
+                            </option>
+                        <?php endforeach; ?> <!-- ここで endforeach を正しく閉じる -->
+                    </select>            
+                </div>
+                <button type="button" id="add-category">カテゴリを追加</button>
             </div>
-
             <!-- 更新ボタン -->
             <div class="button-container">
                 <a href="index.php" class="white-button">投稿一覧に戻る</a>
@@ -277,5 +276,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1 class="app-name">アプリ名</h1>
         <p>2024秋ハッカソン - グループG</p>
     </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+    document.getElementById('add-main-ingredient').addEventListener('click', function() {
+    var container = document.getElementById('main-ingredient-container');
+    
+    var newSelect = document.createElement('select');
+    newSelect.name = 'main_ingredient_id[]';
+    newSelect.className = 'post-item';
+    newSelect.innerHTML = `<?php foreach ($allIngredients as $ingredient): ?><option value="<?php echo $ingredient['ingredient_id']; ?>"><?php echo $ingredient['ingredient_name']; ?></option><?php endforeach; ?>`;
+
+    var removeButton = document.createElement('button');
+    removeButton.textContent = '削除';
+    removeButton.className = 'remove-button';
+    removeButton.type = 'button';
+
+    removeButton.addEventListener('click', function() {
+        container.removeChild(newSelect);
+        container.removeChild(removeButton);
+    });
+
+    container.appendChild(newSelect);
+    container.appendChild(removeButton);
+});
+
+    document.getElementById('add-category').addEventListener('click', function() {
+        var container = document.getElementById('category-container');
+        
+        var newSelect = document.createElement('select');
+        newSelect.name = 'category_id[]';
+        newSelect.className = 'post-item';
+        newSelect.innerHTML = `<?php foreach ($allCategories as $category): ?><option value="<?php echo $category['category_id']; ?>"><?php echo $category['category_name']; ?></option><?php endforeach; ?>`;
+
+        var removeButton = document.createElement('button');
+        removeButton.textContent = '削除';
+        removeButton.className = 'remove-button';
+        removeButton.type = 'button';
+
+        removeButton.addEventListener('click', function() {
+            container.removeChild(newSelect);
+            container.removeChild(removeButton);
+        });
+
+        container.appendChild(newSelect);
+        container.appendChild(removeButton);
+    });
+    </script>
+
 </body>
 </html>
