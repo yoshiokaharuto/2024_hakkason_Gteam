@@ -1,4 +1,12 @@
 <?php
+
+session_start();
+
+$resultMessage = '';
+$errorMessages = [
+    'user_id' => '',
+    'password' => ''
+];
 ?>
 
 <!DOCTYPE html>
