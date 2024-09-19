@@ -161,9 +161,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <header>
         <a href="index.php" title="レシピ一覧に戻る">
-            <h1 class="app-name">アプリ名</h1>
+            <h1 class="app-name">
+                アプリ名
+            </h1>
         </a>
+
+        <div id="header-icon-container">
+            <a href="post.php" title="新規投稿">
+                <span class="material-symbols-outlined">add_circle</span>
+            </a>
+            <a href="settings.php" title="設定">
+                <span class="material-symbols-outlined">settings</span>
+            </a>
+            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+                <span class="material-symbols-outlined">logout</span>
+            </a>
+        </div>
+        <label id="sub-header-button-container">
+            <input type="checkbox" id="sub-header-checkbox">
+            <span class="material-symbols-outlined" id="sub-header-button">menu</span>
+        </label>
     </header>
+
+    <div id="sub-header">
+        <ul>
+            <a href="post.php">
+                <li>
+                    <span class="material-symbols-outlined">add_circle</span>
+                    新規投稿
+                </li>
+            </a>
+            <a href="settings.php">
+                <li>
+                    <span class="material-symbols-outlined">settings</span>
+                    設定
+                </li>
+            </a>
+            <a href="login.php"> <!-- 仮でログイン画面に飛びます -->
+                <li>
+                    <span class="material-symbols-outlined">logout</span>
+                    ログアウト
+                </li>
+            </a>
+        </ul>
+    </div>
     
     <main>
         <div id="page-name-section">
@@ -301,5 +342,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1 class="app-name">アプリ名</h1>
         <p>2024秋ハッカソン - グループG</p>
     </footer>
+
+    <script src="js/script.js"></script>
 </body>
 </html>

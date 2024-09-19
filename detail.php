@@ -49,7 +49,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
 </head>
 <body>
-<header>
+    <header>
         <a href="index.php" title="レシピ一覧に戻る">
             <h1 class="app-name">
                 アプリ名
@@ -138,8 +138,11 @@
                     echo "<p class='recipe-mainIngredient'><span>".str_replace(', ', '</span><span>', $data['main_ingredient'])."</span></p>";
                 }
             ?>
-            <p class="recipe-userAndDate">
-                <?= preoutput($data['user_id']) ?>(<?= preoutput($data['date']) ?>)
+            <p class='recipe-userAndDate'>
+            <span class="material-symbols-outlined">person</span>
+            <?= htmlspecialchars($data['user_id'], ENT_QUOTES, 'UTF-8') ?><br>
+            <span class="material-symbols-outlined">calendar_today</span>
+            <?= htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') ?>
             </p>
         </div>
         <div class="recipe-information">

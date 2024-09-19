@@ -12,10 +12,12 @@ html, body, main, div, span, h1, h2, h3, p, ol, ul, li {
 :root {
     --main-color: #FF852C;
     --sub-color: #FFAB6F;
-    --gray: #B0B0B0;
     --background-color: #F3F3F3;
     --text-color: #000000;
     --invert-text-color: #FFFFFF;
+
+    --gray: #B0B0B0;
+    --black: #000000;
 }
 
 body {
@@ -46,6 +48,7 @@ a {
 }
 
 header {
+    color: var(--invert-text-color);
     background-color: var(--main-color);
     padding: 20px 50px;
     display: flex;
@@ -417,7 +420,7 @@ footer {
     border-radius: 5px;
     padding-left: 10px;
     line-height: 20px;
-    color: var(--text-color);
+    color: var(--black);
 }
 
 .post-item-container textarea {
