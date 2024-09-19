@@ -21,6 +21,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $user_id = $_POST['user_id'];
         $password = $_POST['password'];
 
+        $stmt = $pdo->prepare("SELECT user_id, password FROM users WHERE user_id = :user_id");
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt->execute();
     }
 }
 ?>
