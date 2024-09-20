@@ -27,7 +27,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $password = $_POST['password'];
 
         $stmt = $pdo->prepare("SELECT * FROM users WHERE user_id = :user_id");
-        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
 
         if($stmt->rowCount() > 0){
