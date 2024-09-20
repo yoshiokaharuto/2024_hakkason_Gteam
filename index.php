@@ -15,6 +15,9 @@ if (!isset($_SESSION['user_id'])) {
 $recipe_name = isset($_GET['recipe_name']) && $_GET['recipe_name'] !== '' ? '%' . $_GET['recipe_name'] . '%' : '%';
 $category_tag = isset($_GET['category_tag']) && $_GET['category_tag'] !== '' ? $_GET['category_tag'] : null;
 $ingredient_tag = isset($_GET['ingredient_tag']) && $_GET['ingredient_tag'] !== '' ? $_GET['ingredient_tag'] : null;
+$user_recipe = isset($_GET['user-recipe']);
+
+
 
 // カテゴリタグの取得
 $sql_categories = "SELECT category_name FROM categories";
