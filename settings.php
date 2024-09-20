@@ -22,14 +22,16 @@
         $stm->execute();
         $_SESSION['theme'] = $stm->fetch(PDO::FETCH_ASSOC);
 
-        $sql = "UPDATE users SET theme_id = :theme_id WHERE user_id = :user_id";
-        $stm = $pdo->prepare($sql);
-        $stm->bindValue(':theme_id', $theme_id, PDO::PARAM_INT);
-        $stm->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-        $stm->execute();
-        $_SESSION['resultMessage'] = 'テーマを変更しました！';
-    } else {
-        $_SESSION['resultMessage'] = 'テーマを変更できませんでした。'; 
+        try {
+            $sql = "UPDATE users SET theme_id = :theme_id WHERE user_id = :user_id";
+            $stm = $pdo->prepare($sql);
+            $stm->bindValue(':theme_id', $theme_id, PDO::PARAM_INT);
+            $stm->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+            $stm->execute();
+            $resultMessage = 'テーマを変更しました！';
+        } catch(PDOException $e) {
+            $resultMessage = 'sqlエラー:'.$e->getMessage();
+        }
     }
 
     if(isset($_POST['currentPassword']) && isset($_POST['newPassword']) && isset($_POST['newPasswordCheck'])) {
@@ -50,21 +52,15 @@
                 $stm->bindValue(':newPassword_hash', $newPassword_hash, PDO::PARAM_STR);
                 $stm->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
                 $stm->execute();
-                $_SESSION['resultMessage'] = 'パスワードを更新しました！';
+                $resultMessage = 'パスワードを更新しました！';
             } catch(PDOException $e) {
                 $resultMessage = 'sqlエラー:'.$e->getMessage();
             }
         } elseif(strcmp($newPassword, $newPasswordCheck) !== 0) {
-            $_SESSION['resultMessage'] = '新しいパスワードと新しいパスワード(確認)が一致しません。もう一度入力してください。';
-        }else {
-            $_SESSION['resultMessage'] = 'パスワードを更新できませんでした。';
+            $resultMessage = '新しいパスワードと新しいパスワード(確認)が一致しません。\nもう一度入力してください。';
+        } else {
+            $resultMessage = 'パスワードを更新できませんでした。';
         }
-    }
-
-    $resultMessage = '';
-    if(isset($_SESSION['resultMessage'])) {
-        $resultMessage = $_SESSION['resultMessage'];
-        unset($_SESSION['resultMessage']);//メッセージ表示後に削除
     }
 ?>
 
@@ -156,7 +152,7 @@
                     </label>
                 </div>
                 <div class="button-container">
-                    <button type="submit" class="main-button">
+                    <button type="submit" class="sub-button">
                         <span class="material-symbols-outlined">check</span>
                         変更
                     </button>
@@ -182,7 +178,7 @@
                     </label>
                 </div>
                 <div class="button-container">
-                    <button type="submit" class="main-button">
+                    <button type="submit" class="sub-button">
                         <span class="material-symbols-outlined">check</span>
                         変更
                     </button>
@@ -191,13 +187,13 @@
         </div>
 
         <div class="button-container">
-            <a href="index.php" class="white-button">
-                <span class="material-symbols-outlined">undo</span>
-                レシピ一覧に戻る
-            </a>
             <a href="logout.php" class="main-button">
                 <span class="material-symbols-outlined">logout</span>
                 ログアウト
+            </a>
+            <a href="index.php" class="white-button">
+                <span class="material-symbols-outlined">undo</span>
+                レシピ一覧に戻る
             </a>
         </div>
     </main>
