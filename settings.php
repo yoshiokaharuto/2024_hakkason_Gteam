@@ -44,7 +44,9 @@
         $stm->execute();
         $DBpassword = $stm->fetch(PDO::FETCH_ASSOC);
 
-        if(password_verify($currentPassword, $DBpassword['password']) && strcmp($newPassword, $newPasswordCheck) === 0) {
+        if(strcmp($newPassword, $newPasswordCheck) !== 0) {
+            $resultMessage = '新しいパスワードと新しいパスワード(確認)が一致しません。\nもう一度入力してください。';
+        } elseif(password_verify($currentPassword, $DBpassword['password'])) {
             try {
                 $newPassword_hash = password_hash($newPassword, PASSWORD_BCRYPT);
                 $sql = "UPDATE users SET password = :newPassword_hash WHERE user_id = :user_id";
@@ -52,14 +54,12 @@
                 $stm->bindValue(':newPassword_hash', $newPassword_hash, PDO::PARAM_STR);
                 $stm->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
                 $stm->execute();
-                $resultMessage = 'パスワードを更新しました！';
+                $resultMessage = 'パスワードを変更しました！';
             } catch(PDOException $e) {
                 $resultMessage = 'sqlエラー:'.$e->getMessage();
             }
-        } elseif(strcmp($newPassword, $newPasswordCheck) !== 0) {
-            $resultMessage = '新しいパスワードと新しいパスワード(確認)が一致しません。\nもう一度入力してください。';
         } else {
-            $resultMessage = 'パスワードを更新できませんでした。';
+            $resultMessage = 'パスワードを変更できませんでした。';
         }
     }
 ?>

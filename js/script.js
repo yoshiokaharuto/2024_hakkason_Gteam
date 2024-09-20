@@ -48,8 +48,10 @@ document.addEventListener('DOMContentLoaded', function() {
 function copyButton(elementId) {
     var element = document.getElementById(elementId);
     navigator.clipboard.writeText(element.innerText);
+    alert('この項目をコピーしました！');
 }
 
 function copyAllButton() {
     navigator.clipboard.writeText(document.getElementById('recipe-dataToCopy').innerText);
+    alert('このレシピをコピーしました！');
 }
