@@ -28,6 +28,30 @@
         $stm->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
         $stm->execute();
     }
+
+    if(isset($_POST['currentPassword']) && isset($_POST['newPassword']) && isset($_POST['newPasswordCheck'])) {
+        $currentPassword = $_POST['currentPassword'];
+        $newPassword = $_POST['newPassword'];
+        $newPasswordCheck = $_POST['newPasswordCheck'];
+
+        $stm = $pdo->prepare("SELECT password FROM users WHERE user_id = :user_id");
+        $stm->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stm->execute();
+        $DBpassword = $stm->fetch(PDO::FETCH_ASSOC);
+
+        if(password_verify($currentPassword, $DBpassword['password']) && strcmp($newPassword, $newPasswordCheck) === 0) {
+            try {
+                $newPassword_hash = password_hash($newPassword, PASSWORD_BCRYPT);
+                $sql = "UPDATE users SET password = :newPassword_hash WHERE user_id = :user_id";
+                $stm = $pdo->prepare($sql);
+                $stm->bindValue(':newPassword_hash', $newPassword_hash, PDO::PARAM_STR);
+                $stm->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+                $stm->execute();
+            } catch(PDOException $e) {
+                $resultMessage = 'sqlエラー:'.$e->getMessage();
+            }
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +86,7 @@
             <a href="post.php" title="新規投稿">
                 <span class="material-symbols-outlined">add_circle</span>
             </a>
-            <a href="login.php" title="ログアウト"> <!-- 仮でログイン画面に飛びます -->
+            <a href="logout.php" title="ログアウト">
                 <span class="material-symbols-outlined">logout</span>
             </a>
         </div>
@@ -98,7 +122,7 @@
                 <span class="material-symbols-outlined">lock</span>
                 パスワードを変更
             </h2>
-            <form action="" method="POST">
+            <form action="settings.php" method="POST">
                 <div class="post-item-container">
                     <label>
                         現在のパスワード
@@ -137,7 +161,7 @@
                         <select name="theme_id" class="post-item">
                             <?php foreach($result as $data): ?>
                                 <option value="<?= $data['theme_id']?>" <?= $_SESSION['theme']['theme_id'] == $data['theme_id'] ? 'selected' : '' ?>>
-                                    <?= $data['name'] ?>
+                                <?= $data['name'] ?><?= $_SESSION['theme']['theme_id'] == $data['theme_id'] ? '【使用中】' : '' ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
