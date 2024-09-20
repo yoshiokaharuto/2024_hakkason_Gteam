@@ -113,6 +113,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 </div>
             </form>
         </div>
+                <?php if (!empty($resultMessage)): ?>
+            <script>
+                alert('<?php echo $resultMessage; ?>');
+            </script>
+        <?php endif; ?>
     </main>
 
     <footer>
