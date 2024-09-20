@@ -216,7 +216,7 @@ function preoutput($str) {
         </div>
         <p class="warning-text">本当にこのレシピを削除しますか？</p>
         <div class="button-container">
-            <form action="delete.php" method="POST">
+            <form action="" method="POST">
                 <button type="submit" name="confirm" class="main-button">
                     <span class="material-symbols-outlined">delete</span>
                     削除する
