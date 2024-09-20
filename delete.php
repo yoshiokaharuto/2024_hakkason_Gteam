@@ -1,6 +1,10 @@
 <?php
 require_once "./db_connect.php";
 session_start();
+if (!isset($_SESSION['user_id']) || $recipe['user_id'] !== (int)$_SESSION['user_id']) {
+    header("Location: index.php");
+    exit();
+}
 
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $recipe_id = $_GET['id'];
