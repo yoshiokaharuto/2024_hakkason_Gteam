@@ -288,12 +288,6 @@ if(isset($_SESSION['resultMessage'])) {
             echo "<p id='not-found'><span class='material-symbols-outlined'>sentiment_dissatisfied</span>レシピが見つかりませんでした。</p>";
         }
         ?>
-
-        <?php if (!empty($resultMessage)): ?>
-            <script>
-                alert('<?php echo $resultMessage; ?>');
-            </script>
-        <?php endif; ?>
     </main>
     
     <footer>
