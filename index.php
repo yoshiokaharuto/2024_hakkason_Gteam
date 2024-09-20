@@ -17,7 +17,8 @@ $category_tag = isset($_GET['category_tag']) && $_GET['category_tag'] !== '' ? $
 $ingredient_tag = isset($_GET['ingredient_tag']) && $_GET['ingredient_tag'] !== '' ? $_GET['ingredient_tag'] : null;
 $user_recipe = isset($_GET['user-recipe']);
 
-
+//セッションからユーザIDを取得
+$user_id = $_SESSION['user_id'] ?? null;
 
 // カテゴリタグの取得
 $sql_categories = "SELECT category_name FROM categories";
