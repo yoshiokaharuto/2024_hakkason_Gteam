@@ -286,6 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php foreach ($currentIngredients as $currentIngredient): ?>
                     <div class="ingredient-group">
                         <select name="main_ingredient_id[]" class="post-item">
+                        <option value="">選択してください</option>
                             <?php foreach ($allIngredients as $ingredient): ?>
                                 <option value="<?= $ingredient['ingredient_id']; ?>" 
                                     <?= $ingredient['ingredient_id'] == $currentIngredient ? 'selected' : '' ?>>
@@ -341,6 +342,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php foreach ($currentCategories as $currentCategory): ?>
                     <div class="category-group">
                         <select name="category_id[]" class="post-item">
+                        <option value="">選択してください</option>
                             <?php foreach ($allCategories as $category): ?>
                                 <option value="<?= $category['category_id']; ?>" 
                                     <?= $category['category_id'] == $currentCategory ? 'selected' : '' ?>>
