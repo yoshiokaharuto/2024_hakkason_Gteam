@@ -246,8 +246,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="post-item-container">
                 <label>
                     <span class="material-symbols-outlined">edit</span>
-                    レシピ名
-                    <input type="text" name="name" value="<?= htmlspecialchars($_POST['name'] ?? $recipe['name'], ENT_QUOTES, 'UTF-8') ?>" class="post-item">
+                    レシピ名<span class="require">必須</span>
+                    <input type="text" name="name" value="<?= htmlspecialchars($_POST['name'] ?? $recipe['name'], ENT_QUOTES, 'UTF-8') ?>" class="post-item" require>
                 </label>
                 <p class="error-message"><?php echo $errorMessages['name']; ?></p>
             </div>
@@ -280,8 +280,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="post-item-container">
                 <label>
                     <span class="material-symbols-outlined">timer</span>
-                    所要時間（分）
-                    <input type="number" class="post-item" name="time" value="<?= htmlspecialchars($_POST['time'] ?? $recipe['time'], ENT_QUOTES, 'UTF-8') ?>" step="1" min="1">
+                    所要時間(分)<span class="require">必須</span>
+                    <input type="number" class="post-item" name="time" value="<?= htmlspecialchars($_POST['time'] ?? $recipe['time'], ENT_QUOTES, 'UTF-8') ?>" step="1" min="1" require>
                 </label>
             </div>
 
@@ -294,7 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div id="main-ingredient-container">
                 <!-- 現在の主要食材をループで表示し、各セレクトボックスに削除ボタンを付与 -->
                 <?php foreach ($currentIngredients as $currentIngredient): ?>
-                    <div class="ingredient-group">
+                    <div class="new-select-item">
                         <select name="main_ingredient_id[]" class="post-item">
                             <?php foreach ($allIngredients as $ingredient): ?>
                                 <option value="<?= $ingredient['ingredient_id']; ?>" 
@@ -304,20 +304,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php endforeach; ?>
                         </select>
                         <!-- 削除ボタン -->
-                        <button type="button" class="remove-button">削除</button>
+                        <button type="button" class="remove-button">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
                     </div>
                 <?php endforeach; ?>
-            </div>
-            <button type="button" id="add-main-ingredient">主要食材を追加</button>
+                </div>
+                <button type="button" id="add-main-ingredient" class="add-button">
+                    <span class="material-symbols-outlined">add</span>
+                    主要食材を追加
+                </button>
             </div>
 
             <!-- 食材 -->
             <div class="post-item-container">
                 <label>
                     <span class="material-symbols-outlined">grocery</span>
-                    食材
+                    食材<span class="require">必須</span>
                 </label>
-                <textarea name="ingredient" class="post-item"><?= htmlspecialchars($_POST['ingredient'] ?? $recipe['ingredient'], ENT_QUOTES, 'UTF-8') ?></textarea>
+                <textarea name="ingredient" class="post-item" require><?= htmlspecialchars($_POST['ingredient'] ?? $recipe['ingredient'], ENT_QUOTES, 'UTF-8') ?></textarea>
                 <p class="error-message"><?php echo $errorMessages['ingredient']; ?></p>
             </div>
 
@@ -325,9 +330,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="post-item-container">
                 <label>
                     <span class="material-symbols-outlined">format_list_numbered</span>
-                    手順
+                    手順<span class="require">必須</span>
                 </label>
-                <textarea name="process" class="post-item"><?= htmlspecialchars($_POST['process'] ?? $recipe['process'], ENT_QUOTES, 'UTF-8') ?></textarea>
+                <textarea name="process" class="post-item" require><?= htmlspecialchars($_POST['process'] ?? $recipe['process'], ENT_QUOTES, 'UTF-8') ?></textarea>
                 <p class="error-message"><?php echo $errorMessages['process']; ?></p>
             </div>
 
@@ -349,7 +354,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div id="category-container">
                 <!-- 現在のカテゴリをループで表示し、各セレクトボックスに削除ボタンを付与 -->
                 <?php foreach ($currentCategories as $currentCategory): ?>
-                    <div class="category-group">
+                    <div class="new-select-item">
                         <select name="category_id[]" class="post-item">
                             <?php foreach ($allCategories as $category): ?>
                                 <option value="<?= $category['category_id']; ?>" 
@@ -359,22 +364,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php endforeach; ?>
                         </select>
                         <!-- 削除ボタン -->
-                        <button type="button" class="remove-button">削除</button>
+                        <button type="button" class="remove-button">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
                     </div>
                 <?php endforeach; ?>
             </div>
-            <button type="button" id="add-category">カテゴリを追加</button>
+            <button type="button" id="add-category" class="add-button">
+                <span class="material-symbols-outlined">add</span>
+                カテゴリを追加
+            </button>
             </div>
             <!-- 更新ボタン -->
             <div class="button-container">
-                <a href="index.php" class="white-button">
-                    <span class="material-symbols-outlined">undo</span>
-                    レシピ一覧に戻る
-                </a>
                 <button type="submit" class="main-button">
                     <span class="material-symbols-outlined">check</span>
                     更新する
                 </button>
+                <a href="index.php" class="white-button">
+                    <span class="material-symbols-outlined">undo</span>
+                    レシピ一覧に戻る
+                </a>
             </div>
         </form>
     </main>
@@ -390,7 +400,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var container = document.getElementById('main-ingredient-container');
 
         var newGroup = document.createElement('div');
-        newGroup.className = 'ingredient-group';
+        newGroup.className = 'new-select-item';
 
         var newSelect = document.createElement('select');
         newSelect.name = 'main_ingredient_id[]';
@@ -398,7 +408,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         newSelect.innerHTML = `<?php foreach ($allIngredients as $ingredient): ?><option value="<?php echo $ingredient['ingredient_id']; ?>"><?php echo $ingredient['ingredient_name']; ?></option><?php endforeach; ?>`;
 
         var removeButton = document.createElement('button');
-        removeButton.textContent = '削除';
+        removeButton.innerHTML = '<span class="material-symbols-outlined">delete</span>';
         removeButton.className = 'remove-button';
         removeButton.type = 'button';
 
@@ -413,19 +423,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         container.appendChild(newGroup);
     });
 
-    // 既存の削除ボタンにもイベントリスナーを追加
-    document.querySelectorAll('.remove-button').forEach(function(button) {
-        button.addEventListener('click', function() {
-            var parent = button.parentElement;
-            parent.parentElement.removeChild(parent);
-        });
-    });
-
-        document.getElementById('add-category').addEventListener('click', function() {
+    document.getElementById('add-category').addEventListener('click', function() {
         var container = document.getElementById('category-container');
         
         var newGroup = document.createElement('div');
-        newGroup.className = 'category-group';
+        newGroup.className = 'new-select-item';
 
         var newSelect = document.createElement('select');
         newSelect.name = 'category_id[]';
@@ -433,7 +435,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         newSelect.innerHTML = `<?php foreach ($allCategories as $category): ?><option value="<?php echo $category['category_id']; ?>"><?php echo $category['category_name']; ?></option><?php endforeach; ?>`;
 
         var removeButton = document.createElement('button');
-        removeButton.textContent = '削除';
+        removeButton.innerHTML = '<span class="material-symbols-outlined">delete</span>';
         removeButton.className = 'remove-button';
         removeButton.type = 'button';
 

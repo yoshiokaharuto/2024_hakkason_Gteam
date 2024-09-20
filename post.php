@@ -187,8 +187,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="post-item-container">
                 <label>
                     <span class="material-symbols-outlined">edit</span>
-                    レシピ名
-                    <input type="text" name="name" placeholder="ちょい足し卵かけご飯" class="post-item">
+                    レシピ名<span class="require">必須</span>
+                    <input type="text" name="name" placeholder="ちょい足し卵かけご飯" class="post-item" require>
                     <p class="error-message"><?php echo $errorMessages['name']; ?></p>
                 </label>
             </div>
@@ -217,17 +217,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="post-item-container">
                 <label>
                 <span class="material-symbols-outlined">timer</span>
-                    所要時間（分）
-                    <input type="number" class="post-item" name="time" value="1" step="1" min="1">
+                    所要時間(分)<span class="require">必須</span>
+                    <input type="number" class="post-item" name="time" value="1" step="1" min="1" require>
                 </label>
             </div>
             <div class="post-item-container">
                 <label>
                     <span class="material-symbols-outlined">grocery</span>
-                    食材
+                    食材<span class="require">必須</span>
                     <textarea name="ingredient" placeholder="・卵 - 1個
 ・ご飯 - 150g
-・焼き肉のタレ - 大さじ1" class="post-item"></textarea>
+・焼き肉のタレ - 大さじ1" class="post-item" require></textarea>
                     <p class="error-message"><?php echo $errorMessages['ingredient']; ?></p>
                 </label>
             </div>
@@ -254,10 +254,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="post-item-container">
                 <label>
                     <span class="material-symbols-outlined">format_list_numbered</span>
-                    手順
+                    手順<span class="require">必須</span>
                     <textarea name="process" placeholder="➀茶碗にご飯を盛ります。
 ➁卵を割ってご飯にかける。
-➂焼肉のタレをかける。" class="post-item"></textarea>
+➂焼肉のタレをかける。" class="post-item" require></textarea>
                     <p class="error-message"><?php echo $errorMessages['process']; ?></p>
                 </label>
             </div>
@@ -289,14 +289,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
             <div class="button-container">
-                <a href="index.php" class="white-button">
-                    <span class="material-symbols-outlined">undo</span>
-                    レシピ一覧に戻る
-                </a>
                 <button type="submit" class="main-button">
                     <span class="material-symbols-outlined">send</span>
                     投稿する
                 </button>
+                <a href="index.php" class="white-button">
+                    <span class="material-symbols-outlined">undo</span>
+                    レシピ一覧に戻る
+                </a>
             </div>
         </form>
     </main>

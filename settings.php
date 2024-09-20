@@ -152,7 +152,7 @@
                     </label>
                 </div>
                 <div class="button-container">
-                    <button type="submit" class="main-button">
+                    <button type="submit" class="sub-button">
                         <span class="material-symbols-outlined">check</span>
                         変更
                     </button>
@@ -178,7 +178,7 @@
                     </label>
                 </div>
                 <div class="button-container">
-                    <button type="submit" class="main-button">
+                    <button type="submit" class="sub-button">
                         <span class="material-symbols-outlined">check</span>
                         変更
                     </button>
@@ -187,13 +187,13 @@
         </div>
 
         <div class="button-container">
-            <a href="index.php" class="white-button">
-                <span class="material-symbols-outlined">undo</span>
-                レシピ一覧に戻る
-            </a>
             <a href="logout.php" class="main-button">
                 <span class="material-symbols-outlined">logout</span>
                 ログアウト
+            </a>
+            <a href="index.php" class="white-button">
+                <span class="material-symbols-outlined">undo</span>
+                レシピ一覧に戻る
             </a>
         </div>
     </main>

@@ -91,7 +91,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             <form action="user_register.php" method="POST">
                 <div class="post-item-container">
                     <label>
-                        ID<span class="require">必須</span>
+                        ID(数字)<span class="require">必須</span>
                         <input type="text" name="user_id" placeholder="利用したいIDを入力" class="post-item" require>
                         <p class="error-message"><?php echo $errorMessages['user_id'];?></p>
                     </label>
@@ -99,19 +99,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <div class="post-item-container">
                     <label>
                         パスワード<span class="require">必須</span>
-                        <input type="password" name="password" placeholder="パスワードをを入力" class="post-item" require>
+                        <input type="password" name="password" placeholder="パスワードを入力" class="post-item" require>
                         <p class="error-message"><?php echo $errorMessages['password'];?></p>
                     </label>
                 </div>
                 <div class="button-container">
-                    <a href="login.php" class="white-button">
-                        <span class="material-symbols-outlined">undo</span>
-                        ログイン画面に戻る
-                    </a>
                     <button type="submit" class="main-button">
                         <span class="material-symbols-outlined">person_add</span>
                         登録
                     </button>
+                    <a href="login.php" class="white-button">
+                        <span class="material-symbols-outlined">undo</span>
+                        ログイン画面に戻る
+                    </a>
                 </div>
             </form>
         </div>

@@ -360,22 +360,24 @@ footer {
     padding-top: 20px;
     border-top: 1px solid var(--gray);
     display: flex;
+    flex-direction: row-reverse;
     justify-content: center;
     gap: 50px;
 }
 
 .button-container .white-button,
-.button-container .main-button {
+.button-container .main-button,
+.button-container .sub-button {
     padding: 5px 15px;
     text-align: center;
+    font-size: 16px;
+    border-radius: 5px;
 }
 
 .button-container .white-button {
-    font-size: 16px;
     color: var(--main-color);
     background-color: var(--white);
     border: 1px solid var(--main-color);
-    border-radius: 5px;
 }
 
 .button-container .white-button:active {
@@ -383,15 +385,23 @@ footer {
 }
 
 .button-container .main-button {
-    font-size: 16px;
     color: var(--white);
     background-color: var(--main-color);
     border: none;
-    border-radius: 5px;
 }
 
 .button-container .main-button:active {
     background-color: var(--sub-color);
+}
+
+.button-container .sub-button {
+    color: var(--white);
+    background-color: var(--sub-color);
+    border: none;
+}
+
+.button-container .sub-button:active {
+    background-color: var(--main-color);
 }
 
 @media (max-width: 600px) {
@@ -402,6 +412,14 @@ footer {
 }
 
 /* ========== ↑ 主にdetail ========== */
+/* ========== ↓ 主にdelete ========== */ 
+.warning-text {
+    font-size: 20px;
+    color: var(--main-color);
+    text-align: center;
+}
+
+/* ========== ↑ 主にdelete ========== */
 /* ========== ↓ 主にpost ========== */ 
 #page-name-section {
     margin: 20px 0;
@@ -530,10 +548,13 @@ footer {
     text-align: center;
     font-size: 14px;
     line-height: 24px;
-    color: var(--sub-color);
-    background-color: var(--white);
-    border: 1px solid var(--sub-color);
+    background-color: var(--sub-color);
+    border: none;
     border-radius: 5px;
+}
+
+.remove-button .material-symbols-outlined {
+    color: var(--white);
 }
 
 .add-button:active {
@@ -572,7 +593,7 @@ footer {
 
 .require {
     display: inline-block;
-    background-color: var(--main-color);
+    background-color: var(--sub-color);
     color: var(--white);
     font-size: 12px;
     padding: 2px 5px;

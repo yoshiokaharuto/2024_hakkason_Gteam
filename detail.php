@@ -270,14 +270,14 @@
         </div>
 <?php } ?>
         <div class="button-container">
+            <button onclick="copyAllButton()" class="sub-button">
+                <span class="material-symbols-outlined">content_copy</span>
+                このレシピをコピー
+            </button>
             <a href="index.php" class="white-button">
                 <span class="material-symbols-outlined">undo</span>
                 レシピ一覧に戻る
             </a>
-            <button onclick="copyAllButton()" class="main-button">
-                <span class="material-symbols-outlined">content_copy</span>
-                このレシピをコピー
-            </button>
         </div>
     </main>
     
