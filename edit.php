@@ -151,7 +151,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // コミット
             $pdo->commit();
-            $resultMessage = "レシピの情報が正常に更新されました！<br>";
+            // $resultMessage = "レシピの情報が正常に更新されました！<br>";
+
+            // レシピの更新が成功した後、index.phpにリダイレクト
+            header("Location: index.php");
+            exit();  // リダイレクト後に残りのコードが実行されないようにする
+
         } catch (PDOException $e) {
             $pdo->rollBack();
             $resultMessage = "SQLエラー: " . $e->getMessage() . "<br>";
@@ -287,39 +292,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     主要食材
                 </label>
                 <div id="main-ingredient-container">
-                 <!-- $currentIngredients[0]に対応する最初のselectboxには削除ボタンを付けない -->
-                    <?php if (!empty($currentIngredients)): ?>
-                        <div class="ingredient-group">
-                            <select name="main_ingredient_id[]" class="post-item">
-                                <?php foreach ($allIngredients as $ingredient): ?>
-                                    <option value="<?= $ingredient['ingredient_id']; ?>" 
-                                        <?= $ingredient['ingredient_id'] == $currentIngredients[0] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($ingredient['ingredient_name'], ENT_QUOTES, 'UTF-8'); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    <?php endif; ?>
-                    <!-- 2つ目以降のselectboxには削除ボタンをつける -->
-                    <?php for ($i = 1; $i < count($currentIngredients); $i++): ?>
-                        <div class="ingredient-group">
-                            <select name="main_ingredient_id[]" class="post-item">
-                                <?php foreach ($allIngredients as $ingredient): ?>
-                                    <option value="<?= $ingredient['ingredient_id']; ?>" 
-                                        <?= $ingredient['ingredient_id'] == $currentIngredients[$i] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($ingredient['ingredient_name'], ENT_QUOTES, 'UTF-8'); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <!-- 削除ボタン -->
-                            <button type="button" class="remove-button">削除</button>
-                        </div>
-                    <?php endfor; ?>
-                </div>
-                <button type="button" id="add-main-ingredient" class="add-button">
-                    <span class="material-symbols-outlined">add</span>
-                    主要食材を追加
-                </button>
+                <!-- 現在の主要食材をループで表示し、各セレクトボックスに削除ボタンを付与 -->
+                <?php foreach ($currentIngredients as $currentIngredient): ?>
+                    <div class="ingredient-group">
+                        <select name="main_ingredient_id[]" class="post-item">
+                            <?php foreach ($allIngredients as $ingredient): ?>
+                                <option value="<?= $ingredient['ingredient_id']; ?>" 
+                                    <?= $ingredient['ingredient_id'] == $currentIngredient ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($ingredient['ingredient_name'], ENT_QUOTES, 'UTF-8'); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <!-- 削除ボタン -->
+                        <button type="button" class="remove-button">削除</button>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <button type="button" id="add-main-ingredient">主要食材を追加</button>
             </div>
 
             <!-- 食材 -->
@@ -358,39 +347,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     カテゴリ
                 </label>
                 <div id="category-container">
-                    <!-- $currentCategories[0]に対応する最初のselectboxには削除ボタンを付けない -->
-                    <?php if (!empty($currentCategories)): ?>
-                        <div class="category-group">
-                            <select name="category_id[]" class="post-item">
-                                <?php foreach ($allCategories as $category): ?>
-                                    <option value="<?= $category['category_id']; ?>" 
-                                        <?= $category['category_id'] == $currentCategories[0] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($category['category_name'], ENT_QUOTES, 'UTF-8'); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    <?php endif; ?>
-                    <!-- 2つ目以降のselectboxには削除ボタンをつける -->
-                    <?php for ($i = 1; $i < count($currentCategories); $i++): ?>
-                        <div class="category-group">
-                            <select name="category_id[]" class="post-item">
-                                <?php foreach ($allCategories as $category): ?>
-                                    <option value="<?= $category['category_id']; ?>" 
-                                        <?= $category['category_id'] == $currentCategories[$i] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($category['category_name'], ENT_QUOTES, 'UTF-8'); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <!-- 削除ボタン -->
-                            <button type="button" class="remove-button">削除</button>
-                        </div>
-                    <?php endfor; ?>
-                </div>
-                <button type="button" id="add-category" class="add-button">
-                    <span class="material-symbols-outlined">add</span>
-                    カテゴリを追加
-                </button>
+                <!-- 現在のカテゴリをループで表示し、各セレクトボックスに削除ボタンを付与 -->
+                <?php foreach ($currentCategories as $currentCategory): ?>
+                    <div class="category-group">
+                        <select name="category_id[]" class="post-item">
+                            <?php foreach ($allCategories as $category): ?>
+                                <option value="<?= $category['category_id']; ?>" 
+                                    <?= $category['category_id'] == $currentCategory ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($category['category_name'], ENT_QUOTES, 'UTF-8'); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <!-- 削除ボタン -->
+                        <button type="button" class="remove-button">削除</button>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <button type="button" id="add-category">カテゴリを追加</button>
             </div>
             <!-- 更新ボタン -->
             <div class="button-container">
@@ -415,7 +388,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
     document.getElementById('add-main-ingredient').addEventListener('click', function() {
         var container = document.getElementById('main-ingredient-container');
-        
+
         var newGroup = document.createElement('div');
         newGroup.className = 'ingredient-group';
 
@@ -446,36 +419,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             var parent = button.parentElement;
             parent.parentElement.removeChild(parent);
         });
-        var wrapperDiv = document.createElement('div');
-        wrapperDiv.className = 'new-select-item';
-
-        var newSelect = document.createElement('select');
-        newSelect.name = 'main_ingredient_id[]';
-        newSelect.className = 'post-item';
-        newSelect.innerHTML = `<?php foreach ($allIngredients as $ingredient): ?><option value="<?php echo $ingredient['ingredient_id']; ?>"><?php echo $ingredient['ingredient_name']; ?></option><?php endforeach; ?>`;
-
-        var removeButton = document.createElement('button');
-        removeButton.innerHTML = '<span class="material-symbols-outlined">delete</span>';
-        removeButton.className = 'remove-button';
-        removeButton.type = 'button';
-
-        removeButton.addEventListener('click', function() {
-            container.removeChild(wrapperDiv);
-        });
-
-        wrapperDiv.appendChild(newSelect);
-        wrapperDiv.appendChild(removeButton);
-
-        container.appendChild(wrapperDiv);
     });
 
-    document.getElementById('add-category').addEventListener('click', function() {
+        document.getElementById('add-category').addEventListener('click', function() {
         var container = document.getElementById('category-container');
         
         var newGroup = document.createElement('div');
         newGroup.className = 'category-group';
-        var wrapperDiv = document.createElement('div');
-        wrapperDiv.className = 'new-select-item';
 
         var newSelect = document.createElement('select');
         newSelect.name = 'category_id[]';
@@ -483,7 +433,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         newSelect.innerHTML = `<?php foreach ($allCategories as $category): ?><option value="<?php echo $category['category_id']; ?>"><?php echo $category['category_name']; ?></option><?php endforeach; ?>`;
 
         var removeButton = document.createElement('button');
-        removeButton.innerHTML = '<span class="material-symbols-outlined">delete</span>';
+        removeButton.textContent = '削除';
         removeButton.className = 'remove-button';
         removeButton.type = 'button';
 
@@ -504,15 +454,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             var parent = button.parentElement;
             parent.parentElement.removeChild(parent);
         });
-
-        wrapperDiv.appendChild(newSelect);
-        wrapperDiv.appendChild(removeButton);
-
-        container.appendChild(wrapperDiv);
     });
+    
     </script>
 
-
-    <script src="js/script.js"></script>
 </body>
 </html>
