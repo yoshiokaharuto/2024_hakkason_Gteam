@@ -60,6 +60,10 @@ $stmt->bindValue(':recipe_name', $recipe_name, PDO::PARAM_STR);
 $stmt->bindValue(':category_tag', $category_tag, PDO::PARAM_STR);
 $stmt->bindValue(':ingredient_tag', $ingredient_tag, PDO::PARAM_STR);
 
+if($user_recipe && $user_id) {
+    $stmt->bindValue(':user_id',$user_id, PDO::PARAM_INT);
+}
+
 // クエリを実行
 $stmt->execute();
 
