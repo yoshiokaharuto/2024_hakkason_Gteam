@@ -27,6 +27,9 @@
         $stm->bindValue(':theme_id', $theme_id, PDO::PARAM_INT);
         $stm->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
         $stm->execute();
+        $_SESSION['resultMessage'] = 'テーマを変更しました！';
+    } else {
+        $_SESSION['resultMessage'] = 'テーマを変更できませんでした。'; 
     }
 
     if(isset($_POST['currentPassword']) && isset($_POST['newPassword']) && isset($_POST['newPasswordCheck'])) {
@@ -47,10 +50,21 @@
                 $stm->bindValue(':newPassword_hash', $newPassword_hash, PDO::PARAM_STR);
                 $stm->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
                 $stm->execute();
+                $_SESSION['resultMessage'] = 'パスワードを更新しました！';
             } catch(PDOException $e) {
                 $resultMessage = 'sqlエラー:'.$e->getMessage();
             }
+        } elseif(strcmp($newPassword, $newPasswordCheck) !== 0) {
+            $_SESSION['resultMessage'] = '新しいパスワードと新しいパスワード(確認)が一致しません。もう一度入力してください。';
+        }else {
+            $_SESSION['resultMessage'] = 'パスワードを更新できませんでした。';
         }
+    }
+
+    $resultMessage = '';
+    if(isset($_SESSION['resultMessage'])) {
+        $resultMessage = $_SESSION['resultMessage'];
+        unset($_SESSION['resultMessage']);//メッセージ表示後に削除
     }
 ?>
 
@@ -193,6 +207,11 @@
         <p>2024秋ハッカソン - グループG</p>
     </footer>
 
+    <?php if (!empty($resultMessage)): ?>
+        <script>
+            alert('<?php echo $resultMessage; ?>');
+        </script>
+    <?php endif; ?>
     <script src="js/script.js"></script>
 </body>
 </html>
