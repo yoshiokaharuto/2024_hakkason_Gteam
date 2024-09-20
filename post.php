@@ -18,6 +18,12 @@ $errorMessages = [
 // データベースからカテゴリと主要食材を取得
 $categories = [];
 $ingredients = [];
+$genres = [
+    0 => "和風",
+    1 => "洋風",
+    2 => "中華風",
+    3 => "お菓子・デザート"
+];
 
 try {
     // カテゴリの取得
@@ -59,51 +65,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $note = isset($_POST['note']) ? $_POST['note'] : '';
             $category_ids = $_POST['category_id'];
             $main_ingredient_ids = $_POST['main_ingredient_id'];
+            $user_id = $_SESSION['user_id'];
 
-            // 各カテゴリと主要食材を処理するためにループ
-            try {
-                $pdo->beginTransaction();
-                $sql1 = "INSERT INTO recipes (name, genre, ingredient, time, process, note) 
-                         VALUES (:name, :genre, :ingredient, :time, :process, :note)";
-                $stm1 = $pdo->prepare($sql1);
-                $stm1->bindValue(':name', $name, PDO::PARAM_STR);
-                $stm1->bindValue(':genre', $genre, PDO::PARAM_INT);
-                $stm1->bindValue(':ingredient', $ingredient, PDO::PARAM_STR);
-                $stm1->bindValue(':time', $time, PDO::PARAM_INT);
-                $stm1->bindValue(':process', $process, PDO::PARAM_STR);
-                $stm1->bindValue(':note', $note, PDO::PARAM_STR);
-                $stm1->execute();
+            if (empty($user_id)) {
+                $resultMessage = "ユーザーIDが取得できませんでした。ログインしてください。";
+            } else {
+                // 各カテゴリと主要食材を処理するためにループ
+                try {
+                    $pdo->beginTransaction();
+                    $sql1 = "INSERT INTO recipes (name, genre, ingredient, time, process, note, user_id) 
+                             VALUES (:name, :genre, :ingredient, :time, :process, :note, :user_id)";
+                    $stm1 = $pdo->prepare($sql1);
+                    $stm1->bindValue(':name', $name, PDO::PARAM_STR);
+                    $stm1->bindValue(':genre', $genre, PDO::PARAM_INT);
+                    $stm1->bindValue(':ingredient', $ingredient, PDO::PARAM_STR);
+                    $stm1->bindValue(':time', $time, PDO::PARAM_INT);
+                    $stm1->bindValue(':process', $process, PDO::PARAM_STR);
+                    $stm1->bindValue(':note', $note, PDO::PARAM_STR);
+                    $stm1->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+                    $stm1->execute();
 
-                $recipeId = $pdo->lastInsertId();
+                    $recipeId = $pdo->lastInsertId();
 
-                // カテゴリを処理
-                foreach ($category_ids as $category_id) {
-                $sql2 = "INSERT INTO recipe_to_category (recipe_id, category_id) VALUES (:recipe_id, :category_id)";
-                $stm2 = $pdo->prepare($sql2);
-                $stm2->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
-                $stm2->bindValue(':category_id', intval($category_id), PDO::PARAM_INT);
-                $stm2->execute();
-            }
+                    // カテゴリを処理
+                    foreach ($category_ids as $category_id) {
+                        $sql2 = "INSERT INTO recipe_to_category (recipe_id, category_id) VALUES (:recipe_id, :category_id)";
+                        $stm2 = $pdo->prepare($sql2);
+                        $stm2->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
+                        $stm2->bindValue(':category_id', intval($category_id), PDO::PARAM_INT);
+                        $stm2->execute();
+                    }
 
-                // 主要食材を処理
-                foreach ($main_ingredient_ids as $ingredient_id) {
-                $sql3 = "INSERT INTO recipe_to_ingredient (recipe_id, ingredient_id) VALUES (:recipe_id, :ingredient_id)";
-                $stm3 = $pdo->prepare($sql3);
-                $stm3->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
-                $stm3->bindValue(':ingredient_id', intval($ingredient_id), PDO::PARAM_INT);
-                $stm3->execute();
-            }
+                    // 主要食材を処理
+                    foreach ($main_ingredient_ids as $ingredient_id) {
+                        $sql3 = "INSERT INTO recipe_to_ingredient (recipe_id, ingredient_id) VALUES (:recipe_id, :ingredient_id)";
+                        $stm3 = $pdo->prepare($sql3);
+                        $stm3->bindValue(':recipe_id', $recipeId, PDO::PARAM_INT);
+                        $stm3->bindValue(':ingredient_id', intval($ingredient_id), PDO::PARAM_INT);
+                        $stm3->execute();
+                    }
 
-                $pdo->commit();
-                $resultMessage = "レシピが正常に投稿されました。";
-            } catch (PDOException $e) {
-                $pdo->rollBack();
-                $resultMessage = "投稿エラー: " . $e->getMessage() . "<br>";
+                    $pdo->commit();
+                    // 投稿成功時にリダイレクト
+                    header("Location: index.php");
+                    exit();
+                } catch (PDOException $e) {
+                    $pdo->rollBack();
+                    $resultMessage = "投稿エラー: " . $e->getMessage() . "<br>";
+                }
             }
         }
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -168,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p><?php echo $resultMessage; ?></p>
         </div>
 
-        <form action="index.php" method="POST">
+        <form action="post.php" method="POST">
             <div class="post-item-container">
                 <label>
                     <span class="material-symbols-outlined">edit</span>
@@ -182,19 +197,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ジャンル
                 <div class="genre-group">
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="japanese" value="1" checked>
+                        <input type="radio" name="genre" id="japanese" value="0" checked>
                         <label for="japanese">和風</label>
                     </div>
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="western" value="2">
+                        <input type="radio" name="genre" id="western" value="1">
                         <label for="western">洋風</label>
                     </div>
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="chinese" value="3">
+                        <input type="radio" name="genre" id="chinese" value="2">
                         <label for="chinese">中華風</label>
                     </div>
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="dessert" value="4">
+                        <input type="radio" name="genre" id="dessert" value="3">
                         <label for="dessert">デザート</label>
                     </div>
                 </div>
@@ -240,7 +255,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>
                     <span class="material-symbols-outlined">format_list_numbered</span>
                     手順
-                    <textarea name="process" placeholder="①茶碗にご飯を盛り、卵を割り入れます。..." class="post-item"></textarea>
+                    <textarea name="process" placeholder="➀茶碗にご飯を盛ります。
+➁卵を割ってご飯にかける。
+➂焼肉のタレをかける。" class="post-item"></textarea>
                     <p class="error-message"><?php echo $errorMessages['process']; ?></p>
                 </label>
             </div>
@@ -248,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>
                     <span class="material-symbols-outlined">description</span>
                     メモ
-                    <textarea name="note" placeholder="このレシピはお弁当にも最適です。" class="post-item"></textarea>
+                    <textarea name="note" placeholder="〇〇社のタレがおすすめです。" class="post-item"></textarea>
                 </label>
             </div>
             <div class="post-item-container">
