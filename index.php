@@ -49,6 +49,7 @@ $sql = "
     WHERE r.name LIKE :recipe_name
     AND (:category_tag IS NULL OR c.category_name = :category_tag)
     AND (:ingredient_tag IS NULL OR mi.ingredient_name = :ingredient_tag)
+    ".($user_recipe && $user_id ? "AND r.user_id = :user_id" : "")."
     GROUP BY r.recipe_id
     ORDER BY r.recipe_id DESC
 ";
