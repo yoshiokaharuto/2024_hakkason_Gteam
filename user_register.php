@@ -91,15 +91,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             <form action="user_register.php" method="POST">
                 <div class="post-item-container">
                     <label>
-                        ID
-                        <input type="text" name="user_id" placeholder="利用したいIDを入力" class="post-item">
+                        ID<span class="require">必須</span>
+                        <input type="text" name="user_id" placeholder="利用したいIDを入力" class="post-item" require>
                         <p class="error-message"><?php echo $errorMessages['user_id'];?></p>
                     </label>
                 </div>
                 <div class="post-item-container">
                     <label>
-                        パスワード
-                        <input type="password" name="password" placeholder="パスワードをを入力" class="post-item">
+                        パスワード<span class="require">必須</span>
+                        <input type="password" name="password" placeholder="パスワードをを入力" class="post-item" require>
                         <p class="error-message"><?php echo $errorMessages['password'];?></p>
                     </label>
                 </div>

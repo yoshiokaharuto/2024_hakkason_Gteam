@@ -570,6 +570,23 @@ footer {
     }
 }
 
+.require {
+    display: inline-block;
+    background-color: var(--main-color);
+    color: var(--white);
+    font-size: 12px;
+    padding: 2px 5px;
+    margin-left: 10px;
+    margin-top: 6px;
+    vertical-align: top;
+    border-radius: 5px;
+}
+
+.error-message {
+    color: var(--main-color);
+    font-size: 16px;
+}
+
 .button-container-withLink {
     margin: 20px auto;
     padding-top: 20px;
