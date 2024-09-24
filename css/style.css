@@ -63,6 +63,7 @@ header {
 }
 
 header .material-symbols-outlined {
+    user-select: none;
     color: var(--white);
     font-size: 40px;
 }
