@@ -222,19 +222,19 @@ function preoutput($str) {
             </p>
         </div>
         <p class="warning-text">本当にこのレシピを削除しますか？</p>
+        <form action="" method="POST">
         <div class="button-container">
-            <form action="" method="POST">
                 <button type="submit" name="confirm" class="main-button">
                     <span class="material-symbols-outlined">delete</span>
                     削除する
                 </button>
-            </form>
-
-            <a href="detail.php?id=<?= $recipe_id ?>" class="white-button">
-                <span class="material-symbols-outlined">undo</span>
-                レシピ詳細に戻る
-            </a>
-        </div>
+                
+                <a href="detail.php?id=<?= $recipe_id ?>" class="white-button">
+                    <span class="material-symbols-outlined">undo</span>
+                    レシピ詳細に戻る
+                </a>
+            </div>
+        </form>
     </main>
     
     <footer>

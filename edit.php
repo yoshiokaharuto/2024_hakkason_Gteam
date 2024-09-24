@@ -26,7 +26,7 @@ $stm->execute();
 $recipe = $stm->fetch(PDO::FETCH_ASSOC);
 
 if (!$recipe) {
-    echo "該当するレシピが見つかりません。";
+    header("Location: index.php");
     exit();
 }
 
