@@ -2,79 +2,76 @@
 require_once "./db_connect.php";
 session_start();
 
-if (!isset($_SESSION['user_id']) || $recipe['user_id'] !== (int)$_SESSION['user_id']) {
-    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-        header("Location: detail.php?id=".$_GET['id']);
-    } else {
-        header("Location: index.php");
-    }
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    // 有効なレシピIDが指定されていない場合は、indexにリダイレクト
+    header("Location: index.php");
     exit();
 }
 
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $recipe_id = $_GET['id'];
+$recipe_id = $_GET['id'];
 
-    // 削除確認のためのレシピ詳細を取得
-    $sql = "
-        SELECT r.*, 
-        GROUP_CONCAT(DISTINCT c.category_name ORDER BY c.category_name ASC SEPARATOR ', ') AS category, 
-        GROUP_CONCAT(DISTINCT mi.ingredient_name ORDER BY mi.ingredient_name ASC SEPARATOR ', ') AS main_ingredient
-        FROM recipes r
-        LEFT JOIN recipe_to_category rtc ON r.recipe_id = rtc.recipe_id
-        LEFT JOIN categories c ON rtc.category_id = c.category_id
-        LEFT JOIN recipe_to_ingredient rti ON r.recipe_id = rti.recipe_id
-        LEFT JOIN main_ingredients mi ON rti.ingredient_id = mi.ingredient_id
-        WHERE r.recipe_id = :id
-        GROUP BY r.recipe_id
-        ORDER BY r.recipe_id DESC
-    ";
-    $stm = $pdo->prepare($sql);
-    $stm->bindValue(':id', $recipe_id, PDO::PARAM_INT);
-    $stm->execute();
-    $data = $stm->fetch(PDO::FETCH_ASSOC);
+// 削除確認のためのレシピ詳細を取得
+$sql = "
+    SELECT r.*, 
+    GROUP_CONCAT(DISTINCT c.category_name ORDER BY c.category_name ASC SEPARATOR ', ') AS category, 
+    GROUP_CONCAT(DISTINCT mi.ingredient_name ORDER BY mi.ingredient_name ASC SEPARATOR ', ') AS main_ingredient
+    FROM recipes r
+    LEFT JOIN recipe_to_category rtc ON r.recipe_id = rtc.recipe_id
+    LEFT JOIN categories c ON rtc.category_id = c.category_id
+    LEFT JOIN recipe_to_ingredient rti ON r.recipe_id = rti.recipe_id
+    LEFT JOIN main_ingredients mi ON rti.ingredient_id = mi.ingredient_id
+    WHERE r.recipe_id = :id
+    GROUP BY r.recipe_id
+";
+$stm = $pdo->prepare($sql);
+$stm->bindValue(':id', $recipe_id, PDO::PARAM_INT);
+$stm->execute();
+$data = $stm->fetch(PDO::FETCH_ASSOC);
 
-    if (!$data) {
-        // レシピが存在しない場合はindexへリダイレクト
-        header("Location: index.php");
-        exit();
-    }
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
-        // レシピの削除
-        try {
-            $pdo->beginTransaction();
-
-            // recipe_to_category から削除
-            $sql1 = "DELETE FROM recipe_to_category WHERE recipe_id = :recipe_id";
-            $stm1 = $pdo->prepare($sql1);
-            $stm1->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
-            $stm1->execute();
-
-            // recipe_to_ingredient から削除
-            $sql2 = "DELETE FROM recipe_to_ingredient WHERE recipe_id = :recipe_id";
-            $stm2 = $pdo->prepare($sql2);
-            $stm2->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
-            $stm2->execute();
-
-            // recipes から削除
-            $sql3 = "DELETE FROM recipes WHERE recipe_id = :recipe_id";
-            $stm3 = $pdo->prepare($sql3);
-            $stm3->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
-            $stm3->execute();
-
-            $pdo->commit();
-
-            // 削除成功後、indexにリダイレクト
-            header("Location: index.php?message=レシピが削除されました");
-            exit();
-        } catch (PDOException $e) {
-            $pdo->rollBack();
-            $errorMessage = "削除エラー: " . $e->getMessage();
-        }
-    }
-} else {
+if (!$data) {
+    // レシピが存在しない場合はindexへリダイレクト
     header("Location: index.php");
     exit();
+}
+
+// レシピ取得後にユーザーの所有権をチェック
+if (!isset($_SESSION['user_id']) || $data['user_id'] !== (int)$_SESSION['user_id']) {
+    header("Location: detail.php?id=".$recipe_id);
+    exit();
+}
+
+// 削除確認の処理
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
+    try {
+        $pdo->beginTransaction();
+
+        // recipe_to_category から削除
+        $sql1 = "DELETE FROM recipe_to_category WHERE recipe_id = :recipe_id";
+        $stm1 = $pdo->prepare($sql1);
+        $stm1->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
+        $stm1->execute();
+
+        // recipe_to_ingredient から削除
+        $sql2 = "DELETE FROM recipe_to_ingredient WHERE recipe_id = :recipe_id";
+        $stm2 = $pdo->prepare($sql2);
+        $stm2->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
+        $stm2->execute();
+
+        // recipes から削除
+        $sql3 = "DELETE FROM recipes WHERE recipe_id = :recipe_id";
+        $stm3 = $pdo->prepare($sql3);
+        $stm3->bindValue(':recipe_id', $recipe_id, PDO::PARAM_INT);
+        $stm3->execute();
+
+        $pdo->commit();
+
+        // 削除成功後、indexにリダイレクト
+        header("Location: index.php?message=レシピが削除されました");
+        exit();
+    } catch (PDOException $e) {
+        $pdo->rollBack();
+        $errorMessage = "削除エラー: " . $e->getMessage();
+    }
 }
 
 function preoutput($str) {
@@ -82,6 +79,7 @@ function preoutput($str) {
     return nl2br($str);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="ja">
