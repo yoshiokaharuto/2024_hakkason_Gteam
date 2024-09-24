@@ -1,7 +1,6 @@
 <?php
 // データベース接続ファイルを読み込む
 require_once 'db_connect.php';
-
 session_start();
 
 $resultMessage = '';
@@ -15,7 +14,7 @@ $errorMessages = [
 $recipe_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($recipe_id <= 0) {
-    echo "レシピIDが指定されていません。";
+    header("Location: index.php");
     exit();
 }
 
@@ -32,7 +31,7 @@ if (!$recipe) {
 }
 
 if (!isset($_SESSION['user_id']) || $recipe['user_id'] !== (int)$_SESSION['user_id']) {
-    header("Location: index.php");
+    header("Location: detail.php?id=".$_GET['id']);
     exit();
 }
 

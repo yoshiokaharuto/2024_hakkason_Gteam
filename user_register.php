@@ -4,6 +4,11 @@ require_once "./db_connect.php";
 //セッション開始
 session_start();
 
+if (isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
+
 $resultMessage = '';
 $errorMessages = [
     'user_id' => '',
