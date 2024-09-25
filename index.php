@@ -116,7 +116,7 @@ if(isset($_SESSION['resultMessage'])) {
     <header>
         <a href="index.php">
             <h1 class="app-name">
-                アプリ名
+                <img src="img/logo.png">
             </h1>
         </a>
 
@@ -291,7 +291,9 @@ if(isset($_SESSION['resultMessage'])) {
     </main>
     
     <footer>
-        <h1 class="app-name">アプリ名</h1>
+        <h1 class="app-name">
+            <img src="img/logo.png">
+        </h1>
         <p>2024秋ハッカソン - グループG</p>
     </footer>
 

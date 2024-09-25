@@ -106,7 +106,7 @@ function preoutput($str) {
     <header>
         <a href="index.php" title="レシピ一覧に戻る">
             <h1 class="app-name">
-                アプリ名
+                <img src="img/logo.png">
             </h1>
         </a>
 
@@ -222,23 +222,25 @@ function preoutput($str) {
             </p>
         </div>
         <p class="warning-text">本当にこのレシピを削除しますか？</p>
+        <form action="" method="POST">
         <div class="button-container">
-            <form action="" method="POST">
                 <button type="submit" name="confirm" class="main-button">
                     <span class="material-symbols-outlined">delete</span>
                     削除する
                 </button>
-            </form>
-
-            <a href="detail.php?id=<?= $recipe_id ?>" class="white-button">
-                <span class="material-symbols-outlined">undo</span>
-                レシピ詳細に戻る
-            </a>
-        </div>
+                
+                <a href="detail.php?id=<?= $recipe_id ?>" class="white-button">
+                    <span class="material-symbols-outlined">undo</span>
+                    レシピ詳細に戻る
+                </a>
+            </div>
+        </form>
     </main>
     
     <footer>
-        <h1 class="app-name">アプリ名</h1>
+        <h1 class="app-name">
+            <img src="img/logo.png">
+        </h1>
         <p>2024秋ハッカソン - グループG</p>
     </footer>
 

@@ -41,6 +41,11 @@ body {
     color: var(--white);
     font-size: 30px;
     font-weight: normal;
+    height: 42px;
+}
+
+.app-name img {
+    height: 100%;
 }
 
 a {
