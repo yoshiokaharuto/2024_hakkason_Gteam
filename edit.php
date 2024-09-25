@@ -258,19 +258,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ジャンル
                 <div class="genre-group">
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="japanese" value="0" <?= (isset($_POST['genre']) && $_POST['genre'] == 0) || (!isset($_POST['genre']) && $recipe['genre'] == 0) ? 'checked' : '' ?>>
+                        <input type="radio" name="genre" id="japanese" value="1" <?= (isset($_POST['genre']) && $_POST['genre'] == 1) || (!isset($_POST['genre']) && $recipe['genre'] == 1) ? 'checked' : '' ?>>
                         <label for="japanese">和風</label>
                     </div>
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="western" value="1" <?= (isset($_POST['genre']) && $_POST['genre'] == 1) || (!isset($_POST['genre']) && $recipe['genre'] == 1) ? 'checked' : '' ?>>
+                        <input type="radio" name="genre" id="western" value="2" <?= (isset($_POST['genre']) && $_POST['genre'] == 2) || (!isset($_POST['genre']) && $recipe['genre'] == 2) ? 'checked' : '' ?>>
                         <label for="western">洋風</label>
                     </div>
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="chinese" value="2" <?= (isset($_POST['genre']) && $_POST['genre'] == 2) || (!isset($_POST['genre']) && $recipe['genre'] == 2) ? 'checked' : '' ?>>
+                        <input type="radio" name="genre" id="chinese" value="3" <?= (isset($_POST['genre']) && $_POST['genre'] == 3) || (!isset($_POST['genre']) && $recipe['genre'] == 3) ? 'checked' : '' ?>>
                         <label for="chinese">中華風</label>
                     </div>
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="dessert" value="3" <?= (isset($_POST['genre']) && $_POST['genre'] == 3) || (!isset($_POST['genre']) && $recipe['genre'] == 3) ? 'checked' : '' ?>>
+                        <input type="radio" name="genre" id="dessert" value="4" <?= (isset($_POST['genre']) && $_POST['genre'] == 4) || (!isset($_POST['genre']) && $recipe['genre'] == 4) ? 'checked' : '' ?>>
                         <label for="dessert">デザート</label>
                     </div>
                 </div>

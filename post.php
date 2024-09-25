@@ -19,10 +19,10 @@ $errorMessages = [
 $categories = [];
 $ingredients = [];
 $genres = [
-    0 => "和風",
-    1 => "洋風",
-    2 => "中華風",
-    3 => "お菓子・デザート"
+    1 => "和風",
+    2 => "洋風",
+    3 => "中華風",
+    4 => "お菓子・デザート"
 ];
 
 try {
@@ -200,19 +200,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ジャンル
                 <div class="genre-group">
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="japanese" value="0" checked>
+                        <input type="radio" name="genre" id="japanese" value="1" checked>
                         <label for="japanese">和風</label>
                     </div>
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="western" value="1">
+                        <input type="radio" name="genre" id="western" value="2">
                         <label for="western">洋風</label>
                     </div>
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="chinese" value="2">
+                        <input type="radio" name="genre" id="chinese" value="3">
                         <label for="chinese">中華風</label>
                     </div>
                     <div class="genre-option">
-                        <input type="radio" name="genre" id="dessert" value="3">
+                        <input type="radio" name="genre" id="dessert" value="4">
                         <label for="dessert">デザート</label>
                     </div>
                 </div>

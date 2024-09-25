@@ -50,7 +50,7 @@ $sql = "
     WHERE r.name LIKE :recipe_name
     AND (:category_tag IS NULL OR c.category_name = :category_tag)
     AND (:ingredient_tag IS NULL OR mi.ingredient_name = :ingredient_tag)
-    ".($genre && $genre ? "AND r.genre = :genre" : "")."
+    ".($genre ? "AND r.genre = :genre" : "")."
     ".($user_recipe && $user_id ? "AND r.user_id = :user_id" : "")."
     GROUP BY r.recipe_id
     ORDER BY r.recipe_id DESC
@@ -61,7 +61,10 @@ $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':recipe_name', $recipe_name, PDO::PARAM_STR);
 $stmt->bindValue(':category_tag', $category_tag, PDO::PARAM_STR);
 $stmt->bindValue(':ingredient_tag', $ingredient_tag, PDO::PARAM_STR);
-$stmt->bindValue(':genre',(int)$genre, PDO::PARAM_INT);
+
+if ($genre) {
+    $stmt->bindValue(':genre',(int)$genre, PDO::PARAM_INT);
+}
 
 if($user_recipe && $user_id) {
     $stmt->bindValue(':user_id',$user_id, PDO::PARAM_INT);
@@ -214,10 +217,10 @@ if(isset($_SESSION['resultMessage'])) {
                     <!-- ジャンルの<select> -->
                     <select name="genre" class="post-item">
                         <option value="">ジャンルを選択</option>
-                        <option value="0" <?= isset($_GET['genre']) && $_GET['genre'] === 0 ? 'selected' : '' ?>>和風</option>
-                        <option value="1" <?= isset($_GET['genre']) && $_GET['genre'] === 1 ? 'selected' : '' ?>>洋風</option>
-                        <option value="2" <?= isset($_GET['genre']) && $_GET['genre'] === 2 ? 'selected' : '' ?>>中華風</option>
-                        <option value="3" <?= isset($_GET['genre']) && $_GET['genre'] === 3 ? 'selected' : '' ?>>デザート</option>
+                        <option value="1" <?= isset($_GET['genre']) && $_GET['genre'] === 1 ? 'selected' : '' ?>>和風</option>
+                        <option value="2" <?= isset($_GET['genre']) && $_GET['genre'] === 2 ? 'selected' : '' ?>>洋風</option>
+                        <option value="3" <?= isset($_GET['genre']) && $_GET['genre'] === 3 ? 'selected' : '' ?>>中華風</option>
+                        <option value="4" <?= isset($_GET['genre']) && $_GET['genre'] === 4 ? 'selected' : '' ?>>デザート</option>
                     </select>
 
                 </div>
@@ -254,16 +257,16 @@ if(isset($_SESSION['resultMessage'])) {
                         <p class='recipe-genre'>
                         <?php
                             switch($data["genre"]) {
-                                case 0:
+                                case 1:
                                     echo "和";
                                     break;
-                                case 1:
+                                case 2:
                                     echo "洋";
                                     break;
-                                case 2:
+                                case 3:
                                     echo "中";
                                     break;
-                                case 3:
+                                case 4:
                                     echo "デ";
                                     break;
                                 default:
