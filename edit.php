@@ -191,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <header>
         <a href="index.php" title="レシピ一覧に戻る">
             <h1 class="app-name">
-                アプリ名
+                <img src="img/logo.png">
             </h1>
         </a>
 
@@ -391,7 +391,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
 
     <footer>
-        <h1 class="app-name">アプリ名</h1>
+        <h1 class="app-name">
+            <img src="img/logo.png">
+        </h1>
         <p>2024秋ハッカソン - グループG</p>
     </footer>
 
