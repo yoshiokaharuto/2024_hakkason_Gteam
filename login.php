@@ -8,6 +8,10 @@ if (isset($_SESSION['user_id'])) {
 }
 
 $resultMessage = '';
+if (isset($_SESSION['resultMessage'])) {
+    $resultMessage = $_SESSION['resultMessage'];
+    unset($_SESSION['resultMessage']); // メッセージを表示後に削除
+}
 $errorMessages = [
     'user_id' => '',
     'password' => ''
