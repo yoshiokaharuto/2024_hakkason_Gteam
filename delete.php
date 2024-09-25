@@ -182,16 +182,16 @@ function preoutput($str) {
                 <p class="recipe-genre">
                     <?php
                         switch($data["genre"]) {
-                            case 0:
+                            case 1:
                                 echo "和";
                                 break;
-                            case 1:
+                            case 2:
                                 echo "洋";
                                 break;
-                            case 2:
+                            case 3:
                                 echo "中";
                                 break;
-                            case 3:
+                            case 4:
                                 echo "デ";
                                 break;
                             default:

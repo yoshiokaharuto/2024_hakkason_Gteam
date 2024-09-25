@@ -139,16 +139,16 @@
                 <p class="recipe-genre">
                     <?php
                         switch($data["genre"]) {
-                            case 0:
+                            case 1:
                                 echo "和";
                                 break;
-                            case 1:
+                            case 2:
                                 echo "洋";
                                 break;
-                            case 2:
+                            case 3:
                                 echo "中";
                                 break;
-                            case 3:
+                            case 4:
                                 echo "デ";
                                 break;
                             default:
@@ -229,16 +229,16 @@
         <div id="recipe-dataToCopy">【レシピ名】<?= preoutput($data['name']) ?><br>
 【ジャンル】<?php
                 switch($data["genre"]) {
-                    case 0:
+                    case 1:
                         echo "和風";
                         break;
-                    case 1:
+                    case 2:
                         echo "洋風";
                         break;
-                    case 2:
+                    case 3:
                         echo "中華風";
                         break;
-                    case 3:
+                    case 4:
                         echo "お菓子・デザート";
                         break;
                     default:

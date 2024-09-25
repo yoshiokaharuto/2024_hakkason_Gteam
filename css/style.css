@@ -130,6 +130,10 @@ footer {
     padding: 40px;
 }
 
+footer .app-name {
+    margin: 10px 0;
+}
+
 @media (max-width: 600px) {
     header {
         padding: 20px;
@@ -352,7 +356,7 @@ footer {
 .recipe-information-content {
     color: var(--text-color);
     background-color: var(--invert-text-color);
-    padding: 10px 20px;
+    padding: 15px 20px;
     border: 1px solid var(--gray);
     border-radius: 10px;
 }
