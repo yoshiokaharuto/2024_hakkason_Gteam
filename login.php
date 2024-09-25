@@ -8,6 +8,10 @@ if (isset($_SESSION['user_id'])) {
 }
 
 $resultMessage = '';
+if (isset($_SESSION['resultMessage'])) {
+    $resultMessage = $_SESSION['resultMessage'];
+    unset($_SESSION['resultMessage']); // メッセージを表示後に削除
+}
 $errorMessages = [
     'user_id' => '',
     'password' => ''
@@ -49,7 +53,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 header("Location:index.php");
                 exit();
             } else {
-                $resultMessage = "無効なidまたはパスワードです。";
+                $errorMessages['user_id'] = "無効なidまたはパスワードです。";
+                $errorMessages['password'] = "無効なidまたはパスワードです。";
             }
         }
     }
@@ -89,14 +94,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     <label>
                         ID<span class="require">必須</span>
                         <input type="text" name="user_id" placeholder="IDを入力" class="post-item" require>
-                        <p><?php echo $errorMessages['user_id'];?></p>
+                        <p class="error-message"><?php echo $errorMessages['user_id'];?></p>
                     </label>
                 </div>
                 <div class="post-item-container">
                     <label>
                         パスワード<span class="require">必須</span>
                         <input type="password" name="password" placeholder="パスワードを入力" class="post-item" require>
-                        <p><?php echo $errorMessages['password'];?></p>
+                        <p class="error-message"><?php echo $errorMessages['password'];?></p>
                     </label>
                 </div>
                 <div class="button-container-withLink">
