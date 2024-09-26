@@ -5,7 +5,7 @@ $user = 'root';
 //パスワード
 $password = '';
 //データベース名
-$database = 'hakkason_gteam';
+$database = 'hakkason_gteam_2';
 //サーバ名
 $server = 'localhost:3308';
 

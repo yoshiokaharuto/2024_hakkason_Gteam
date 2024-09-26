@@ -40,6 +40,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if (password_verify($password, $row['password'])){
                 $_SESSION['user_id'] = $user_id;
                 $theme_id = $row['theme_id'];
+                $mc_id = $row['mc_id'];
+                $sc_id = $row['sc_id'];
 
                 $sql = "SELECT * FROM theme WHERE theme_id = :theme_id";
                 $stm = $pdo->prepare($sql);
@@ -47,6 +49,20 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $stm->execute();
                 $theme = $stm->fetch(PDO::FETCH_ASSOC);
                 $_SESSION['theme'] = $theme;
+
+                $sql = "SELECT * FROM main_color WHERE mc_id = :mc_id";
+                $stm = $pdo->prepare($sql);
+                $stm->bindValue(':mc_id', $mc_id, PDO::PARAM_INT);
+                $stm->execute();
+                $main_color = $stm->fetch(PDO::FETCH_ASSOC);
+                $_SESSION['main_color'] = $main_color;
+
+                $sql = "SELECT * FROM sub_color WHERE sc_id = :sc_id";
+                $stm = $pdo->prepare($sql);
+                $stm->bindValue(':sc_id', $sc_id, PDO::PARAM_INT);
+                $stm->execute();
+                $sub_color = $stm->fetch(PDO::FETCH_ASSOC);
+                $_SESSION['sub_color'] = $sub_color;
 
                 //セッションidを再生成
                 session_regenerate_id(true);
