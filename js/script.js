@@ -44,6 +44,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// index.phpの検索フォーム
+const searchForm = document.getElementById('search-form');
+if(searchForm) {
+    searchForm.addEventListener('submit', ()=>{
+        Array.from(searchForm).forEach((input)=>{
+            if(input.value === ''){
+                input.disabled = true;
+            }
+        });
+    }, false)
+}
+
 // detail.phpのコピーボタン
 function copyButton(elementId) {
     var element = document.getElementById(elementId);

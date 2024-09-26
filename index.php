@@ -190,7 +190,7 @@ if(isset($_SESSION['resultMessage'])) {
     </div>
 
     <main>
-        <form action="index.php" method="GET">
+        <form action="index.php" method="GET" id="search-form">
             <div id="search-container">
                 <input type="text" name="recipe_name" value="<?= htmlspecialchars($_GET['recipe_name'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="検索したいレシピ名を入力…">
                 <div id="searchByTag-container">
