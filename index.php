@@ -219,20 +219,33 @@ if(isset($_SESSION['resultMessage'])) {
                     </select>
 
                     <!-- ジャンルの<select> -->
+
+                    <!-- 
+                    intval()で数値として比較する方法に変更
+                    ※予想される不具合や注意点
+                    　intval()を使用すると、$_GET['genre']が文字列や無効な値であっても、
+                    　整数に変換されてしまう。例えば、"aaa"という値はintval()で0に変換される。
+                    　そのため、無効なジャンルが渡された場合、意図せずジャンル0が選択される可能性がある。
+                    　（ジャンル0が存在しない場合は問題ないが、存在すると誤った選択がされることになります）
+                    -->
                     <select name="genre" class="post-item">
                         <option value="">ジャンルを選択</option>
-                        <option value="1" <?= isset($_GET['genre']) && $_GET['genre'] === 1 ? 'selected' : '' ?>>和風</option>
-                        <option value="2" <?= isset($_GET['genre']) && $_GET['genre'] === 2 ? 'selected' : '' ?>>洋風</option>
-                        <option value="3" <?= isset($_GET['genre']) && $_GET['genre'] === 3 ? 'selected' : '' ?>>中華風</option>
-                        <option value="4" <?= isset($_GET['genre']) && $_GET['genre'] === 4 ? 'selected' : '' ?>>デザート</option>
+                        <option value="1" <?= isset($_GET['genre']) && intval($_GET['genre']) === 1 ? 'selected' : '' ?>>和風</option>
+                        <option value="2" <?= isset($_GET['genre']) && intval($_GET['genre']) === 2 ? 'selected' : '' ?>>洋風</option>
+                        <option value="3" <?= isset($_GET['genre']) && intval($_GET['genre']) === 3 ? 'selected' : '' ?>>中華風</option>
+                        <option value="4" <?= isset($_GET['genre']) && intval($_GET['genre']) === 4 ? 'selected' : '' ?>>デザート</option>
                     </select>
 
                 </div>
-<?php if(isset($_SESSION['user_id'])) { // ログイン状態 ?>
-                <label id="user-recipe">
-                    <input type="checkbox" name="user-recipe">自分が投稿したレシピ</input>
-                </label>
-<?php } ?>
+                <!-- 
+                　isset($_GET['user-recipe']) ? 'checked' : ''の部分が、
+                　チェックボックスが選択されているかどうかを判断し、選択された状態を保持します。
+                -->
+                <?php if(isset($_SESSION['user_id'])) { // ログイン状態 ?>
+                    <label id="user-recipe">
+                        <input type="checkbox" name="user-recipe" <?= isset($_GET['user-recipe']) ? 'checked' : '' ?>>自分が投稿したレシピ
+                    </label>
+                <?php } ?>
                 <div id="index-button-container">
                     <button type="submit" id="search-button">
                         <span class="material-symbols-outlined">search</span>
