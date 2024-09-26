@@ -12,16 +12,22 @@ if (isset($_SESSION['user_id'])) {
 $resultMessage = '';
 $errorMessages = [
     'user_id' => '',
-    'password' => ''
+    'password' => '',
+    'passwordCheck' => ''
 ];
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     //バリデーション
     if(empty($_POST['user_id'])){
-        $errorMessages['user_id'] = 'idは必須です';
+        $errorMessages['user_id'] = 'IDは必須です';
     }
     if(empty($_POST['password'])){
-        $errorMessages['password'] = 'passwordは必須です';
+        $errorMessages['password'] = 'パスワードは必須です';
+    }
+    if(empty($_POST['passwordCheck'])){
+        $errorMessages['passwordCheck'] = 'パスワード(確認)は必須です';
+    } elseif($_POST['password'] !== $_POST['passwordCheck']) {
+        $errorMessages['passwordCheck'] = 'パスワードとパスワード(確認)が一致しません';
     }
 
     if(empty(array_filter($errorMessages))) {
@@ -100,15 +106,22 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <div class="post-item-container">
                     <label>
                         ID(数字)<span class="require">必須</span>
-                        <input type="text" name="user_id" placeholder="利用したいIDを入力" class="post-item" require>
+                        <input type="text" name="user_id" placeholder="利用したいIDを入力してください" class="post-item" require>
                         <p class="error-message"><?php echo $errorMessages['user_id'];?></p>
                     </label>
                 </div>
                 <div class="post-item-container">
                     <label>
                         パスワード<span class="require">必須</span>
-                        <input type="password" name="password" placeholder="パスワードを入力" class="post-item" require>
+                        <input type="password" name="password" placeholder="パスワードを入力してください" class="post-item" require>
                         <p class="error-message"><?php echo $errorMessages['password'];?></p>
+                    </label>
+                </div>
+                <div class="post-item-container">
+                    <label>
+                        パスワード(確認)<span class="require">必須</span>
+                        <input type="password" name="passwordCheck" placeholder="確認の為もう一度入力してください" class="post-item" require>
+                        <p class="error-message"><?php echo $errorMessages['passwordCheck'];?></p>
                     </label>
                 </div>
                 <div class="button-container">
