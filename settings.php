@@ -10,22 +10,54 @@
     $sql = "SELECT * FROM theme";
     $stm = $pdo->prepare($sql);
     $stm->execute();
-    $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+    $themeResult = $stm->fetchAll(PDO::FETCH_ASSOC);
+    $themeValues = array_column($themeResult, 'theme_id');
 
-    $themeValues = array_column($result, 'theme_id');
+    $sql = "SELECT * FROM main_color";
+    $stm = $pdo->prepare($sql);
+    $stm->execute();
+    $mcResult = $stm->fetchAll(PDO::FETCH_ASSOC);
+    $mcValues = array_column($mcResult, 'mc_id');
 
-    if(isset($_POST['theme_id']) && in_array((int)$_POST['theme_id'], $themeValues, true)) {
+    $sql = "SELECT * FROM sub_color";
+    $stm = $pdo->prepare($sql);
+    $stm->execute();
+    $scResult = $stm->fetchAll(PDO::FETCH_ASSOC);
+    $scValues = array_column($scResult, 'sc_id');
+
+    if(
+        (isset($_POST['theme_id']) && in_array((int)$_POST['theme_id'], $themeValues, true))&&
+        (isset($_POST['mc_id']) && in_array((int)$_POST['mc_id'], $mcValues, true))&&
+        (isset($_POST['sc_id']) && in_array((int)$_POST['sc_id'], $scValues, true))
+    ) {
         $theme_id = $_POST['theme_id'];
+        $mc_id = $_POST['mc_id'];
+        $sc_id = $_POST['sc_id'];
+
         $sql = "SELECT * FROM theme WHERE theme_id = :theme_id";
         $stm = $pdo->prepare($sql);
         $stm->bindValue(':theme_id', $theme_id, PDO::PARAM_INT);
         $stm->execute();
         $_SESSION['theme'] = $stm->fetch(PDO::FETCH_ASSOC);
 
+        $sql = "SELECT * FROM main_color WHERE mc_id = :mc_id";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(':mc_id', $mc_id, PDO::PARAM_INT);
+        $stm->execute();
+        $_SESSION['main_color'] = $stm->fetch(PDO::FETCH_ASSOC);
+
+        $sql = "SELECT * FROM sub_color WHERE sc_id = :sc_id";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(':sc_id', $sc_id, PDO::PARAM_INT);
+        $stm->execute();
+        $_SESSION['sub_color'] = $stm->fetch(PDO::FETCH_ASSOC);
+
         try {
-            $sql = "UPDATE users SET theme_id = :theme_id WHERE user_id = :user_id";
+            $sql = "UPDATE users SET theme_id = :theme_id, mc_id = :mc_id, sc_id = :sc_id WHERE user_id = :user_id";
             $stm = $pdo->prepare($sql);
             $stm->bindValue(':theme_id', $theme_id, PDO::PARAM_INT);
+            $stm->bindValue(':mc_id', $mc_id, PDO::PARAM_INT);
+            $stm->bindValue(':sc_id', $sc_id, PDO::PARAM_INT);
             $stm->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
             $stm->execute();
             $resultMessage = 'テーマを変更しました！';
@@ -78,8 +110,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
     <style>
         :root {
-            --main-color: #<?= $_SESSION['theme']['main'] ?>;
-            --sub-color: #<?= $_SESSION['theme']['sub'] ?>;
+            --main-color: #<?= $_SESSION['main_color']['color'] ?>;
+            --sub-color: #<?= $_SESSION['sub_color']['color'] ?>;
             --background-color: #<?= $_SESSION['theme']['background'] ?>;
             --text-color: #<?= $_SESSION['theme']['text'] ?>;
             --invert-text-color: #<?= $_SESSION['theme']['invert-text'] ?>;
@@ -169,10 +201,35 @@
             <form action="settings.php" method="POST">
                 <div class="post-item-container">
                     <label>
+                        ベース
                         <select name="theme_id" class="post-item">
-                            <?php foreach($result as $data): ?>
-                                <option value="<?= $data['theme_id']?>" <?= $_SESSION['theme']['theme_id'] == $data['theme_id'] ? 'selected' : '' ?>>
-                                <?= $data['name'] ?><?= $_SESSION['theme']['theme_id'] == $data['theme_id'] ? '【使用中】' : '' ?>
+                            <?php foreach($themeResult as $data): ?>
+                                <option value="<?= $data['theme_id']?>" <?= $_SESSION['theme']['theme_id'] === $data['theme_id'] ? 'selected' : '' ?>>
+                                <?= $data['name'] ?><?= $_SESSION['theme']['theme_id'] === $data['theme_id'] ? '【使用中】' : '' ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                </div>
+                <div class="post-item-container">
+                    <label>
+                        メインカラー
+                        <select name="mc_id" class="post-item">
+                            <?php foreach($mcResult as $data): ?>
+                                <option value="<?= $data['mc_id']?>" <?= $_SESSION['main_color']['mc_id'] === $data['mc_id'] ? 'selected' : '' ?>>
+                                <?= $data['name'] ?><?= $_SESSION['main_color']['mc_id'] === $data['mc_id'] ? '【使用中】' : '' ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                </div>
+                <div class="post-item-container">
+                    <label>
+                        サブカラー
+                        <select name="sc_id" class="post-item">
+                            <?php foreach($scResult as $data): ?>
+                                <option value="<?= $data['sc_id']?>" <?= $_SESSION['sub_color']['sc_id'] === $data['sc_id'] ? 'selected' : '' ?>>
+                                <?= $data['name'] ?><?= $_SESSION['sub_color']['sc_id'] === $data['sc_id'] ? '【使用中】' : '' ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>

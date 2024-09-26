@@ -3,11 +3,15 @@ require_once "./db_connect.php";
 session_start(); //セッション開始
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['theme'] = [
-        'main' => 'FF852C',
-        'sub' => 'FFAB6F',
         'background' => 'F3F3F3',
         'text' => '000000',
         'invert-text' => 'FFFFFF'
+    ];
+    $_SESSION['main_color'] = [
+        'color' => 'FF852C'
+    ];
+    $_SESSION['sub_color'] = [
+        'color' => 'FFAB6F'
     ];
 }
 
@@ -111,8 +115,8 @@ if(isset($_SESSION['resultMessage'])) {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
     <style>
         :root {
-            --main-color: #<?= $_SESSION['theme']['main'] ?>;
-            --sub-color: #<?= $_SESSION['theme']['sub'] ?>;
+            --main-color: #<?= $_SESSION['main_color']['color'] ?>;
+            --sub-color: #<?= $_SESSION['sub_color']['color'] ?>;
             --background-color: #<?= $_SESSION['theme']['background'] ?>;
             --text-color: #<?= $_SESSION['theme']['text'] ?>;
             --invert-text-color: #<?= $_SESSION['theme']['invert-text'] ?>;
