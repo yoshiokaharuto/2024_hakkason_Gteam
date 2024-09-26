@@ -15,6 +15,16 @@ $errorMessages = [
     'process' => ''
 ];
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Store the form data in session variables
+    $_SESSION['name'] = $_POST['name'] ?? '';
+    $_SESSION['genre'] = $_POST['genre'] ?? '';
+    $_SESSION['time'] = $_POST['time'] ?? '';
+    $_SESSION['ingredient'] = $_POST['ingredient'] ?? '';
+    $_SESSION['process'] = $_POST['process'] ?? '';
+    $_SESSION['note'] = $_POST['note'] ?? '';
+}
+
 // データベースからカテゴリと主要食材を取得
 $categories = [];
 $ingredients = [];
@@ -105,10 +115,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stm3->execute();
                     }
 
-                    $pdo->commit();
                     // 投稿成功時にリダイレクト
+                    $pdo->commit();
+                    // セッションの値をリセット
+                    unset($_SESSION['name']);
+                    unset($_SESSION['genre']);
+                    unset($_SESSION['time']);
+                    unset($_SESSION['ingredient']);
+                    unset($_SESSION['process']);
+                    unset($_SESSION['note']);
                     header("Location: index.php");
                     exit();
+
                 } catch (PDOException $e) {
                     $pdo->rollBack();
                     $resultMessage = "投稿エラー: " . $e->getMessage() . "<br>";
@@ -118,6 +136,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -134,8 +154,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
     <style>
         :root {
-            --main-color: #<?= $_SESSION['main_color']['color'] ?>;
-            --sub-color: #<?= $_SESSION['sub_color']['color'] ?>;
+            --main-color: #<?= $_SESSION['theme']['main'] ?>;
+            --sub-color: #<?= $_SESSION['theme']['sub'] ?>;
             --background-color: #<?= $_SESSION['theme']['background'] ?>;
             --text-color: #<?= $_SESSION['theme']['text'] ?>;
             --invert-text-color: #<?= $_SESSION['theme']['invert-text'] ?>;
@@ -185,56 +205,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1>新規投稿</h1>
             <p><?php echo $resultMessage; ?></p>
         </div>
-
-        <form action="post.php" method="POST">
-            <div class="post-item-container">
-                <label>
-                    <span class="material-symbols-outlined">edit</span>
-                    レシピ名<span class="require">必須</span>
-                    <input type="text" name="name" placeholder="ちょい足し卵かけご飯" class="post-item" require>
-                    <p class="error-message"><?php echo $errorMessages['name']; ?></p>
-                </label>
+        <form action="confirm.php" method="POST">
+    <div class="post-item-container">
+        <label>
+            <span class="material-symbols-outlined">edit</span>
+            レシピ名<span class="require">必須</span>
+            <input type="text" name="name" placeholder="ちょい足し卵かけご飯" class="post-item" value="<?= isset($_SESSION['name']) ? htmlspecialchars($_SESSION['name'], ENT_QUOTES) : '' ?>">
+            <p class="error-message"><?php echo $errorMessages['name']; ?></p>
+        </label>
+    </div>
+    <div class="post-item-container">
+        <span class="material-symbols-outlined">widgets</span>    
+        ジャンル
+        <div class="genre-group">
+            <div class="genre-option">
+                <input type="radio" name="genre" id="japanese" value="1" <?= isset($_SESSION['genre']) && $_SESSION['genre'] == 1 ? 'checked' : '' ?> checked>
+                <label for="japanese">和風</label>
             </div>
-            <div class="post-item-container">
-                <span class="material-symbols-outlined">widgets</span>    
-                ジャンル
-                <div class="genre-group">
-                    <div class="genre-option">
-                        <input type="radio" name="genre" id="japanese" value="1" checked>
-                        <label for="japanese">和風</label>
-                    </div>
-                    <div class="genre-option">
-                        <input type="radio" name="genre" id="western" value="2">
-                        <label for="western">洋風</label>
-                    </div>
-                    <div class="genre-option">
-                        <input type="radio" name="genre" id="chinese" value="3">
-                        <label for="chinese">中華風</label>
-                    </div>
-                    <div class="genre-option">
-                        <input type="radio" name="genre" id="dessert" value="4">
-                        <label for="dessert">デザート</label>
-                    </div>
-                </div>
+            <div class="genre-option">
+                <input type="radio" name="genre" id="western" value="2" <?= isset($_SESSION['genre']) && $_SESSION['genre'] == 2 ? 'checked' : '' ?>>
+                <label for="western">洋風</label>
             </div>
-            <div class="post-item-container">
-                <label>
-                <span class="material-symbols-outlined">timer</span>
-                    所要時間(分)<span class="require">必須</span>
-                    <input type="number" class="post-item" name="time" value="1" step="1" min="1" require>
-                </label>
+            <div class="genre-option">
+                <input type="radio" name="genre" id="chinese" value="3" <?= isset($_SESSION['genre']) && $_SESSION['genre'] == 3 ? 'checked' : '' ?>>
+                <label for="chinese">中華風</label>
             </div>
-            <div class="post-item-container">
-                <label>
-                    <span class="material-symbols-outlined">grocery</span>
-                    食材<span class="require">必須</span>
-                    <textarea name="ingredient" placeholder="・卵 - 1個
+            <div class="genre-option">
+                <input type="radio" name="genre" id="dessert" value="4" <?= isset($_SESSION['genre']) && $_SESSION['genre'] == 4 ? 'checked' : '' ?>>
+                <label for="dessert">デザート</label>
+            </div>
+        </div>
+    </div>
+    <div class="post-item-container">
+        <label>
+            <span class="material-symbols-outlined">timer</span>
+            所要時間(分)<span class="require">必須</span>
+            <input type="number" class="post-item" name="time" value="<?= isset($_SESSION['time']) ? htmlspecialchars($_SESSION['time'], ENT_QUOTES) : 1 ?>" step="1" min="1">
+        </label>
+    </div>
+    <div class="post-item-container">
+        <label>
+            <span class="material-symbols-outlined">grocery</span>
+            食材<span class="require">必須</span>
+            <textarea name="ingredient" placeholder="・卵 - 1個
 ・ご飯 - 150g
-・焼き肉のタレ - 大さじ1" class="post-item" require></textarea>
-                    <p class="error-message"><?php echo $errorMessages['ingredient']; ?></p>
-                </label>
-            </div>
-            <div class="post-item-container">
+・焼き肉のタレ - 大さじ1" class="post-item"><?= isset($_SESSION['ingredient']) ? htmlspecialchars($_SESSION['ingredient'], ENT_QUOTES) : '' ?></textarea>
+            <p class="error-message"><?php echo $errorMessages['ingredient']; ?></p>
+        </label>
+    </div>
+    <div class="post-item-container">
                 <label>
                     <span class="material-symbols-outlined">star</span>
                     主要食材
@@ -253,25 +272,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <span class="material-symbols-outlined">add</span>
                     主要食材を追加
                 </button>
-            </div>
-            <div class="post-item-container">
-                <label>
-                    <span class="material-symbols-outlined">format_list_numbered</span>
-                    手順<span class="require">必須</span>
-                    <textarea name="process" placeholder="➀茶碗にご飯を盛ります。
+    </div>
+    <div class="post-item-container">
+        <label>
+            <span class="material-symbols-outlined">format_list_numbered</span>
+            手順<span class="require">必須</span>
+            <textarea name="process" placeholder="➀茶碗にご飯を盛ります。
 ➁卵を割ってご飯にかける。
-➂焼肉のタレをかける。" class="post-item" require></textarea>
-                    <p class="error-message"><?php echo $errorMessages['process']; ?></p>
-                </label>
-            </div>
-            <div class="post-item-container">
-                <label>
-                    <span class="material-symbols-outlined">description</span>
-                    メモ
-                    <textarea name="note" placeholder="〇〇社のタレがおすすめです。" class="post-item"></textarea>
-                </label>
-            </div>
-            <div class="post-item-container">
+➂焼肉のタレをかける。" class="post-item"><?= isset($_SESSION['process']) ? htmlspecialchars($_SESSION['process'], ENT_QUOTES) : '' ?></textarea>
+            <p class="error-message"><?php echo $errorMessages['process']; ?></p>
+        </label>
+    </div>
+    <div class="post-item-container">
+        <label>
+            <span class="material-symbols-outlined">description</span>
+            メモ
+            <textarea name="note" placeholder="〇〇社のタレがおすすめです。" class="post-item"><?= isset($_SESSION['note']) ? htmlspecialchars($_SESSION['note'], ENT_QUOTES) : '' ?></textarea>
+        </label>
+    </div>
+    <div class="post-item-container">
                 <label>
                     <span class="material-symbols-outlined">sell</span>
                     カテゴリ
@@ -290,7 +309,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <span class="material-symbols-outlined">add</span>
                     カテゴリを追加
                 </button>
-            </div>
             <div class="button-container">
                 <button type="submit" class="main-button">
                     <span class="material-symbols-outlined">send</span>
